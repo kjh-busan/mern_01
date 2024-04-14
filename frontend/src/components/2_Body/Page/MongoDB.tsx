@@ -5,9 +5,10 @@ import BasicTable from '../../3_Page/Table/TableMUI'
 
 // User 타입 정의
 export type Users = {
-    _id: string
+    _id?: string
     name: string
     email: string
+    password: string
     isChecked?: boolean
     // 필요한 다른 필드들...
     handleSearch: () => void
@@ -72,13 +73,6 @@ const App: React.FC = () => {
                 <Button onClick={handleSearch}>Search</Button>
             </ButtonGroup>
             <BasicTable searchResults={searchResults} />
-            {/* <ul>
-                {searchResults.map((user) => (
-                    <li key={user._id}>
-                        {user.name} - {user.email}
-                    </li>
-                ))}
-            </ul> */}
         </>
     )
 }
