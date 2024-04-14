@@ -33,6 +33,9 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
         }))
         console.log(`checkedItems: `, checkedItems)
     }
+    const setSearchResults = (resultsJson: string) => {
+        setSearchResults(resultsJson)
+    }
 
     const handleDelete = async (row: Users) => {
         const userId = row._id // 사용자의 _id를 추출합니다.
@@ -42,7 +45,7 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
                 `http://localhost:5001/api/users/${userId}`
             )
             console.log(response.data) // 삭제 성공 시 서버에서 보낸 응답을 출력합니다.
-            // 삭제 성공에 따른 추가 작업을 여기에 추가하세요
+            setSearchResults(response.data) // 가져온 데이터를 상태에 저장
         } catch (error) {
             console.error('Error deleting user:', error)
             // 삭제 실패에 대한 추가 처리를 여기에 추가하세요
@@ -64,6 +67,9 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
                 fetchUsers: function (): void {
                     throw new Error('Function not implemented.')
                 },
+                setSearchResults: function (): void {
+                    throw new Error('Function not implemented.')
+                },
             }
             console.log(`newUser:${newUser}`)
             // Axios를 사용하여 POST 요청을 보냅니다.
@@ -72,8 +78,7 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
                 newUser
             )
             console.log(response.data) // 삽입된 사용자 정보를 콘솔에 출력합니다.
-            // 삽입 성공에 따른 추가 작업을 여기에 추가하세요
-            return response.data // 삽입된 사용자 정보를 반환합니다.
+            setSearchResults(response.data) // 가져온 데이터를 상태에 저장
         } catch (error) {
             console.error('Error inserting user:', error)
             // 삽입 실패에 대한 추가 처리를 여기에 추가하세요
@@ -98,7 +103,9 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
                 }
             )
             console.log(response.data) // 업데이트된 사용자 정보를 콘솔에 출력합니다.
-            // 업데이트 성공에 따른 추가 작업을 여기에 추가하세요
+            setIsUpdate(false)
+            handleCheckbox(name)
+            setSearchResults(response.data)
         } catch (error) {
             console.error('Error updating user:', error)
             // 업데이트 실패에 대한 추가 처리를 여기에 추가하세요

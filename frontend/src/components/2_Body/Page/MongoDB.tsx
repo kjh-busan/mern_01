@@ -14,6 +14,7 @@ export type Users = {
     handleSearch: () => void
     handleSearchUser: (row: Users) => void
     fetchUsers: () => void
+    setSearchResults: () => void
 }
 
 const App: React.FC = () => {
