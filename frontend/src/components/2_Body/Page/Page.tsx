@@ -1,7 +1,7 @@
 import React from 'react'
-import { Header } from '../1_Headers/Header'
-import MongoDB from './Page/MongoDB'
-import Footer from '../9_Footers/Footer'
+import { Header } from '../../1_Headers/Header'
+import MongoDB from './MongoDB'
+import Footer from '../../9_Footers/Footer'
 
 type User = {
     name: string

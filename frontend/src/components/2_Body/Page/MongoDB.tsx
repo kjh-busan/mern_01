@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Button, ButtonGroup, TextField } from '@mui/material'
+import BasicTable from '../../3_Page/Table/TableMUI'
 
 // User 타입 정의
-type User = {
+export type Users = {
     _id: string
     name: string
     email: string
+    isChecked?: boolean
     // 필요한 다른 필드들...
+    handleSearch: () => void
+    handleSearchUser: (row: Users) => void
+    fetchUsers: () => void
 }
 
 const App: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('') // 검색어 상태
-    const [searchResults, setSearchResults] = useState<User[]>([]) // 검색 결과 상태
+    const [searchResults, setSearchResults] = useState<Users[]>([]) // 검색 결과 상태
 
     // '/api/users' 엔드포인트에서 사용자 데이터를 가져온다
     const fetchUsers = async () => {
         try {
-            const response = await axios.get<User[]>(
+            const response = await axios.get<Users[]>(
                 'http://localhost:5001/api/users'
             )
             setSearchResults(response.data) // 가져온 데이터를 상태에 저장
@@ -33,7 +38,7 @@ const App: React.FC = () => {
             return
         }
         try {
-            const response = await axios.get<User[]>(
+            const response = await axios.get<Users[]>(
                 `http://localhost:5001/api/users?name=${searchTerm}`
             )
             console.log('response:', response)
@@ -66,14 +71,14 @@ const App: React.FC = () => {
             <ButtonGroup variant="contained" aria-label="Basic button group">
                 <Button onClick={handleSearch}>Search</Button>
             </ButtonGroup>
-
-            <ul>
+            <BasicTable searchResults={searchResults} />
+            {/* <ul>
                 {searchResults.map((user) => (
                     <li key={user._id}>
                         {user.name} - {user.email}
                     </li>
                 ))}
-            </ul>
+            </ul> */}
         </>
     )
 }
