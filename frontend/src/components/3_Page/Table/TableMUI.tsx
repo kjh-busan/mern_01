@@ -21,6 +21,7 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
     const [checkedItems, setCheckedItems] = React.useState<{
         [key: string]: boolean
     }>({})
+    const [isUpdate, setIsUpdate] = React.useState(false)
     const [name, setName] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [email, setEmail] = React.useState('')
@@ -80,6 +81,30 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
         }
     }
 
+    const handleUpdate = async (row: Users) => {
+        const userId = row._id // 사용자의 _id를 추출합니다.
+        setName(row.name)
+        setEmail(row.email)
+
+        try {
+            // Axios를 사용하여 PUT 요청을 보냅니다.
+            const response = await axios.put(
+                `http://localhost:5001/api/users/${userId}`,
+                {
+                    name: name,
+                    email: email,
+                    password: row.password,
+                    handleSearch: function (): void {},
+                }
+            )
+            console.log(response.data) // 업데이트된 사용자 정보를 콘솔에 출력합니다.
+            // 업데이트 성공에 따른 추가 작업을 여기에 추가하세요
+        } catch (error) {
+            console.error('Error updating user:', error)
+            // 업데이트 실패에 대한 추가 처리를 여기에 추가하세요
+        }
+    }
+
     React.useEffect(() => {
         // checked가 true인 것만 남기기
         setCheckedItems((prevState) => {
@@ -91,11 +116,11 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
             })
             return newState
         })
-    }, []) // 빈 배열로 의존성을 제거하여 useEffect가 한 번만 실행되도록 설정
+    }, [name, email]) // 빈 배열로 의존성을 제거하여 useEffect가 한 번만 실행되도록 설정
 
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table sx={{ minWidth: 480 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                         <TableCell align="right">
@@ -143,9 +168,6 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
                                     checked={checkedItems[row.name] || false} // 해당 항목의 checked 상태를 checkedItems에서 가져옴
                                     onChange={() => handleCheckbox(row.name)} // 체크 상태 변경 시 handleCheckbox 호출
                                 />
-                            </TableCell>
-                            <TableCell component="th" scope="row">
-                                {row.name}
                                 {checkedItems[row.name] && ( // Checkbox가 선택된 경우에만 버튼 표시
                                     <Button
                                         variant="contained"
@@ -155,8 +177,46 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
                                         Delete
                                     </Button>
                                 )}
+                                {checkedItems[row.name] && isUpdate && (
+                                    <Button
+                                        variant="contained"
+                                        color="warning"
+                                        onClick={() => handleUpdate(row)}
+                                    >
+                                        Update
+                                    </Button>
+                                )}
                             </TableCell>
-                            <TableCell align="right">{row.email}</TableCell>
+                            {checkedItems[row.name] ? (
+                                <TextField
+                                    required
+                                    defaultValue={row.name}
+                                    onChange={(e) => {
+                                        setName(e.target.value)
+                                        setIsUpdate(true)
+                                    }}
+                                >
+                                    {row.name}
+                                </TextField>
+                            ) : (
+                                <TableCell component="th" scope="row">
+                                    {row.name}
+                                </TableCell>
+                            )}
+                            {checkedItems[row.name] ? (
+                                <TextField
+                                    required
+                                    defaultValue={row.email}
+                                    onChange={(e) => {
+                                        setEmail(e.target.value)
+                                        setIsUpdate(true)
+                                    }}
+                                />
+                            ) : (
+                                <TableCell component="th" scope="row">
+                                    {row.email}
+                                </TableCell>
+                            )}{' '}
                         </TableRow>
                     ))}
                 </TableBody>
