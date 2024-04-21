@@ -1,3 +1,4 @@
 import User from "./models/user.js";
+import Todo from "./todos/todo.js";
 
-export { User };
+export { Todo, User, Movie };
