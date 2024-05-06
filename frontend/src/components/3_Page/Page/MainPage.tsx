@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Button, ButtonGroup, TextField } from '@mui/material'
-import BasicTable from '../../3_Page/Table/TableMUI'
+import BasicTable from '../Table/Table'
 
 // User 타입 정의
 export type Users = {

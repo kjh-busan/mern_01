@@ -1,7 +1,7 @@
 import React from 'react'
-import { Header } from '../../1_Headers/Header'
-import MongoDB from './MongoDB'
-import Footer from '../../9_Footers/Footer'
+import { Header } from '../1_Headers/Header'
+import Footer from '../9_Footers/Footer'
+import Todo from '../3_Page/MongoDB/SampleFlix/Todo'
 
 type User = {
     name: string
@@ -32,11 +32,7 @@ export const Page: React.FC = () => {
                     onCreateAccount={() => onCreateAccount()}
                 />
             </section>
-            <section className="storybook-page">
-                <section className="storybook-page">
-                    {user && <MongoDB />}
-                </section>
-            </section>
+            <section className="storybook-page">{user && <Todo />}</section>
             <section>
                 <Footer />
             </section>

@@ -15,7 +15,7 @@ const User: React.FC<UserMongoDBProps> = ({ searchTerm }) => {
     const [users, setUsers] = useState<UserMongoDB[]>([])
 
     useEffect(() => {
-        alert(searchTerm)
+        // alert(searchTerm)
         fetchUsers()
     }, [])
 

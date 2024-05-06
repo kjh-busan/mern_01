@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { Users } from '../../2_Body/Page/MongoDB'
+import { Users } from '../Page/MainPage'
 import { Button, Checkbox, TextField } from '@mui/material'
 import axios from 'axios'
 
@@ -104,7 +104,7 @@ export default function BasicTable({ searchResults }: BasicTableProps) {
             )
             console.log(response.data) // 업데이트된 사용자 정보를 콘솔에 출력합니다.
             setIsUpdate(false)
-            handleCheckbox(name)
+            handleCheckbox(row.name)
             setSearchResults(response.data)
         } catch (error) {
             console.error('Error updating user:', error)
