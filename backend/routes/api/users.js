@@ -26,7 +26,6 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   const { name } = req.query; // 쿼리 파라미터에서 'name' 추출
-  console.log("#2 [READ]:", name); // 콘솔창에 출력
   try {
     let query = {};
 
@@ -37,6 +36,7 @@ router.get("/", async (req, res) => {
 
     const users = await User.find(query); // 수정된 쿼리 객체를 사용하여 사용자 조회
     res.json(users); // 클라이언트에게도 결과 전송
+    console.log("#2 [READ]:", users.status); // 콘솔창에 출력
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

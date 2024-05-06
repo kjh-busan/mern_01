@@ -13,16 +13,16 @@ app.use(
     extended: false,
   })
 );
-// node.js에서 json 파일을 사용할때 필요(필수는 아닌듯)
+// node.jsにてjsonファイルを使用するため（必須ではない？）
 app.use(
   express.json({
     extended: false,
   })
 );
-app.use(cors()); // 모든 도메인에서의 요청을 허용
+app.use(cors()); // 全てのdomain要求を許可
 
 app.listen(PORT, () => {
-  console.log(`start! express server on port ${PORT}`);
+  // console.log(`start! express server on port ${PORT}`);
 });
 
 // API Server List

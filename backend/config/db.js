@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./.env.local" });
 
-const { MONGODB_URI } = process.env; // .env 파일에서 MongoDB URI 가져오기
+const { MONGODB_URI } = process.env;
 
 const connectDB = async () => {
   try {

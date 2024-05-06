@@ -9,7 +9,7 @@ const TodoSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
   },
   title: {
     type: String,
