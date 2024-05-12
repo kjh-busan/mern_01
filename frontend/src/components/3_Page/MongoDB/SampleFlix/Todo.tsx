@@ -6,6 +6,7 @@ import {
     Box,
     Button,
     ButtonGroup,
+    InputLabel,
     MenuItem,
     Modal,
     Paper,
@@ -30,7 +31,7 @@ type TodoType = {
     time?: Date
 }
 
-const todoTitles = [
+const TodoTitles = [
     {
         value: 'Prgramming',
         label: '🖥️',
@@ -154,15 +155,16 @@ const Todo: React.FC = () => {
         }
     }
 
-    const showSelectTitle = (title: string) => {
+    const showSelectTitle = (titleValue: string) => {
         // TODO
+        const selectedItem = TodoTitles.find((t) => t.value === titleValue)
         return (
             <MenuItem
                 key="todo-title-key"
                 id="todo-title"
-                value={'option.value'}
+                defaultValue={selectedItem?.value}
             >
-                {'option.label'}
+                {selectedItem?.label}
             </MenuItem>
         )
     }
@@ -200,7 +202,7 @@ const Todo: React.FC = () => {
                 helperText="Please select your todos"
                 onChange={(e) => setTitle(e.target.value)}
             >
-                {todoTitles.map((option) => (
+                {TodoTitles.map((option) => (
                     <MenuItem
                         key="todo-title-key"
                         id="todo-title"
@@ -256,11 +258,11 @@ const Todo: React.FC = () => {
                                 <TextField
                                     id="todo-title"
                                     select
-                                    label="Select"
+                                    label={showSelectTitle(row.title)}
                                     helperText="Please select your todos"
                                     onChange={(e) => setTitle(e.target.value)}
                                 >
-                                    {todoTitles.map((option) => (
+                                    {TodoTitles.map((option) => (
                                         <MenuItem
                                             key="todo-title-key"
                                             id="todo-title"
