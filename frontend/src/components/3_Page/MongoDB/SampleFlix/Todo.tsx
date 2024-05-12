@@ -76,11 +76,16 @@ const Todo: React.FC = () => {
         }
     }
     const onChecked = (row: TodoType) => {
-        // const completedChg = !row.completed
-        console.log('checked=', row.completed)
-        // setTodo({ ...row, completed })
-        setCompleted(!completed)
+        // 해당 항목의 _id를 사용하여 수정할 항목을 찾습니다.
+        const updatedTodos = todos.map((todo) =>
+            todo._id === row._id
+                ? { ...todo, completed: !todo.completed }
+                : todo
+        )
+        // 변경된 배열을 상태로 설정합니다.
+        setTodos(updatedTodos)
     }
+
     const setUserCount = (row: TodoType, count: number) => {
         // const likeCount: number = row.likeCount! + count
         // console.log('likeCount', likeCount)
@@ -121,16 +126,34 @@ const Todo: React.FC = () => {
                 `http://localhost:5001/api/todos/${row._id}`,
                 newTodo
             )
+
             if (response.status) {
+                console.log('OK UPDATE')
                 fetchTodos()
+            } else {
+                alert('ERROR fetch')
             }
+            // setCompleted(false)
+            setUsername('')
+            setTitle('')
+            setContents('')
+            // setLikeCount(0)
         } catch (error) {
             console.error('Error deleting user:', error)
             // 삭제 실패에 대한 추가 처리를 여기에 추가하세요
         }
     }
 
+    const checkoutInsert = () => {
+        return !username || !title || !contents ? true : false
+    }
+
     const onInsertHandle = async () => {
+        // validate check
+        if (checkoutInsert()) {
+            return
+        }
+
         // Insert
         const newTodo: TodoType = {
             // _id: new Date(new Date().getTime()).toString(),
