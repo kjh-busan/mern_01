@@ -51,8 +51,14 @@ const todoTitles = [
 
 const Todo: React.FC = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
-    const [todo, setTodo] = useState<TodoType>()
+    // const [todo, setTodo] = useState<TodoType>()
     const [modal, setModal] = useState<boolean>(false)
+
+    const [completed, setCompleted] = useState<boolean>(false)
+    const [username, setUsername] = useState('')
+    const [title, setTitle] = useState('')
+    const [contents, setContents] = useState('')
+    const [likeCount, setLikeCount] = useState<number>()
 
     useEffect(() => {
         fetchTodos()
@@ -69,7 +75,7 @@ const Todo: React.FC = () => {
         }
     }
     const onChecked = (row: TodoType) => {
-        const completedChg = !row.completed
+        // const completedChg = !row.completed
         console.log('checked=', row.completed)
         // setTodo({ ...row, completed })
         setCompleted(!completed)
@@ -114,18 +120,14 @@ const Todo: React.FC = () => {
                 `http://localhost:5001/api/todos/${row._id}`,
                 newTodo
             )
-            fetchTodos()
+            if (response.status) {
+                fetchTodos()
+            }
         } catch (error) {
             console.error('Error deleting user:', error)
             // 삭제 실패에 대한 추가 처리를 여기에 추가하세요
         }
     }
-
-    const [completed, setCompleted] = useState<boolean>(false)
-    const [username, setUsername] = useState('')
-    const [title, setTitle] = useState('')
-    const [contents, setContents] = useState('')
-    const [likeCount, setLikeCount] = useState<number>()
 
     const onInsertHandle = async () => {
         // Insert
@@ -150,6 +152,19 @@ const Todo: React.FC = () => {
         } else {
             console.log('ERROR: Response')
         }
+    }
+
+    const showSelectTitle = (title: string) => {
+        // TODO
+        return (
+            <MenuItem
+                key="todo-title-key"
+                id="todo-title"
+                value={'option.value'}
+            >
+                {'option.label'}
+            </MenuItem>
+        )
     }
     return (
         <div>
@@ -231,18 +246,31 @@ const Todo: React.FC = () => {
                                     onChange={() => onChecked(row)}
                                     checked={row.completed}
                                 />
-                                <TableCell component="th" scope="row">
+                                <TableCell
+                                    key="username"
+                                    component="th"
+                                    scope="row"
+                                >
                                     {row.username}
                                 </TableCell>
-                                <TableCell align="left">
-                                    <TextField
-                                        label={row.title}
-                                        onChange={(e) =>
-                                            setTitle(e.target.value)
-                                        }
-                                    />
-                                </TableCell>
-                                <TableCell align="left">
+                                <TextField
+                                    id="todo-title"
+                                    select
+                                    label="Select"
+                                    helperText="Please select your todos"
+                                    onChange={(e) => setTitle(e.target.value)}
+                                >
+                                    {todoTitles.map((option) => (
+                                        <MenuItem
+                                            key="todo-title-key"
+                                            id="todo-title"
+                                            value={option.value}
+                                        >
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                <TableCell key="content" align="left">
                                     <TextField
                                         label={row.contents}
                                         onChange={(e) =>
@@ -250,7 +278,7 @@ const Todo: React.FC = () => {
                                         }
                                     />
                                 </TableCell>
-                                <TableCell align="left">
+                                <TableCell key="likeCount" align="left">
                                     <Badge
                                         color="secondary"
                                         badgeContent={row.likeCount}

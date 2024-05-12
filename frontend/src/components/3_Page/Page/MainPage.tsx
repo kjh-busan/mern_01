@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { Button, ButtonGroup, TextField } from '@mui/material'
-import BasicTable from '../Table/Table'
 
 // User 타입 정의
 export type Users = {
@@ -57,9 +56,6 @@ const App: React.FC = () => {
     const handleSearch = async () => {
         searchTerm.length > 0 ? handleSearchUser() : fetchUsers()
     }
-    // useEffect(() => {
-    //     fetchUsers()
-    // }, []) // 의존성 배열 수정: 빈 배열로 컴포넌트 마운트 시 한 번만 실행
 
     return (
         <>
@@ -73,7 +69,6 @@ const App: React.FC = () => {
             <ButtonGroup variant="contained" aria-label="Basic button group">
                 <Button onClick={handleSearch}>Search</Button>
             </ButtonGroup>
-            <BasicTable searchResults={searchResults} />
         </>
     )
 }
