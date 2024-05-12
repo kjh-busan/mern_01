@@ -36,9 +36,12 @@ router.get("/", async (req, res) => {
     if (username) {
       query.username = new RegExp(username, "i");
     }
-    const todos = await Todo.find(query); // 수정: Todo로 변경
+    const todos = await Todo.find(query);
     res.json(todos);
-    console.log("#2 [READ] Status:", todos[0].status);
+    console.log(
+      "#2 [READ] Status:",
+      todos.length > 0 ? todos[0].status : "No todos found"
+    );
   } catch (err) {
     console.error("에러: ", err.message);
     res.status(500).send("Server Error에러");
