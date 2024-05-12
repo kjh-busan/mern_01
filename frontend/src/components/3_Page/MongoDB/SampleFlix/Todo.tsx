@@ -6,7 +6,6 @@ import {
     Box,
     Button,
     ButtonGroup,
-    InputLabel,
     MenuItem,
     Modal,
     Paper,
@@ -20,7 +19,6 @@ import {
     Typography,
 } from '@mui/material'
 
-// Todo 타입 정의
 type TodoType = {
     _id?: string
     username: string
@@ -52,14 +50,11 @@ const TodoTitles = [
 
 const Todo: React.FC = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
-    // const [todo, setTodo] = useState<TodoType>()
     const [modal, setModal] = useState<boolean>(false)
 
-    const [completed, setCompleted] = useState<boolean>(false)
     const [username, setUsername] = useState('')
     const [title, setTitle] = useState('')
     const [contents, setContents] = useState('')
-    const [likeCount, setLikeCount] = useState<number>()
 
     useEffect(() => {
         fetchTodos()
@@ -76,35 +71,38 @@ const Todo: React.FC = () => {
         }
     }
     const onChecked = (row: TodoType) => {
-        // 해당 항목의 _id를 사용하여 수정할 항목을 찾습니다.
-        const updatedTodos = todos.map((todo) =>
+        const updatedTodo = todos.map((todo) =>
             todo._id === row._id
                 ? { ...todo, completed: !todo.completed }
                 : todo
         )
-        // 변경된 배열을 상태로 설정합니다.
-        setTodos(updatedTodos)
+        setTodos(updatedTodo)
     }
 
     const setUserCount = (row: TodoType, count: number) => {
-        // const likeCount: number = row.likeCount! + count
-        // console.log('likeCount', likeCount)
-        // setTodo(row)
-        setLikeCount(likeCount! + count)
+        const updatedTodos = todos.map((todo) =>
+            todo._id === row._id
+                ? {
+                      ...todo,
+                      likeCount: todo.likeCount
+                          ? todo.likeCount + count
+                          : count,
+                  }
+                : todo
+        )
+        setTodos(updatedTodos)
     }
     const toggleModal = () => setModal(!modal)
     const onHandleDelete = async (row: TodoType) => {
         toggleModal()
         try {
-            // Axios를 사용하여 DELETE 요청을 보냅니다.
             const response = await axios.delete(
                 `http://localhost:5001/api/todos/${row._id}`
             )
-            console.log(response.data) // 삭제 성공 시 서버에서 보낸 응답을 출력합니다.
+            console.log(response.data)
             fetchTodos()
         } catch (error) {
             console.error('Error deleting user:', error)
-            // 삭제 실패에 대한 추가 처리를 여기에 추가하세요
         }
     }
 
@@ -112,15 +110,13 @@ const Todo: React.FC = () => {
         // Update
         try {
             const newTodo: TodoType = {
-                // _id: new Date(new Date().getTime()).toString(),
                 username,
                 title,
                 contents,
-                likeCount,
-                completed,
+                likeCount: row.likeCount,
+                completed: row.completed,
                 time: new Date(),
             }
-            // Axios를 사용하여 UPDATE 요청을 보냅니다.
             console.log('UPDATE newTodo:', newTodo)
             const response = await axios.put(
                 `http://localhost:5001/api/todos/${row._id}`,
@@ -133,14 +129,8 @@ const Todo: React.FC = () => {
             } else {
                 alert('ERROR fetch')
             }
-            // setCompleted(false)
-            setUsername('')
-            setTitle('')
-            setContents('')
-            // setLikeCount(0)
         } catch (error) {
             console.error('Error deleting user:', error)
-            // 삭제 실패에 대한 추가 처리를 여기에 추가하세요
         }
     }
 
@@ -156,7 +146,6 @@ const Todo: React.FC = () => {
 
         // Insert
         const newTodo: TodoType = {
-            // _id: new Date(new Date().getTime()).toString(),
             username,
             title,
             contents,
@@ -165,7 +154,6 @@ const Todo: React.FC = () => {
             time: new Date(),
         }
         console.log('onInsertHandle:', newTodo)
-        // Axios를 사용하여 POST 요청을 보냅니다.
         const response = await axios.post<TodoType>(
             'http://localhost:5001/api/todos',
             newTodo
@@ -179,7 +167,6 @@ const Todo: React.FC = () => {
     }
 
     const showSelectTitle = (titleValue: string) => {
-        // TODO
         const selectedItem = TodoTitles.find((t) => t.value === titleValue)
         return (
             <MenuItem
