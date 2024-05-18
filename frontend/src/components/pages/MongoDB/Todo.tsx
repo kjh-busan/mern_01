@@ -28,7 +28,7 @@ type TodoType = {
 
 const TodoTitles = [
     {
-        value: 'Prgramming',
+        value: 'Programming',
         label: '🖥️',
     },
     {
@@ -237,23 +237,26 @@ const Todo: React.FC = () => {
                                 >
                                     {row.username}
                                 </TableCell>
-                                <TextField
-                                    id="todo-title"
-                                    select
-                                    label={showSelectTitle(row.title)}
-                                    helperText="Please select your todos"
-                                    onChange={(e) => setTitle(e.target.value)}
-                                >
-                                    {TodoTitles.map((option) => (
-                                        <MenuItem
-                                            key="todo-title-key"
-                                            id="todo-title"
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                                <TableCell key="title" align="left">
+                                    <TextField
+                                        select
+                                        value={row.title}
+                                        label="Select"
+                                        helperText="Please select your todos"
+                                        onChange={(e) =>
+                                            setTitle(e.target.value)
+                                        }
+                                    >
+                                        {TodoTitles.map((option) => (
+                                            <MenuItem
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </TableCell>
                                 <TableCell key="content" align="left">
                                     <TextField
                                         label={row.contents}
