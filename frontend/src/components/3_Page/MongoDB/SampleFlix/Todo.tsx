@@ -24,8 +24,8 @@ type TodoType = {
     username: string
     title: string
     contents: string
-    likeCount?: number
-    completed?: boolean
+    likeCount: number
+    completed: boolean
     time?: Date
 }
 
@@ -55,6 +55,7 @@ const Todo: React.FC = () => {
     const [username, setUsername] = useState('')
     const [title, setTitle] = useState('')
     const [contents, setContents] = useState('')
+    // const [completed, setCompleted] = useState<boolean>(false)
 
     useEffect(() => {
         fetchTodos()
@@ -70,7 +71,8 @@ const Todo: React.FC = () => {
             console.error('Error fetching todos:', error)
         }
     }
-    const onChecked = (row: TodoType) => {
+    const onCompleted = (row: TodoType) => {
+        // setCompleted(row.completed)
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id
                 ? { ...todo, completed: !todo.completed }
@@ -80,7 +82,7 @@ const Todo: React.FC = () => {
     }
 
     const setUserCount = (row: TodoType, count: number) => {
-        const updatedTodos = todos.map((todo) =>
+        const updatedTodo = todos.map((todo) =>
             todo._id === row._id
                 ? {
                       ...todo,
@@ -90,7 +92,7 @@ const Todo: React.FC = () => {
                   }
                 : todo
         )
-        setTodos(updatedTodos)
+        setTodos(updatedTodo)
     }
     const toggleModal = () => setModal(!modal)
     const onHandleDelete = async (row: TodoType) => {
@@ -118,17 +120,13 @@ const Todo: React.FC = () => {
                 time: new Date(),
             }
             console.log('UPDATE newTodo:', newTodo)
-            const response = await axios.put(
+            await axios.put(
                 `http://localhost:5001/api/todos/${row._id}`,
                 newTodo
             )
 
-            if (response.status) {
-                console.log('OK UPDATE')
-                fetchTodos()
-            } else {
-                alert('ERROR fetch')
-            }
+            console.log('OK UPDATE')
+            fetchTodos()
         } catch (error) {
             console.error('Error deleting user:', error)
         }
@@ -255,7 +253,7 @@ const Todo: React.FC = () => {
                                 <Checkbox
                                     value="completed"
                                     id={`todo${index}`}
-                                    onChange={() => onChecked(row)}
+                                    onChange={() => onCompleted(row)}
                                     checked={row.completed}
                                 />
                                 <TableCell

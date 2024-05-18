@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Todo = require("../../models/Todo"); // 수정: Todo로 변경
+const Todo = require("../../models/Todo");
 
 router.post("/", async (req, res) => {
   const { username, title, contents, likeCount, completed, time } = req.body;
   console.log("#1 [CREATE]:", username, title, contents);
 
   try {
-    // 새로운 사용자 문서 생성
     const newTodo = new Todo({
       username,
       title,
@@ -17,10 +16,9 @@ router.post("/", async (req, res) => {
       time,
     });
 
-    // MongoDB create new Todo
     const result = await newTodo.save();
 
-    res.status(201).json(result); // 삽입된 TODO 정보를 클라이언트에게 응답
+    res.status(201).json(result);
   } catch (error) {
     console.error("Error inserting user:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -44,23 +42,20 @@ router.get("/", async (req, res) => {
     );
   } catch (err) {
     console.error("에러: ", err.message);
-    res.status(500).send("Server Error에러");
+    res.status(500).send("Server Error");
   }
 });
 
 router.put("/:id", async (req, res) => {
-  const userId = req.params.id; // 라우트 경로에서 사용자 ID를 읽어옵니다.
+  const userId = req.params.id;
   const { username, title, contents, likeCount, completed, time } = req.body;
-  // console.log("#3 [UPDATE]:", username, title, contents, likeCount, completed);
   try {
-    // MongoDB에서 해당 ID를 가진 사용자를 찾습니다.
     let todo = await Todo.findById(userId);
 
     if (!todo) {
       return res.status(404).json({ message: "Todo not found" });
     }
 
-    // 클라이언트에서 전달된 필드가 있는 경우에만 업데이트합니다.
     if (title) {
       todo.title = title;
     }
@@ -74,11 +69,10 @@ router.put("/:id", async (req, res) => {
       todo.completed = completed;
     }
 
-    // 업데이트된 사용자 정보를 저장합니다.
     const updateTodo = await todo.save();
 
     console.log("[BE ]updateTodo:", todo);
-    res.status(200).json(updateTodo); // 업데이트된 사용자 정보를 클라이언트에게 응답합니다.
+    res.status(200).json(updateTodo);
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -86,11 +80,10 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const userId = req.params.id; // 라우트 경로에서 매개변수를 읽어옵니다.
+  const userId = req.params.id;
   console.log("#4 [DELETE] userId:", userId);
 
   try {
-    // MongoDB에서 해당 ID를 가진 유저를 찾아서 삭제합니다.
     const result = await Todo.deleteOne({ _id: userId }).exec();
 
     if (result.deletedCount > 0) {
