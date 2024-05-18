@@ -3,11 +3,9 @@ import axios from 'axios'
 import Checkbox from '@mui/material/Checkbox'
 import {
     Badge,
-    Box,
     Button,
     ButtonGroup,
     MenuItem,
-    Modal,
     Paper,
     Table,
     TableBody,
@@ -16,7 +14,6 @@ import {
     TableHead,
     TableRow,
     TextField,
-    Typography,
 } from '@mui/material'
 
 type TodoType = {
@@ -50,8 +47,6 @@ const TodoTitles = [
 
 const Todo: React.FC = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
-    const [modal, setModal] = useState<boolean>(false)
-
     const [username, setUsername] = useState('')
     const [title, setTitle] = useState('')
     const [contents, setContents] = useState('')
@@ -92,9 +87,7 @@ const Todo: React.FC = () => {
         )
         setTodos(updatedTodo)
     }
-    const toggleModal = () => setModal(!modal)
     const onHandleDelete = async (row: TodoType) => {
-        toggleModal()
         try {
             const response = await axios.delete(
                 `http://localhost:5001/api/todos/${row._id}`
@@ -176,24 +169,7 @@ const Todo: React.FC = () => {
     }
     return (
         <div>
-            <Modal
-                open={modal}
-                onClose={toggleModal}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box>
-                    <Typography
-                        id="modal-modal-title"
-                        variant="h6"
-                        component="h2"
-                    >
-                        Are you want to delete?
-                    </Typography>
-                </Box>
-            </Modal>
             <h1>Todos</h1>
-
             {/* Input area */}
             <TextField
                 id="toto-username"
@@ -208,9 +184,9 @@ const Todo: React.FC = () => {
                 helperText="Please select your todos"
                 onChange={(e) => setTitle(e.target.value)}
             >
-                {TodoTitles.map((option) => (
+                {TodoTitles.map((option, index) => (
                     <MenuItem
-                        key="todo-title-key"
+                        key={`"todo-title-key"${index}`}
                         id="todo-title"
                         value={option.value}
                     >
@@ -241,7 +217,7 @@ const Todo: React.FC = () => {
                     <TableBody>
                         {todos.map((row, index) => (
                             <TableRow
-                                key={row.username}
+                                key={row.username + index}
                                 sx={{
                                     '&:last-child td, &:last-child th': {
                                         border: 0,
