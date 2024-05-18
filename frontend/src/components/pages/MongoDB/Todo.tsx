@@ -55,7 +55,6 @@ const Todo: React.FC = () => {
     const [username, setUsername] = useState('')
     const [title, setTitle] = useState('')
     const [contents, setContents] = useState('')
-    // const [completed, setCompleted] = useState<boolean>(false)
 
     useEffect(() => {
         fetchTodos()
@@ -72,7 +71,6 @@ const Todo: React.FC = () => {
         }
     }
     const onCompleted = (row: TodoType) => {
-        // setCompleted(row.completed)
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id
                 ? { ...todo, completed: !todo.completed }
