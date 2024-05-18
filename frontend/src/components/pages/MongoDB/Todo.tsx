@@ -48,7 +48,8 @@ const TodoTitles = [
 const Todo: React.FC = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
     const [username, setUsername] = useState('')
-    const [title, setTitle] = useState('')
+    const [title, setTitle] = useState('Programming')
+    const [titleItem, setTitleItem] = useState('Programming')
     const [contents, setContents] = useState('')
 
     useEffect(() => {
@@ -65,6 +66,7 @@ const Todo: React.FC = () => {
             console.error('Error fetching todos:', error)
         }
     }
+
     const onCompleted = (row: TodoType) => {
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id
@@ -87,6 +89,7 @@ const Todo: React.FC = () => {
         )
         setTodos(updatedTodo)
     }
+
     const onHandleDelete = async (row: TodoType) => {
         try {
             const response = await axios.delete(
@@ -104,7 +107,7 @@ const Todo: React.FC = () => {
         try {
             const newTodo: TodoType = {
                 username,
-                title,
+                title: titleItem,
                 contents,
                 likeCount: row.likeCount,
                 completed: row.completed,
@@ -119,7 +122,7 @@ const Todo: React.FC = () => {
             console.log('OK UPDATE')
             fetchTodos()
         } catch (error) {
-            console.error('Error deleting user:', error)
+            console.error('Error updating user:', error)
         }
     }
 
@@ -172,7 +175,7 @@ const Todo: React.FC = () => {
             <h1>Todos</h1>
             {/* Input area */}
             <TextField
-                id="toto-username"
+                id="todo-username"
                 label="User Name"
                 variant="outlined"
                 onChange={(e) => setUsername(e.target.value)}
@@ -180,22 +183,19 @@ const Todo: React.FC = () => {
             <TextField
                 id="todo-title"
                 select
-                label="Select"
+                label="Category Select"
+                value={title} // 초기값 설정
                 helperText="Please select your todos"
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)} // 선택된 값을 title 상태에 저장
             >
-                {TodoTitles.map((option, index) => (
-                    <MenuItem
-                        key={`"todo-title-key"${index}`}
-                        id="todo-title"
-                        value={option.value}
-                    >
+                {TodoTitles.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
                         {option.label}
                     </MenuItem>
                 ))}
             </TextField>
             <TextField
-                id="toto-content"
+                id="todo-content"
                 label="Content"
                 variant="outlined"
                 onChange={(e) => setContents(e.target.value)}
@@ -208,10 +208,10 @@ const Todo: React.FC = () => {
                         <TableRow>
                             <TableCell>Completed</TableCell>
                             <TableCell>User Name</TableCell>
-                            <TableCell align="left">Title</TableCell>
+                            <TableCell align="left">Category</TableCell>
                             <TableCell align="left">Content</TableCell>
                             <TableCell align="left">Like</TableCell>
-                            <TableCell align="left">Delete Item</TableCell>
+                            <TableCell align="left">Update/Delete</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -224,28 +224,25 @@ const Todo: React.FC = () => {
                                     },
                                 }}
                             >
-                                <Checkbox
-                                    value="completed"
-                                    id={`todo${index}`}
-                                    onChange={() => onCompleted(row)}
-                                    checked={row.completed}
-                                />
-                                <TableCell
-                                    key="username"
-                                    component="th"
-                                    scope="row"
-                                >
+                                <TableCell>
+                                    <Checkbox
+                                        value="completed"
+                                        id={`todo${index}`}
+                                        onChange={() => onCompleted(row)}
+                                        checked={row.completed}
+                                    />
+                                </TableCell>
+                                <TableCell component="th" scope="row">
                                     {row.username}
                                 </TableCell>
-                                <TableCell key="title" align="left">
+                                <TableCell align="left">
                                     <TextField
                                         select
-                                        value={row.title}
-                                        label="Select"
-                                        helperText="Please select your todos"
+                                        label={showSelectTitle(row.title)}
                                         onChange={(e) =>
-                                            setTitle(e.target.value)
+                                            setTitleItem(e.target.value)
                                         }
+                                        sx={{ width: '100px' }}
                                     >
                                         {TodoTitles.map((option) => (
                                             <MenuItem
@@ -257,7 +254,7 @@ const Todo: React.FC = () => {
                                         ))}
                                     </TextField>
                                 </TableCell>
-                                <TableCell key="content" align="left">
+                                <TableCell align="left">
                                     <TextField
                                         label={row.contents}
                                         onChange={(e) =>
@@ -265,7 +262,7 @@ const Todo: React.FC = () => {
                                         }
                                     />
                                 </TableCell>
-                                <TableCell key="likeCount" align="left">
+                                <TableCell align="left">
                                     <Badge
                                         color="secondary"
                                         badgeContent={row.likeCount}
@@ -291,14 +288,20 @@ const Todo: React.FC = () => {
                                         </Button>
                                     </ButtonGroup>
                                 </TableCell>
-                                <ButtonGroup>
-                                    <Button onClick={() => onHandleDelete(row)}>
-                                        Delete
-                                    </Button>
-                                    <Button onClick={() => onUpdateHandle(row)}>
-                                        Update
-                                    </Button>
-                                </ButtonGroup>
+                                <TableCell>
+                                    <ButtonGroup>
+                                        <Button
+                                            onClick={() => onUpdateHandle(row)}
+                                        >
+                                            Update
+                                        </Button>
+                                        <Button
+                                            onClick={() => onHandleDelete(row)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </ButtonGroup>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -307,4 +310,5 @@ const Todo: React.FC = () => {
         </div>
     )
 }
+
 export default Todo
