@@ -49,8 +49,9 @@ const Todo: React.FC = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
     const [username, setUsername] = useState('')
     const [title, setTitle] = useState('Programming')
-    const [titleItem, setTitleItem] = useState('Programming')
+    // const [titleItem, setTitleItem] = useState('Programming')
     const [contents, setContents] = useState('')
+    // const [contentsItem, setContentsItem] = useState('')
 
     useEffect(() => {
         fetchTodos()
@@ -67,12 +68,39 @@ const Todo: React.FC = () => {
         }
     }
 
-    const onCompleted = (row: TodoType) => {
+    const onTitle = (row: TodoType, value: string) => {
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id
-                ? { ...todo, completed: !todo.completed }
+                ? {
+                      ...todo,
+                      title: value,
+                  }
                 : todo
         )
+        console.log(`onTitle:${row.title}`)
+        setTodos(updatedTodo)
+    }
+
+    const onContents = (row: TodoType, value: string) => {
+        const updatedTodo = todos.map((todo) =>
+            todo._id === row._id
+                ? {
+                      ...todo,
+                      contents: value,
+                  }
+                : todo
+        )
+        console.log(`onContents:${row.contents}`)
+        setTodos(updatedTodo)
+    }
+
+    const onCompleted = (row: TodoType, isChecked: boolean) => {
+        const updatedTodo = todos.map((todo) =>
+            todo._id === row._id ? { ...todo, completed: isChecked } : todo
+        )
+
+        console.log(`setCompleted:${isChecked}`)
+
         setTodos(updatedTodo)
     }
 
@@ -105,14 +133,20 @@ const Todo: React.FC = () => {
     const onUpdateHandle = async (row: TodoType) => {
         // Update
         try {
-            const newTodo: TodoType = {
-                username,
-                title: titleItem,
-                contents,
-                likeCount: row.likeCount,
-                completed: row.completed,
+            const todo = todos.find((todo) => todo._id === row._id)
+
+            const newTodo = {
+                ...todo!,
                 time: new Date(),
             }
+            // const newTodo: TodoType = {
+            //     username,
+            //     title: row.title,
+            //     contents: row.contents,
+            //     likeCount: row.likeCount,
+            //     completed: row.completed,
+            //     time: new Date(),
+            // }
             console.log('UPDATE newTodo:', newTodo)
             await axios.put(
                 `http://localhost:5001/api/todos/${row._id}`,
@@ -161,11 +195,7 @@ const Todo: React.FC = () => {
     const showSelectTitle = (titleValue: string) => {
         const selectedItem = TodoTitles.find((t) => t.value === titleValue)
         return (
-            <MenuItem
-                key="todo-title-key"
-                id="todo-title"
-                defaultValue={selectedItem?.value}
-            >
+            <MenuItem key="todo-title-key" id="todo-title">
                 {selectedItem?.label}
             </MenuItem>
         )
@@ -228,7 +258,9 @@ const Todo: React.FC = () => {
                                     <Checkbox
                                         value="completed"
                                         id={`todo${index}`}
-                                        onChange={() => onCompleted(row)}
+                                        onChange={(e) =>
+                                            onCompleted(row, e.target.checked)
+                                        }
                                         checked={row.completed}
                                     />
                                 </TableCell>
@@ -240,7 +272,7 @@ const Todo: React.FC = () => {
                                         select
                                         label={showSelectTitle(row.title)}
                                         onChange={(e) =>
-                                            setTitleItem(e.target.value)
+                                            onTitle(row, e.target.value)
                                         }
                                         sx={{ width: '100px' }}
                                     >
@@ -258,7 +290,7 @@ const Todo: React.FC = () => {
                                     <TextField
                                         label={row.contents}
                                         onChange={(e) =>
-                                            setContents(e.target.value)
+                                            onContents(row, e.target.value)
                                         }
                                     />
                                 </TableCell>
