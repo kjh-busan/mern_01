@@ -1,8 +1,7 @@
 import React from 'react'
 import TodoTable from './TodoTable'
 import TodoHeader from './TodoHeader'
-import { Alert } from '@mui/material'
-import { useTodoHooks } from '../../../Hooks/TodoHooks'
+import { useTodoHooks } from '../../../../hooks/TodoHooks'
 
 const Todo: React.FC = () => {
     const {
@@ -14,16 +13,19 @@ const Todo: React.FC = () => {
         contents,
         setContents,
         onHandleParam,
-        onHandleDelete,
-        onUpdateHandle,
         onInsertHandle,
+        onSelectRow,
+        onToggleEditMode,
+        onUpdateSelected,
+        onToggleSelectAll,
+        selectAll,
         error,
     } = useTodoHooks()
 
     return (
         <div>
             <h1>Todos</h1>
-            {error && <Alert severity="error">{error}</Alert>}
+            {error && <div style={{ color: 'red' }}>{error}</div>}
             <TodoHeader
                 username={username}
                 setUsername={setUsername}
@@ -32,12 +34,15 @@ const Todo: React.FC = () => {
                 contents={contents}
                 setContents={setContents}
                 onInsertHandle={onInsertHandle}
+                onUpdateSelected={onUpdateSelected}
             />
             <TodoTable
                 todos={todos}
                 onHandleParam={onHandleParam}
-                onUpdateHandle={onUpdateHandle}
-                onHandleDelete={onHandleDelete}
+                onSelectRow={onSelectRow}
+                onToggleEditMode={onToggleEditMode}
+                onToggleSelectAll={onToggleSelectAll}
+                selectAll={selectAll}
             />
         </div>
     )

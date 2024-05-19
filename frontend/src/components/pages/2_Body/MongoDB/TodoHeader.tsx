@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, MenuItem, TextField } from '@mui/material'
-import { TodoHeaderProps, TodoTitles } from '../../../types/todos/TodoTypes'
+import { TodoTitles, TodoHeaderProps } from '../../../../types/todos/TodoTypes'
 
 const TodoHeader: React.FC<TodoHeaderProps> = ({
     username,
@@ -10,9 +10,10 @@ const TodoHeader: React.FC<TodoHeaderProps> = ({
     contents,
     setContents,
     onInsertHandle,
+    onUpdateSelected,
 }) => {
     return (
-        <>
+        <div>
             <TextField
                 id="todo-username"
                 label="User Name"
@@ -56,7 +57,22 @@ const TodoHeader: React.FC<TodoHeaderProps> = ({
             >
                 Insert
             </Button>
-        </>
+            <Button
+                onClick={onUpdateSelected}
+                sx={{
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    border: '1px solid',
+                    borderColor: 'primary.main',
+                    '&:hover': {
+                        backgroundColor: 'primary.dark',
+                        borderColor: 'primary.dark',
+                    },
+                }}
+            >
+                Update
+            </Button>
+        </div>
     )
 }
 

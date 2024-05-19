@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { TodoType } from '../types/todos/TodoTypes'
+import { Types } from 'mongoose'
 
 export const useTodoHooks = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
@@ -8,6 +9,7 @@ export const useTodoHooks = () => {
     const [title, setTitle] = useState('Programming')
     const [contents, setContents] = useState('')
     const [error, setError] = useState<string | null>(null)
+    const [selectAll, setSelectAll] = useState(false)
 
     useEffect(() => {
         fetchTodos()
@@ -57,7 +59,6 @@ export const useTodoHooks = () => {
                 return
             }
 
-            // Check if there are any changes
             const hasChanges = Object.keys(todo).some(
                 (key) =>
                     todo[key as keyof TodoType] !== row[key as keyof TodoType]
@@ -79,12 +80,13 @@ export const useTodoHooks = () => {
 
             console.log('OK UPDATE')
             fetchTodos()
-            setError(null) // Clear the error message
+            setError(null)
         } catch (error) {
             console.error('Error updating user:', error)
             setError('Error updating todo.')
         }
     }
+
     const onInsertHandle = async () => {
         if (checkoutInsert()) {
             setError('Please fill in all fields.')
@@ -121,7 +123,7 @@ export const useTodoHooks = () => {
         console.log('response.status:', response.status)
         if (response.status === 200 || response.status === 201) {
             fetchTodos()
-            setError(null) // Clear the error message
+            setError(null)
         } else {
             console.log('ERROR: Response')
             setError('Error inserting todo.')
@@ -129,6 +131,42 @@ export const useTodoHooks = () => {
     }
 
     const checkoutInsert = () => !username || !title || !contents
+
+    const onSelectRow = (id: Types.ObjectId) => {
+        const updatedTodos = todos.map((todo) =>
+            todo._id === id
+                ? {
+                      ...todo,
+                      selected: !todo.selected,
+                      editMode: !todo.editMode,
+                  }
+                : todo
+        )
+        setTodos(updatedTodos)
+    }
+
+    const onToggleEditMode = (id: Types.ObjectId) => {
+        const updatedTodos = todos.map((todo) =>
+            todo._id === id ? { ...todo, delete: !todo.delete } : todo
+        )
+        setTodos(updatedTodos)
+    }
+
+    const onUpdateSelected = async () => {
+        const selectedTodos = todos.filter((todo) => todo.selected)
+        for (const todo of selectedTodos) {
+            await onUpdateHandle(todo)
+        }
+    }
+
+    const onToggleSelectAll = () => {
+        const updatedTodos = todos.map((todo) => ({
+            ...todo,
+            selected: !selectAll,
+        }))
+        setTodos(updatedTodos)
+        setSelectAll(!selectAll)
+    }
 
     return {
         todos,
@@ -142,6 +180,11 @@ export const useTodoHooks = () => {
         onHandleDelete,
         onUpdateHandle,
         onInsertHandle,
+        onSelectRow,
+        onToggleEditMode,
+        onUpdateSelected,
+        onToggleSelectAll,
+        selectAll,
         error,
     }
 }

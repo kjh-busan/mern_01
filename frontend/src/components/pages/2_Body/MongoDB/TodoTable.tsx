@@ -10,50 +10,42 @@ import {
     TextField,
     MenuItem,
     Badge,
-    ButtonGroup,
-    Button,
     TableContainer,
+    Button,
+    ButtonGroup,
 } from '@mui/material'
-import { TodoTableProps, TodoTitles } from '../../../types/todos/TodoTypes'
+import { TodoTitles, TodoTableProps } from '../../../../types/todos/TodoTypes'
 
-export type TodoType = {
-    _id?: string
-    username: string
-    title: string
-    contents: string
-    likeCount: number
-    completed: boolean
-    time?: Date
-}
-
-/**
- *
- * @param param0
- * @returns
- */
 const TodoTable: React.FC<TodoTableProps> = ({
     todos,
     onHandleParam,
-    onUpdateHandle,
-    onHandleDelete,
+    onSelectRow,
+    onToggleEditMode,
+    onToggleSelectAll,
+    selectAll,
 }) => {
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Completed</TableCell>
+                        <TableCell>
+                            <Checkbox
+                                checked={selectAll}
+                                onChange={onToggleSelectAll}
+                            />
+                        </TableCell>
                         <TableCell>User Name</TableCell>
                         <TableCell align="left">Category</TableCell>
                         <TableCell align="left">Content</TableCell>
                         <TableCell align="left">Like</TableCell>
-                        <TableCell align="left">Update/Delete</TableCell>
+                        <TableCell align="left">Delete</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {todos.map((row, index) => (
+                    {todos.map((row) => (
                         <TableRow
-                            key={row.username + index}
+                            key={row._id?.toString()}
                             sx={{
                                 '&:last-child td, &:last-child th': {
                                     border: 0,
@@ -62,25 +54,28 @@ const TodoTable: React.FC<TodoTableProps> = ({
                         >
                             <TableCell>
                                 <Checkbox
-                                    value="completed"
-                                    id={`todo${index}`}
-                                    onChange={(e) =>
-                                        onHandleParam(
-                                            row,
-                                            'completed',
-                                            e.target.checked
-                                        )
-                                    }
-                                    checked={row.completed}
+                                    checked={row.selected || false}
+                                    onChange={() => onSelectRow(row._id!)}
                                 />
                             </TableCell>
                             <TableCell component="th" scope="row">
-                                {row.username}
+                                <TextField
+                                    value={row.username}
+                                    onChange={(e) =>
+                                        onHandleParam(
+                                            row,
+                                            'username',
+                                            e.target.value
+                                        )
+                                    }
+                                    disabled={!row.editMode}
+                                />
                             </TableCell>
                             <TableCell align="left">
                                 <TextField
                                     select
                                     value={row.title}
+                                    label="Category"
                                     onChange={(e) =>
                                         onHandleParam(
                                             row,
@@ -88,6 +83,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                             e.target.value
                                         )
                                     }
+                                    disabled={!row.editMode}
                                     sx={{ width: '100px' }}
                                 >
                                     {TodoTitles.map((option) => (
@@ -110,6 +106,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                             e.target.value
                                         )
                                     }
+                                    disabled={!row.editMode}
                                 />
                             </TableCell>
                             <TableCell align="left">
@@ -129,6 +126,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                                 row.likeCount - 1
                                             )
                                         }}
+                                        disabled={!row.editMode}
                                     >
                                         -
                                     </Button>
@@ -141,20 +139,18 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                                 row.likeCount + 1
                                             )
                                         }}
+                                        disabled={!row.editMode}
                                     >
                                         +
                                     </Button>
                                 </ButtonGroup>
                             </TableCell>
                             <TableCell>
-                                <ButtonGroup>
-                                    <Button onClick={() => onUpdateHandle(row)}>
-                                        Update
-                                    </Button>
-                                    <Button onClick={() => onHandleDelete(row)}>
-                                        Delete
-                                    </Button>
-                                </ButtonGroup>
+                                <Checkbox
+                                    checked={row.delete || false}
+                                    disabled={!row.editMode}
+                                    onChange={() => onToggleEditMode(row._id!)}
+                                />
                             </TableCell>
                         </TableRow>
                     ))}
