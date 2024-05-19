@@ -48,7 +48,7 @@ router.get("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const userId = req.params.id;
-  const { username, title, contents, likeCount, completed, time } = req.body;
+  const { title, contents, likeCount, completed } = req.body;
   try {
     let todo = await Todo.findById(userId);
 
@@ -65,13 +65,13 @@ router.put("/:id", async (req, res) => {
     if (likeCount) {
       todo.likeCount = likeCount;
     }
-    if (completed) {
+    if (completed !== undefined && completed !== null) {
       todo.completed = completed;
     }
 
+    console.log("[BE ]updateTodo:", todo);
     const updateTodo = await todo.save();
 
-    console.log("[BE ]updateTodo:", todo);
     res.status(200).json(updateTodo);
   } catch (error) {
     console.error("Error updating user:", error);

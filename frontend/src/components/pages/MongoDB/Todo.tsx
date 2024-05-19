@@ -49,15 +49,13 @@ const Todo: React.FC = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
     const [username, setUsername] = useState('')
     const [title, setTitle] = useState('Programming')
-    // const [titleItem, setTitleItem] = useState('Programming')
     const [contents, setContents] = useState('')
-    // const [contentsItem, setContentsItem] = useState('')
 
     useEffect(() => {
         fetchTodos()
     }, [])
 
-    const fetchTodos = async (name = '') => {
+    const fetchTodos = async () => {
         try {
             const response = await axios.get<TodoType[]>(
                 `http://localhost:5001/api/todos`
@@ -98,9 +96,6 @@ const Todo: React.FC = () => {
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id ? { ...todo, completed: isChecked } : todo
         )
-
-        console.log(`setCompleted:${isChecked}`)
-
         setTodos(updatedTodo)
     }
 
@@ -130,7 +125,7 @@ const Todo: React.FC = () => {
         }
     }
 
-    const onUpdateHandle = async (row: TodoType) => {
+    const onHandleUpdate = async (row: TodoType) => {
         // Update
         try {
             const todo = todos.find((todo) => todo._id === row._id)
@@ -139,21 +134,10 @@ const Todo: React.FC = () => {
                 ...todo!,
                 time: new Date(),
             }
-            // const newTodo: TodoType = {
-            //     username,
-            //     title: row.title,
-            //     contents: row.contents,
-            //     likeCount: row.likeCount,
-            //     completed: row.completed,
-            //     time: new Date(),
-            // }
-            console.log('UPDATE newTodo:', newTodo)
             await axios.put(
                 `http://localhost:5001/api/todos/${row._id}`,
                 newTodo
             )
-
-            console.log('OK UPDATE')
             fetchTodos()
         } catch (error) {
             console.error('Error updating user:', error)
@@ -192,14 +176,6 @@ const Todo: React.FC = () => {
         }
     }
 
-    const showSelectTitle = (titleValue: string) => {
-        const selectedItem = TodoTitles.find((t) => t.value === titleValue)
-        return (
-            <MenuItem key="todo-title-key" id="todo-title">
-                {selectedItem?.label}
-            </MenuItem>
-        )
-    }
     return (
         <div>
             <h1>Todos</h1>
@@ -213,7 +189,7 @@ const Todo: React.FC = () => {
             <TextField
                 id="todo-title"
                 select
-                label="Category Select"
+                label="Category"
                 value={title} // 초기값 설정
                 helperText="Please select your todos"
                 onChange={(e) => setTitle(e.target.value)} // 선택된 값을 title 상태에 저장
@@ -247,7 +223,7 @@ const Todo: React.FC = () => {
                     <TableBody>
                         {todos.map((row, index) => (
                             <TableRow
-                                key={row.username + index}
+                                key={row._id! + index}
                                 sx={{
                                     '&:last-child td, &:last-child th': {
                                         border: 0,
@@ -270,7 +246,7 @@ const Todo: React.FC = () => {
                                 <TableCell align="left">
                                     <TextField
                                         select
-                                        label={showSelectTitle(row.title)}
+                                        value={row.title} // value를 row.title으로 설정
                                         onChange={(e) =>
                                             onTitle(row, e.target.value)
                                         }
@@ -288,7 +264,7 @@ const Todo: React.FC = () => {
                                 </TableCell>
                                 <TableCell align="left">
                                     <TextField
-                                        label={row.contents}
+                                        value={row.contents} // value를 row.contents로 설정
                                         onChange={(e) =>
                                             onContents(row, e.target.value)
                                         }
@@ -323,7 +299,7 @@ const Todo: React.FC = () => {
                                 <TableCell>
                                     <ButtonGroup>
                                         <Button
-                                            onClick={() => onUpdateHandle(row)}
+                                            onClick={() => onHandleUpdate(row)}
                                         >
                                             Update
                                         </Button>
