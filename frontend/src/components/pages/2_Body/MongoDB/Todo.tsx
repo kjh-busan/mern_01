@@ -1,7 +1,7 @@
 import React from 'react'
 import TodoTable from './TodoTable'
 import TodoHeader from './TodoHeader'
-import { useTodoHooks } from '../../../../hooks/TodoHooks'
+import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
 
 const Todo: React.FC = () => {
     const {

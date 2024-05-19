@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { TodoType } from '../types/todos/TodoTypes'
+import { TodoType } from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
 
 export const useTodoHooks = () => {
@@ -163,6 +163,7 @@ export const useTodoHooks = () => {
         const updatedTodos = todos.map((todo) => ({
             ...todo,
             selected: !selectAll,
+            editMode: !todo.editMode,
         }))
         setTodos(updatedTodos)
         setSelectAll(!selectAll)
