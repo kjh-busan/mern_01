@@ -66,50 +66,20 @@ const Todo: React.FC = () => {
         }
     }
 
-    const onTitle = (row: TodoType, value: string) => {
+    const onHandleParam = (
+        row: TodoType,
+        field: keyof TodoType,
+        value: any
+    ) => {
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id
                 ? {
                       ...todo,
-                      title: value,
+                      [field]: value,
                   }
                 : todo
         )
-        console.log(`onTitle:${row.title}`)
-        setTodos(updatedTodo)
-    }
-
-    const onContents = (row: TodoType, value: string) => {
-        const updatedTodo = todos.map((todo) =>
-            todo._id === row._id
-                ? {
-                      ...todo,
-                      contents: value,
-                  }
-                : todo
-        )
-        console.log(`onContents:${row.contents}`)
-        setTodos(updatedTodo)
-    }
-
-    const onCompleted = (row: TodoType, isChecked: boolean) => {
-        const updatedTodo = todos.map((todo) =>
-            todo._id === row._id ? { ...todo, completed: isChecked } : todo
-        )
-        setTodos(updatedTodo)
-    }
-
-    const setUserCount = (row: TodoType, count: number) => {
-        const updatedTodo = todos.map((todo) =>
-            todo._id === row._id
-                ? {
-                      ...todo,
-                      likeCount: todo.likeCount
-                          ? todo.likeCount + count
-                          : count,
-                  }
-                : todo
-        )
+        console.log(`Updated ${field}: ${value}`)
         setTodos(updatedTodo)
     }
 
@@ -125,8 +95,7 @@ const Todo: React.FC = () => {
         }
     }
 
-    const onHandleUpdate = async (row: TodoType) => {
-        // Update
+    const onUpdateHandle = async (row: TodoType) => {
         try {
             const todo = todos.find((todo) => todo._id === row._id)
 
@@ -134,10 +103,13 @@ const Todo: React.FC = () => {
                 ...todo!,
                 time: new Date(),
             }
+            console.log('UPDATE newTodo:', newTodo)
             await axios.put(
                 `http://localhost:5001/api/todos/${row._id}`,
                 newTodo
             )
+
+            console.log('OK UPDATE')
             fetchTodos()
         } catch (error) {
             console.error('Error updating user:', error)
@@ -149,12 +121,10 @@ const Todo: React.FC = () => {
     }
 
     const onInsertHandle = async () => {
-        // validate check
         if (checkoutInsert()) {
             return
         }
 
-        // Insert
         const newTodo: TodoType = {
             username,
             title,
@@ -179,7 +149,6 @@ const Todo: React.FC = () => {
     return (
         <div>
             <h1>Todos</h1>
-            {/* Input area */}
             <TextField
                 id="todo-username"
                 label="User Name"
@@ -190,9 +159,9 @@ const Todo: React.FC = () => {
                 id="todo-title"
                 select
                 label="Category"
-                value={title} // 초기값 설정
+                value={title}
                 helperText="Please select your todos"
-                onChange={(e) => setTitle(e.target.value)} // 선택된 값을 title 상태에 저장
+                onChange={(e) => setTitle(e.target.value)}
             >
                 {TodoTitles.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -206,8 +175,21 @@ const Todo: React.FC = () => {
                 variant="outlined"
                 onChange={(e) => setContents(e.target.value)}
             />
-            <Button onClick={onInsertHandle}>Insert</Button>
-            {/* contents area */}
+            <Button
+                onClick={onInsertHandle}
+                sx={{
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    border: '1px solid',
+                    borderColor: 'primary.main',
+                    '&:hover': {
+                        backgroundColor: 'primary.dark',
+                        borderColor: 'primary.dark',
+                    },
+                }}
+            >
+                Insert
+            </Button>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -223,7 +205,7 @@ const Todo: React.FC = () => {
                     <TableBody>
                         {todos.map((row, index) => (
                             <TableRow
-                                key={row._id! + index}
+                                key={row.username + index}
                                 sx={{
                                     '&:last-child td, &:last-child th': {
                                         border: 0,
@@ -235,7 +217,11 @@ const Todo: React.FC = () => {
                                         value="completed"
                                         id={`todo${index}`}
                                         onChange={(e) =>
-                                            onCompleted(row, e.target.checked)
+                                            onHandleParam(
+                                                row,
+                                                'completed',
+                                                e.target.checked
+                                            )
                                         }
                                         checked={row.completed}
                                     />
@@ -246,9 +232,14 @@ const Todo: React.FC = () => {
                                 <TableCell align="left">
                                     <TextField
                                         select
-                                        value={row.title} // value를 row.title으로 설정
+                                        value={row.title}
+                                        label="Category"
                                         onChange={(e) =>
-                                            onTitle(row, e.target.value)
+                                            onHandleParam(
+                                                row,
+                                                'title',
+                                                e.target.value
+                                            )
                                         }
                                         sx={{ width: '100px' }}
                                     >
@@ -264,9 +255,14 @@ const Todo: React.FC = () => {
                                 </TableCell>
                                 <TableCell align="left">
                                     <TextField
-                                        value={row.contents} // value를 row.contents로 설정
+                                        value={row.contents}
+                                        label="Content"
                                         onChange={(e) =>
-                                            onContents(row, e.target.value)
+                                            onHandleParam(
+                                                row,
+                                                'contents',
+                                                e.target.value
+                                            )
                                         }
                                     />
                                 </TableCell>
@@ -281,7 +277,11 @@ const Todo: React.FC = () => {
                                         <Button
                                             aria-label="reduce"
                                             onClick={() => {
-                                                setUserCount(row, -1)
+                                                onHandleParam(
+                                                    row,
+                                                    'likeCount',
+                                                    row.likeCount - 1
+                                                )
                                             }}
                                         >
                                             -
@@ -289,7 +289,11 @@ const Todo: React.FC = () => {
                                         <Button
                                             aria-label="increase"
                                             onClick={() => {
-                                                setUserCount(row, +1)
+                                                onHandleParam(
+                                                    row,
+                                                    'likeCount',
+                                                    row.likeCount + 1
+                                                )
                                             }}
                                         >
                                             +
@@ -299,7 +303,7 @@ const Todo: React.FC = () => {
                                 <TableCell>
                                     <ButtonGroup>
                                         <Button
-                                            onClick={() => onHandleUpdate(row)}
+                                            onClick={() => onUpdateHandle(row)}
                                         >
                                             Update
                                         </Button>
