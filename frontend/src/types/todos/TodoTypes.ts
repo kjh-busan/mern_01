@@ -51,3 +51,11 @@ export const TodoTitles = [
         label: '🥁',
     },
 ]
+
+export type AlertColors = 'error' | 'success' | 'warning'
+
+export const TodoAlertColor: Record<string, AlertColors> = {
+    error: 'error',
+    success: 'success',
+    warning: 'warning',
+}

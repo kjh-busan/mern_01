@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { TodoType } from '../../types/todos/TodoTypes'
+import {
+    AlertColors,
+    TodoAlertColor,
+    TodoType,
+} from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
 import { AlertColor } from '@mui/material/Alert'
 
@@ -12,7 +16,7 @@ export const useTodoHooks = () => {
     const [message, setMessage] = useState<string | null>(null)
     const [selectAll, setSelectAll] = useState(false)
     const [open, setOpen] = useState(false)
-    const [severity, setSeverity] = useState<AlertColor>('error')
+    const [severity, setSeverity] = useState<AlertColors>(TodoAlertColor.error)
 
     useEffect(() => {
         fetchTodos()
@@ -25,11 +29,14 @@ export const useTodoHooks = () => {
             )
             response && setTodos(response.data)
         } catch (error) {
-            onHandleMessage(`Error fetching todos:${error}`, 'error')
+            onHandleMessage(
+                `Error fetching todos:${error}`,
+                TodoAlertColor.error
+            )
         }
     }
 
-    const onHandleMessage = (message: string, severity: AlertColor) => {
+    const onHandleMessage = (message: string, severity: AlertColors) => {
         setMessage(message)
         setSeverity(severity)
         setOpen(true)
@@ -43,7 +50,7 @@ export const useTodoHooks = () => {
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id ? { ...todo, [field]: value } : todo
         )
-        onHandleMessage(`Updated ${field}: ${value}`, 'success')
+        onHandleMessage(`Updated ${field}: ${value}`, TodoAlertColor.success)
 
         setTodos(updatedTodo)
     }
@@ -55,9 +62,15 @@ export const useTodoHooks = () => {
             )
             console.log(`delete: ${response.data}`)
             fetchTodos()
-            onHandleMessage('Todo deleted successfully.', 'success')
+            onHandleMessage(
+                'Todo deleted successfully.',
+                TodoAlertColor.success
+            )
         } catch (error) {
-            onHandleMessage(`Error deleting todo: ${error}`, 'error')
+            onHandleMessage(
+                `Error deleting todo: ${error}`,
+                TodoAlertColor.error
+            )
         }
     }
 
@@ -66,7 +79,10 @@ export const useTodoHooks = () => {
             const todo = todos.find((todo) => todo._id === row._id)
 
             if (!todo) {
-                onHandleMessage('Todo not found for update.', 'error')
+                onHandleMessage(
+                    'Todo not found for update.',
+                    TodoAlertColor.error
+                )
                 return
             }
 
@@ -90,9 +106,12 @@ export const useTodoHooks = () => {
             )
 
             fetchTodos()
-            onHandleMessage('Todo updated successfully.', 'success')
+            onHandleMessage(
+                'Todo updated successfully.',
+                TodoAlertColor.success
+            )
         } catch (error) {
-            onHandleMessage('Error updating todo.', 'error')
+            onHandleMessage('Error updating todo.', TodoAlertColor.error)
         }
     }
 
@@ -131,9 +150,12 @@ export const useTodoHooks = () => {
         )
         if (response.status === 200 || response.status === 201) {
             fetchTodos()
-            onHandleMessage('Todo inserted successfully.', 'success')
+            onHandleMessage(
+                'Todo inserted successfully.',
+                TodoAlertColor.success
+            )
         } else {
-            onHandleMessage('Error inserting todo.', 'error')
+            onHandleMessage('Error inserting todo.', TodoAlertColor.error)
         }
     }
 
@@ -177,7 +199,7 @@ export const useTodoHooks = () => {
     }
 
     const handleClose = (
-        event?: React.SyntheticEvent | Event,
+        _event?: React.SyntheticEvent | Event,
         reason?: string
     ) => {
         if (reason === 'clickaway') {
