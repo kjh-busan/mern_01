@@ -59,17 +59,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                 />
                             </TableCell>
                             <TableCell component="th" scope="row">
-                                <TextField
-                                    value={row.username}
-                                    onChange={(e) =>
-                                        onHandleParam(
-                                            row,
-                                            'username',
-                                            e.target.value
-                                        )
-                                    }
-                                    disabled={!row.editMode}
-                                />
+                                {row.username}
                             </TableCell>
                             <TableCell align="left">
                                 <TextField
