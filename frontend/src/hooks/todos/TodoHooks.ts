@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {
     AlertColors,
+    ResponseStatus,
     TodoAlertColor,
     TodoType,
 } from '../../types/todos/TodoTypes'
@@ -65,11 +66,7 @@ export const useTodoHooks = () => {
                 `http://localhost:5001/api/todos/${row._id}`
             )
             console.log(`delete: ${response.data}`)
-            fetchTodos()
-            onHandleMessage(
-                'Todo deleted successfully.',
-                TodoAlertColor.success
-            )
+            return response.status
         } catch (error) {
             onHandleMessage(
                 `Error deleting todo: ${error}`,
@@ -79,6 +76,23 @@ export const useTodoHooks = () => {
     }
 
     const onUpdateHandle = async (row: TodoType) => {
+        if (row.delete) {
+            const deleteStatus = await onHandleDelete(row)
+            if (ResponseStatus.includes(deleteStatus!)) {
+                fetchTodos()
+                onHandleMessage(
+                    'Todo deleted successfully.',
+                    TodoAlertColor.success
+                )
+            } else {
+                onHandleMessage(
+                    'Todo delete API failed.',
+                    TodoAlertColor.warning
+                )
+            }
+            return
+        }
+
         try {
             const originalTodo = todosOri.find((todo) => todo._id === row._id)
 
@@ -105,16 +119,23 @@ export const useTodoHooks = () => {
                 time: new Date(),
             }
             console.log('UPDATE newTodo:', newTodo)
-            await axios.put(
+            const result = await axios.put(
                 `http://localhost:5001/api/todos/${row._id}`,
                 newTodo
             )
 
-            fetchTodos() // 상태 업데이트 후 todosOri도 업데이트
-            onHandleMessage(
-                'Todo updated successfully.',
-                TodoAlertColor.success
-            )
+            if (ResponseStatus.includes(result.status)) {
+                fetchTodos()
+                onHandleMessage(
+                    'Todo updated successfully.',
+                    TodoAlertColor.success
+                )
+            } else {
+                onHandleMessage(
+                    'Todo update API failed.',
+                    TodoAlertColor.warning
+                )
+            }
         } catch (error) {
             onHandleMessage('Error updating todo.', TodoAlertColor.error)
         }
@@ -122,7 +143,10 @@ export const useTodoHooks = () => {
 
     const onInsertHandle = async () => {
         if (checkoutInsert()) {
-            onHandleMessage('Please fill in all fields.', 'warning')
+            onHandleMessage(
+                'Please fill in all fields.',
+                TodoAlertColor.warning
+            )
             return
         }
 
@@ -136,7 +160,7 @@ export const useTodoHooks = () => {
         if (existingTodo) {
             onHandleMessage(
                 'Todo with the same username, title, and content already exists.',
-                'warning'
+                TodoAlertColor.warning
             )
             return
         }
