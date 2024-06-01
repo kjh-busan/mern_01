@@ -2,14 +2,17 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { TodoType } from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
+import { AlertColor } from '@mui/material/Alert'
 
 export const useTodoHooks = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
     const [username, setUsername] = useState('')
     const [title, setTitle] = useState('Programming')
     const [contents, setContents] = useState('')
-    const [error, setError] = useState<string | null>(null)
+    const [message, setMessage] = useState<string | null>(null)
     const [selectAll, setSelectAll] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [severity, setSeverity] = useState<AlertColor>('error')
 
     useEffect(() => {
         fetchTodos()
@@ -22,8 +25,14 @@ export const useTodoHooks = () => {
             )
             response && setTodos(response.data)
         } catch (error) {
-            console.error('Error fetching todos:', error)
+            onHandleMessage(`Error fetching todos:${error}`, 'error')
         }
+    }
+
+    const onHandleMessage = (message: string, severity: AlertColor) => {
+        setMessage(message)
+        setSeverity(severity)
+        setOpen(true)
     }
 
     const onHandleParam = (
@@ -34,7 +43,8 @@ export const useTodoHooks = () => {
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id ? { ...todo, [field]: value } : todo
         )
-        console.log(`Updated ${field}: ${value}`)
+        onHandleMessage(`Updated ${field}: ${value}`, 'success')
+
         setTodos(updatedTodo)
     }
 
@@ -43,10 +53,11 @@ export const useTodoHooks = () => {
             const response = await axios.delete(
                 `http://localhost:5001/api/todos/${row._id}`
             )
-            console.log(response.data)
+            console.log(`delete: ${response.data}`)
             fetchTodos()
+            onHandleMessage('Todo deleted successfully.', 'success')
         } catch (error) {
-            console.error('Error deleting user:', error)
+            onHandleMessage(`Error deleting todo: ${error}`, 'error')
         }
     }
 
@@ -55,7 +66,7 @@ export const useTodoHooks = () => {
             const todo = todos.find((todo) => todo._id === row._id)
 
             if (!todo) {
-                setError('Todo not found for update.')
+                onHandleMessage('Todo not found for update.', 'error')
                 return
             }
 
@@ -64,7 +75,7 @@ export const useTodoHooks = () => {
                     todo[key as keyof TodoType] !== row[key as keyof TodoType]
             )
             if (!hasChanges) {
-                setError('No changes detected.')
+                onHandleMessage('No changes detected.', 'warning')
                 return
             }
 
@@ -78,18 +89,16 @@ export const useTodoHooks = () => {
                 newTodo
             )
 
-            console.log('OK UPDATE')
             fetchTodos()
-            setError(null)
+            onHandleMessage('Todo updated successfully.', 'success')
         } catch (error) {
-            console.error('Error updating user:', error)
-            setError('Error updating todo.')
+            onHandleMessage('Error updating todo.', 'error')
         }
     }
 
     const onInsertHandle = async () => {
         if (checkoutInsert()) {
-            setError('Please fill in all fields.')
+            onHandleMessage('Please fill in all fields.', 'warning')
             return
         }
 
@@ -101,8 +110,9 @@ export const useTodoHooks = () => {
         )
 
         if (existingTodo) {
-            setError(
-                'Todo with the same username, title, and content already exists.'
+            onHandleMessage(
+                'Todo with the same username, title, and content already exists.',
+                'warning'
             )
             return
         }
@@ -115,18 +125,15 @@ export const useTodoHooks = () => {
             completed: false,
             time: new Date(),
         }
-        console.log('onInsertHandle:', newTodo)
         const response = await axios.post<TodoType>(
             'http://localhost:5001/api/todos',
             newTodo
         )
-        console.log('response.status:', response.status)
         if (response.status === 200 || response.status === 201) {
             fetchTodos()
-            setError(null)
+            onHandleMessage('Todo inserted successfully.', 'success')
         } else {
-            console.log('ERROR: Response')
-            setError('Error inserting todo.')
+            onHandleMessage('Error inserting todo.', 'error')
         }
     }
 
@@ -169,6 +176,17 @@ export const useTodoHooks = () => {
         setSelectAll(!selectAll)
     }
 
+    const handleClose = (
+        event?: React.SyntheticEvent | Event,
+        reason?: string
+    ) => {
+        if (reason === 'clickaway') {
+            return
+        }
+        setOpen(false)
+        setMessage(null)
+    }
+
     return {
         todos,
         username,
@@ -186,6 +204,11 @@ export const useTodoHooks = () => {
         onUpdateSelected,
         onToggleSelectAll,
         selectAll,
-        error,
+        message,
+        open,
+        severity,
+        handleClose,
+        onHandleMessage,
+        setMessage,
     }
 }
