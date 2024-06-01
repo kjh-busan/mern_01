@@ -139,7 +139,13 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                 <Checkbox
                                     checked={row.delete || false}
                                     disabled={!row.editMode}
-                                    onChange={() => onToggleEditMode(row._id!)}
+                                    onChange={() =>
+                                        onHandleParam(
+                                            row,
+                                            'delete',
+                                            !row.delete || false
+                                        )
+                                    }
                                 />
                             </TableCell>
                         </TableRow>
