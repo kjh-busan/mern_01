@@ -30,7 +30,7 @@ const Todo: React.FC = () => {
     return (
         <div>
             <h1>Todos</h1>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
                 <Alert
                     onClose={handleClose}
                     severity={severity}
