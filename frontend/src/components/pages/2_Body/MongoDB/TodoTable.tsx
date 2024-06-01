@@ -65,7 +65,6 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                 <TextField
                                     select
                                     value={row.title}
-                                    label="Category"
                                     onChange={(e) =>
                                         onHandleParam(
                                             row,

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import TodoTable from './TodoTable'
 import TodoHeader from './TodoHeader'
 import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
+import TodoTable from './TodoTable'
 
 const Todo: React.FC = () => {
     const {
