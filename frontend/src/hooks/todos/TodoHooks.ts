@@ -10,6 +10,7 @@ import { AlertColor } from '@mui/material/Alert'
 
 export const useTodoHooks = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
+    const [todosOri, setTodosOri] = useState<TodoType[]>([])
     const [username, setUsername] = useState('')
     const [title, setTitle] = useState('Programming')
     const [contents, setContents] = useState('')
@@ -27,7 +28,10 @@ export const useTodoHooks = () => {
             const response = await axios.get<TodoType[]>(
                 'http://localhost:5001/api/todos'
             )
-            response && setTodos(response.data)
+            if (response.data) {
+                setTodos(response.data)
+                setTodosOri(response.data)
+            }
         } catch (error) {
             onHandleMessage(
                 `Error fetching todos:${error}`,
@@ -50,8 +54,8 @@ export const useTodoHooks = () => {
         const updatedTodo = todos.map((todo) =>
             todo._id === row._id ? { ...todo, [field]: value } : todo
         )
-        onHandleMessage(`Updated ${field}: ${value}`, TodoAlertColor.success)
 
+        // onHandleMessage(`Updated ${field}: ${value}`, TodoAlertColor.success)
         setTodos(updatedTodo)
     }
 
@@ -76,9 +80,9 @@ export const useTodoHooks = () => {
 
     const onUpdateHandle = async (row: TodoType) => {
         try {
-            const todo = todos.find((todo) => todo._id === row._id)
+            const originalTodo = todosOri.find((todo) => todo._id === row._id)
 
-            if (!todo) {
+            if (!originalTodo) {
                 onHandleMessage(
                     'Todo not found for update.',
                     TodoAlertColor.error
@@ -86,17 +90,18 @@ export const useTodoHooks = () => {
                 return
             }
 
-            const hasChanges = Object.keys(todo).some(
+            const hasChanges = Object.keys(originalTodo).some(
                 (key) =>
-                    todo[key as keyof TodoType] !== row[key as keyof TodoType]
+                    originalTodo[key as keyof TodoType] !==
+                    row[key as keyof TodoType]
             )
             if (!hasChanges) {
-                onHandleMessage('No changes detected.', 'warning')
+                onHandleMessage('No changes detected.', TodoAlertColor.warning)
                 return
             }
 
             const newTodo = {
-                ...todo,
+                ...row,
                 time: new Date(),
             }
             console.log('UPDATE newTodo:', newTodo)
@@ -105,7 +110,7 @@ export const useTodoHooks = () => {
                 newTodo
             )
 
-            fetchTodos()
+            fetchTodos() // 상태 업데이트 후 todosOri도 업데이트
             onHandleMessage(
                 'Todo updated successfully.',
                 TodoAlertColor.success
