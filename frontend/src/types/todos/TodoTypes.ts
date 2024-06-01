@@ -59,3 +59,5 @@ export const TodoAlertColor: Record<string, AlertColors> = {
     success: 'success',
     warning: 'warning',
 }
+
+export const ResponseStatus = [200, 201, 202, 204]
