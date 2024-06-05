@@ -188,11 +188,8 @@ export const useTodoHooks = () => {
     }
 
     const checkoutInsert = (): boolean => !username || !title || !contents
-    const checkoutUpdate = (): boolean => {
-        const hasSelected = todos.filter((todo) => todo.selected)
-        console.log(hasSelected)
-        return hasSelected.length > 0 ? false : true
-    }
+    const checkoutUpdate = (): boolean =>
+        todos.filter((todo) => todo.selected).length > 0 ? false : true
 
     const onSelectRow = (id: Types.ObjectId) => {
         const updatedTodos = todos.map((todo) =>
