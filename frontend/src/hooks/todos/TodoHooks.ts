@@ -21,6 +21,7 @@ export const useTodoHooks = () => {
 
     useEffect(() => {
         fetchTodos()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const fetchTodos = async () => {
@@ -75,6 +76,7 @@ export const useTodoHooks = () => {
     }
 
     const onUpdateHandle = async (row: TodoType) => {
+        // If row was checked delete checkbox
         if (row.delete) {
             const deleteStatus = await onHandleDelete(row)
             if (ResponseStatus.includes(deleteStatus!)) {
@@ -135,6 +137,9 @@ export const useTodoHooks = () => {
                     TodoAlertColor.warning
                 )
             }
+
+            // Initial selectAll checkbox
+            setSelectAll(false)
         } catch (error) {
             onHandleMessage('Error updating todo.', TodoAlertColor.error)
         }
