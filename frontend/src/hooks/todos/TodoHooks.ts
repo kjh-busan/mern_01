@@ -111,8 +111,6 @@ export const useTodoHooks = () => {
                     row[key as keyof TodoType]
             )
             if (!hasChanges) {
-                console.log('hasChanges:', hasChanges)
-                onHandleMessage('No changes detected.', TodoAlertColor.warning)
                 return
             }
 
@@ -120,7 +118,7 @@ export const useTodoHooks = () => {
                 ...row,
                 time: new Date(),
             }
-            console.log('UPDATE newTodo:', newTodo)
+            console.log('UPDATE newTodo:', newTodo.contents)
             const result = await axios.put(
                 `http://localhost:5001/api/todos/${row._id}`,
                 newTodo
@@ -211,6 +209,38 @@ export const useTodoHooks = () => {
 
     const onUpdateSelected = async () => {
         const selectedTodos = todos.filter((todo) => todo.selected)
+        let hasChanges = false
+
+        for (const selectedTodo of selectedTodos) {
+            const originalTodo = todosOri.find(
+                (todo) => todo._id === selectedTodo._id
+            )
+            if (!originalTodo) continue
+
+            const fieldsToCompare: (keyof TodoType)[] = [
+                'username',
+                'title',
+                'contents',
+                'likeCount',
+                'completed',
+                'delete',
+            ]
+            const todoHasChanges = fieldsToCompare.some(
+                (key) => originalTodo[key] !== selectedTodo[key]
+            )
+
+            if (todoHasChanges) {
+                hasChanges = true
+                break
+            }
+        }
+
+        if (!hasChanges) {
+            console.log('hasChanges:', hasChanges)
+            onHandleMessage('No changes detected.', TodoAlertColor.warning)
+            return
+        }
+
         for (const todo of selectedTodos) {
             await onUpdateHandle(todo)
         }
