@@ -195,6 +195,9 @@ export const useTodoHooks = () => {
         } else {
             onHandleMessage('Error inserting todo.', TodoAlertColor.error)
         }
+        // Initial selectAll checkbox
+        setSelectAll(false)
+        setSelectAllDelete(false)
     }
 
     const checkoutInsert = (): boolean => !username || !title || !contents
