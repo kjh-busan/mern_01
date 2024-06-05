@@ -111,6 +111,7 @@ export const useTodoHooks = () => {
                     row[key as keyof TodoType]
             )
             if (!hasChanges) {
+                console.log('hasChanges:', hasChanges)
                 onHandleMessage('No changes detected.', TodoAlertColor.warning)
                 return
             }
