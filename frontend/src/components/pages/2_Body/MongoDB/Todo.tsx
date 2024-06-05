@@ -24,6 +24,8 @@ const Todo: React.FC = () => {
         open,
         severity,
         handleClose,
+        checkoutInsert,
+        checkoutUpdate,
     } = useTodoHooks()
 
     return (
@@ -47,6 +49,8 @@ const Todo: React.FC = () => {
                 setContents={setContents}
                 onInsertHandle={onInsertHandle}
                 onUpdateSelected={onUpdateSelected}
+                checkoutInsert={checkoutInsert}
+                checkoutUpdate={checkoutUpdate}
             />
             <TodoTable
                 todos={todos}

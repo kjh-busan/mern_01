@@ -21,6 +21,8 @@ export type TodoHeaderProps = {
     setContents: (value: string) => void
     onInsertHandle: () => void
     onUpdateSelected: () => void
+    checkoutInsert: () => boolean
+    checkoutUpdate: () => boolean
 }
 
 export type TodoTableProps = {

@@ -187,7 +187,12 @@ export const useTodoHooks = () => {
         }
     }
 
-    const checkoutInsert = () => !username || !title || !contents
+    const checkoutInsert = (): boolean => !username || !title || !contents
+    const checkoutUpdate = (): boolean => {
+        const hasSelected = todos.filter((todo) => todo.selected)
+        console.log(hasSelected)
+        return hasSelected.length > 0 ? false : true
+    }
 
     const onSelectRow = (id: Types.ObjectId) => {
         const updatedTodos = todos.map((todo) =>
@@ -195,7 +200,6 @@ export const useTodoHooks = () => {
                 ? {
                       ...todo,
                       selected: !todo.selected,
-                      //   editMode: !todo.editMode,
                   }
                 : todo
         )
@@ -251,5 +255,7 @@ export const useTodoHooks = () => {
         handleClose,
         onHandleMessage,
         setMessage,
+        checkoutInsert,
+        checkoutUpdate,
     }
 }
