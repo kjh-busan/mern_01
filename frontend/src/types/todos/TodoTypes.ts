@@ -9,7 +9,6 @@ export type TodoType = {
     completed: boolean
     time?: Date
     selected?: boolean
-    editMode?: boolean
     delete?: boolean
 }
 
@@ -22,15 +21,18 @@ export type TodoHeaderProps = {
     setContents: (value: string) => void
     onInsertHandle: () => void
     onUpdateSelected: () => void
+    checkoutInsert: () => boolean
+    checkoutUpdate: () => boolean
 }
 
 export type TodoTableProps = {
     todos: TodoType[]
     onHandleParam: (row: TodoType, field: keyof TodoType, value: any) => void
     onSelectRow: (id: Types.ObjectId) => void
-    onToggleEditMode: (id: Types.ObjectId) => void
     onToggleSelectAll: () => void
     selectAll: boolean
+    onToggleSelectAllDelete: () => void
+    selectAllDelete: boolean
 }
 
 export const TodoTitles = [

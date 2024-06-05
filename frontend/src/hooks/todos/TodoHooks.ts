@@ -7,7 +7,6 @@ import {
     TodoType,
 } from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
-import { AlertColor } from '@mui/material/Alert'
 
 export const useTodoHooks = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
@@ -17,11 +16,13 @@ export const useTodoHooks = () => {
     const [contents, setContents] = useState('')
     const [message, setMessage] = useState<string | null>(null)
     const [selectAll, setSelectAll] = useState(false)
+    const [selectAllDelete, setSelectAllDelete] = useState(false)
     const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState<AlertColors>(TodoAlertColor.error)
 
     useEffect(() => {
         fetchTodos()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const fetchTodos = async () => {
@@ -76,6 +77,7 @@ export const useTodoHooks = () => {
     }
 
     const onUpdateHandle = async (row: TodoType) => {
+        // If row was checked delete checkbox
         if (row.delete) {
             const deleteStatus = await onHandleDelete(row)
             if (ResponseStatus.includes(deleteStatus!)) {
@@ -90,6 +92,10 @@ export const useTodoHooks = () => {
                     TodoAlertColor.warning
                 )
             }
+
+            // Initial selectAll checkbox
+            setSelectAll(false)
+            setSelectAllDelete(false)
             return
         }
 
@@ -110,7 +116,6 @@ export const useTodoHooks = () => {
                     row[key as keyof TodoType]
             )
             if (!hasChanges) {
-                onHandleMessage('No changes detected.', TodoAlertColor.warning)
                 return
             }
 
@@ -118,7 +123,7 @@ export const useTodoHooks = () => {
                 ...row,
                 time: new Date(),
             }
-            console.log('UPDATE newTodo:', newTodo)
+            console.log('UPDATE newTodo:', newTodo.contents)
             const result = await axios.put(
                 `http://localhost:5001/api/todos/${row._id}`,
                 newTodo
@@ -136,6 +141,10 @@ export const useTodoHooks = () => {
                     TodoAlertColor.warning
                 )
             }
+
+            // Initial selectAll checkbox
+            setSelectAll(false)
+            setSelectAllDelete(false)
         } catch (error) {
             onHandleMessage('Error updating todo.', TodoAlertColor.error)
         }
@@ -186,9 +195,14 @@ export const useTodoHooks = () => {
         } else {
             onHandleMessage('Error inserting todo.', TodoAlertColor.error)
         }
+        // Initial selectAll checkbox
+        setSelectAll(false)
+        setSelectAllDelete(false)
     }
 
-    const checkoutInsert = () => !username || !title || !contents
+    const checkoutInsert = (): boolean => !username || !title || !contents
+    const checkoutUpdate = (): boolean =>
+        todos.filter((todo) => todo.selected).length > 0 ? false : true
 
     const onSelectRow = (id: Types.ObjectId) => {
         const updatedTodos = todos.map((todo) =>
@@ -196,22 +210,46 @@ export const useTodoHooks = () => {
                 ? {
                       ...todo,
                       selected: !todo.selected,
-                      editMode: !todo.editMode,
                   }
                 : todo
         )
         setTodos(updatedTodos)
     }
 
-    const onToggleEditMode = (id: Types.ObjectId) => {
-        const updatedTodos = todos.map((todo) =>
-            todo._id === id ? { ...todo, delete: !todo.delete } : todo
-        )
-        setTodos(updatedTodos)
-    }
-
     const onUpdateSelected = async () => {
         const selectedTodos = todos.filter((todo) => todo.selected)
+        let hasChanges = false
+
+        for (const selectedTodo of selectedTodos) {
+            const originalTodo = todosOri.find(
+                (todo) => todo._id === selectedTodo._id
+            )
+            if (!originalTodo) continue
+
+            const fieldsToCompare: (keyof TodoType)[] = [
+                'username',
+                'title',
+                'contents',
+                'likeCount',
+                'completed',
+                'delete',
+            ]
+            const todoHasChanges = fieldsToCompare.some(
+                (key) => originalTodo[key] !== selectedTodo[key]
+            )
+
+            if (todoHasChanges) {
+                hasChanges = true
+                break
+            }
+        }
+
+        if (!hasChanges) {
+            console.log('hasChanges:', hasChanges)
+            onHandleMessage('No changes detected.', TodoAlertColor.warning)
+            return
+        }
+
         for (const todo of selectedTodos) {
             await onUpdateHandle(todo)
         }
@@ -221,10 +259,18 @@ export const useTodoHooks = () => {
         const updatedTodos = todos.map((todo) => ({
             ...todo,
             selected: !selectAll,
-            editMode: !todo.editMode,
         }))
         setTodos(updatedTodos)
         setSelectAll(!selectAll)
+    }
+
+    const onToggleSelectAllDelete = () => {
+        const updatedTodos = todos.map((todo) => ({
+            ...todo,
+            delete: !selectAllDelete,
+        }))
+        setTodos(updatedTodos)
+        setSelectAllDelete(!selectAllDelete)
     }
 
     const handleClose = (
@@ -251,15 +297,18 @@ export const useTodoHooks = () => {
         onUpdateHandle,
         onInsertHandle,
         onSelectRow,
-        onToggleEditMode,
         onUpdateSelected,
         onToggleSelectAll,
         selectAll,
+        onToggleSelectAllDelete,
+        selectAllDelete,
         message,
         open,
         severity,
         handleClose,
         onHandleMessage,
         setMessage,
+        checkoutInsert,
+        checkoutUpdate,
     }
 }

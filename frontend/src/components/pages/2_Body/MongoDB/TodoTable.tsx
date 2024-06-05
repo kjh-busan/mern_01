@@ -20,9 +20,10 @@ const TodoTable: React.FC<TodoTableProps> = ({
     todos,
     onHandleParam,
     onSelectRow,
-    onToggleEditMode,
     onToggleSelectAll,
     selectAll,
+    onToggleSelectAllDelete,
+    selectAllDelete,
 }) => {
     return (
         <TableContainer component={Paper}>
@@ -39,7 +40,15 @@ const TodoTable: React.FC<TodoTableProps> = ({
                         <TableCell align="left">Category</TableCell>
                         <TableCell align="left">Content</TableCell>
                         <TableCell align="left">Like</TableCell>
-                        <TableCell align="left">Delete</TableCell>
+                        <TableCell align="left">
+                            Delete
+                            {selectAll && (
+                                <Checkbox
+                                    checked={selectAllDelete}
+                                    onChange={onToggleSelectAllDelete}
+                                />
+                            )}
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -65,7 +74,6 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                 <TextField
                                     select
                                     value={row.title}
-                                    label="Category"
                                     onChange={(e) =>
                                         onHandleParam(
                                             row,
@@ -73,7 +81,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                             e.target.value
                                         )
                                     }
-                                    disabled={!row.editMode}
+                                    disabled={row.selected ? false : true}
                                     sx={{ width: '100px' }}
                                 >
                                     {TodoTitles.map((option) => (
@@ -96,7 +104,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                             e.target.value
                                         )
                                     }
-                                    disabled={!row.editMode}
+                                    disabled={row.selected ? false : true}
                                 />
                             </TableCell>
                             <TableCell align="left">
@@ -116,7 +124,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                                 row.likeCount - 1
                                             )
                                         }}
-                                        disabled={!row.editMode}
+                                        disabled={row.selected ? false : true}
                                     >
                                         -
                                     </Button>
@@ -129,7 +137,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                                 row.likeCount + 1
                                             )
                                         }}
-                                        disabled={!row.editMode}
+                                        disabled={row.selected ? false : true}
                                     >
                                         +
                                     </Button>
@@ -138,7 +146,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                             <TableCell>
                                 <Checkbox
                                     checked={row.delete || false}
-                                    disabled={!row.editMode}
+                                    disabled={row.selected ? false : true}
                                     onChange={() =>
                                         onHandleParam(
                                             row,

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import TodoTable from './TodoTable'
+import React from 'react'
 import TodoHeader from './TodoHeader'
 import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
+import TodoTable from './TodoTable'
 
 const Todo: React.FC = () => {
     const {
@@ -17,7 +17,6 @@ const Todo: React.FC = () => {
         onHandleParam,
         onInsertHandle,
         onSelectRow,
-        onToggleEditMode,
         onUpdateSelected,
         onToggleSelectAll,
         selectAll,
@@ -25,6 +24,10 @@ const Todo: React.FC = () => {
         open,
         severity,
         handleClose,
+        checkoutInsert,
+        checkoutUpdate,
+        onToggleSelectAllDelete,
+        selectAllDelete,
     } = useTodoHooks()
 
     return (
@@ -48,14 +51,17 @@ const Todo: React.FC = () => {
                 setContents={setContents}
                 onInsertHandle={onInsertHandle}
                 onUpdateSelected={onUpdateSelected}
+                checkoutInsert={checkoutInsert}
+                checkoutUpdate={checkoutUpdate}
             />
             <TodoTable
                 todos={todos}
                 onHandleParam={onHandleParam}
                 onSelectRow={onSelectRow}
-                onToggleEditMode={onToggleEditMode}
                 onToggleSelectAll={onToggleSelectAll}
                 selectAll={selectAll}
+                onToggleSelectAllDelete={onToggleSelectAllDelete}
+                selectAllDelete={selectAllDelete}
             />
         </div>
     )

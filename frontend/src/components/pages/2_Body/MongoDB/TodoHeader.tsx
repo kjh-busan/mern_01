@@ -11,6 +11,8 @@ const TodoHeader: React.FC<TodoHeaderProps> = ({
     setContents,
     onInsertHandle,
     onUpdateSelected,
+    checkoutInsert,
+    checkoutUpdate,
 }) => {
     return (
         <div>
@@ -44,6 +46,7 @@ const TodoHeader: React.FC<TodoHeaderProps> = ({
             />
             <Button
                 onClick={onInsertHandle}
+                disabled={checkoutInsert()}
                 sx={{
                     backgroundColor: 'primary.main',
                     color: 'white',
@@ -59,6 +62,7 @@ const TodoHeader: React.FC<TodoHeaderProps> = ({
             </Button>
             <Button
                 onClick={onUpdateSelected}
+                disabled={checkoutUpdate()}
                 sx={{
                     backgroundColor: 'primary.main',
                     color: 'white',
