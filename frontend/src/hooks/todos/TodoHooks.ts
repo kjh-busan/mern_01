@@ -16,6 +16,7 @@ export const useTodoHooks = () => {
     const [contents, setContents] = useState('')
     const [message, setMessage] = useState<string | null>(null)
     const [selectAll, setSelectAll] = useState(false)
+    const [selectAllDelete, setSelectAllDelete] = useState(false)
     const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState<AlertColors>(TodoAlertColor.error)
 
@@ -91,6 +92,10 @@ export const useTodoHooks = () => {
                     TodoAlertColor.warning
                 )
             }
+
+            // Initial selectAll checkbox
+            setSelectAll(false)
+            setSelectAllDelete(false)
             return
         }
 
@@ -139,6 +144,7 @@ export const useTodoHooks = () => {
 
             // Initial selectAll checkbox
             setSelectAll(false)
+            setSelectAllDelete(false)
         } catch (error) {
             onHandleMessage('Error updating todo.', TodoAlertColor.error)
         }
@@ -255,6 +261,15 @@ export const useTodoHooks = () => {
         setSelectAll(!selectAll)
     }
 
+    const onToggleSelectAllDelete = () => {
+        const updatedTodos = todos.map((todo) => ({
+            ...todo,
+            delete: !selectAllDelete,
+        }))
+        setTodos(updatedTodos)
+        setSelectAllDelete(!selectAllDelete)
+    }
+
     const handleClose = (
         _event?: React.SyntheticEvent | Event,
         reason?: string
@@ -282,6 +297,8 @@ export const useTodoHooks = () => {
         onUpdateSelected,
         onToggleSelectAll,
         selectAll,
+        onToggleSelectAllDelete,
+        selectAllDelete,
         message,
         open,
         severity,

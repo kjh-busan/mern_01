@@ -31,6 +31,8 @@ export type TodoTableProps = {
     onSelectRow: (id: Types.ObjectId) => void
     onToggleSelectAll: () => void
     selectAll: boolean
+    onToggleSelectAllDelete: () => void
+    selectAllDelete: boolean
 }
 
 export const TodoTitles = [

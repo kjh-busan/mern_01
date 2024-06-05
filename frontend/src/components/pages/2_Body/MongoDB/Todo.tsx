@@ -26,6 +26,8 @@ const Todo: React.FC = () => {
         handleClose,
         checkoutInsert,
         checkoutUpdate,
+        onToggleSelectAllDelete,
+        selectAllDelete,
     } = useTodoHooks()
 
     return (
@@ -58,6 +60,8 @@ const Todo: React.FC = () => {
                 onSelectRow={onSelectRow}
                 onToggleSelectAll={onToggleSelectAll}
                 selectAll={selectAll}
+                onToggleSelectAllDelete={onToggleSelectAllDelete}
+                selectAllDelete={selectAllDelete}
             />
         </div>
     )

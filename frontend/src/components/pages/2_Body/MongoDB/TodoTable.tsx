@@ -22,6 +22,8 @@ const TodoTable: React.FC<TodoTableProps> = ({
     onSelectRow,
     onToggleSelectAll,
     selectAll,
+    onToggleSelectAllDelete,
+    selectAllDelete,
 }) => {
     return (
         <TableContainer component={Paper}>
@@ -38,7 +40,15 @@ const TodoTable: React.FC<TodoTableProps> = ({
                         <TableCell align="left">Category</TableCell>
                         <TableCell align="left">Content</TableCell>
                         <TableCell align="left">Like</TableCell>
-                        <TableCell align="left">Delete</TableCell>
+                        <TableCell align="left">
+                            Delete
+                            {selectAll && (
+                                <Checkbox
+                                    checked={selectAllDelete}
+                                    onChange={onToggleSelectAllDelete}
+                                />
+                            )}
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
