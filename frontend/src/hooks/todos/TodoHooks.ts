@@ -7,7 +7,6 @@ import {
     TodoType,
 } from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
-import { AlertColor } from '@mui/material/Alert'
 
 export const useTodoHooks = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
@@ -196,16 +195,9 @@ export const useTodoHooks = () => {
                 ? {
                       ...todo,
                       selected: !todo.selected,
-                      editMode: !todo.editMode,
+                      //   editMode: !todo.editMode,
                   }
                 : todo
-        )
-        setTodos(updatedTodos)
-    }
-
-    const onToggleEditMode = (id: Types.ObjectId) => {
-        const updatedTodos = todos.map((todo) =>
-            todo._id === id ? { ...todo, delete: !todo.delete } : todo
         )
         setTodos(updatedTodos)
     }
@@ -221,7 +213,6 @@ export const useTodoHooks = () => {
         const updatedTodos = todos.map((todo) => ({
             ...todo,
             selected: !selectAll,
-            editMode: !todo.editMode,
         }))
         setTodos(updatedTodos)
         setSelectAll(!selectAll)
@@ -251,7 +242,6 @@ export const useTodoHooks = () => {
         onUpdateHandle,
         onInsertHandle,
         onSelectRow,
-        onToggleEditMode,
         onUpdateSelected,
         onToggleSelectAll,
         selectAll,

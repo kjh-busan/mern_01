@@ -20,7 +20,6 @@ const TodoTable: React.FC<TodoTableProps> = ({
     todos,
     onHandleParam,
     onSelectRow,
-    onToggleEditMode,
     onToggleSelectAll,
     selectAll,
 }) => {
@@ -72,7 +71,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                             e.target.value
                                         )
                                     }
-                                    disabled={!row.editMode}
+                                    disabled={row.selected ? false : true}
                                     sx={{ width: '100px' }}
                                 >
                                     {TodoTitles.map((option) => (
@@ -95,7 +94,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                             e.target.value
                                         )
                                     }
-                                    disabled={!row.editMode}
+                                    disabled={row.selected ? false : true}
                                 />
                             </TableCell>
                             <TableCell align="left">
@@ -115,7 +114,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                                 row.likeCount - 1
                                             )
                                         }}
-                                        disabled={!row.editMode}
+                                        disabled={row.selected ? false : true}
                                     >
                                         -
                                     </Button>
@@ -128,7 +127,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                                 row.likeCount + 1
                                             )
                                         }}
-                                        disabled={!row.editMode}
+                                        disabled={row.selected ? false : true}
                                     >
                                         +
                                     </Button>
@@ -137,7 +136,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                             <TableCell>
                                 <Checkbox
                                     checked={row.delete || false}
-                                    disabled={!row.editMode}
+                                    disabled={row.selected ? false : true}
                                     onChange={() =>
                                         onHandleParam(
                                             row,

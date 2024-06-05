@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import TodoHeader from './TodoHeader'
 import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
 import Snackbar from '@mui/material/Snackbar'
@@ -17,7 +17,6 @@ const Todo: React.FC = () => {
         onHandleParam,
         onInsertHandle,
         onSelectRow,
-        onToggleEditMode,
         onUpdateSelected,
         onToggleSelectAll,
         selectAll,
@@ -53,7 +52,6 @@ const Todo: React.FC = () => {
                 todos={todos}
                 onHandleParam={onHandleParam}
                 onSelectRow={onSelectRow}
-                onToggleEditMode={onToggleEditMode}
                 onToggleSelectAll={onToggleSelectAll}
                 selectAll={selectAll}
             />
