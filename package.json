@@ -1,4 +1,10 @@
 {
+  "name": "workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"yarn --cwd frontend dev\" \"yarn --cwd backend start\""
+  },
   "dependencies": {
     "concurrently": "^8.2.2",
     "dayjs": "^1.11.11"
