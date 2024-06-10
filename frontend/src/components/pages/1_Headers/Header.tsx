@@ -20,6 +20,7 @@ export const Header = ({
     onLogout,
     onCreateAccount,
 }: HeaderProps) => (
+    return (
     <header>
         <div className="storybook-header">
             <div>
@@ -72,4 +73,6 @@ export const Header = ({
             </div>
         </div>
     </header>
+
+    )
 )
