@@ -1,16 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { LoginModalProps } from '../../types/login/LoginTypes'
 
-const Login = (props: any) => {
+const LogIn = ({ open, onClose, onLogin }: LoginModalProps) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const onButtonClick = () => {
         // You'll update this function later...
+        onLogin()
     }
 
     return (
