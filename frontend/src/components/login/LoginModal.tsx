@@ -6,15 +6,15 @@ import {
     DialogActions,
     Button,
 } from '@mui/material'
-import Login from './Login'
 import { LoginModalProps } from '../../types/login/LoginTypes'
+import LogIn from './Login'
 
 const LoginModal = ({ open, onClose, onLogin }: LoginModalProps) => {
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Login</DialogTitle>
             <DialogContent>
-                <Login onLogin={onLogin} />
+                <LogIn onLogin={onLogin} onClose={onClose} open={false} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Close</Button>

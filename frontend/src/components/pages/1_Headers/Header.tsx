@@ -76,12 +76,12 @@ export const Header = ({
                                 onClick={handleLoginClick}
                                 label="Log in"
                             />
-                            <Button
+                            {/* <Button
                                 primary
                                 size="small"
-                                onClick={onCreateAccount}
+                                onClick={handleSignUpClick}
                                 label="Sign up"
-                            />
+                            /> */}
                         </>
                     )}
                 </div>

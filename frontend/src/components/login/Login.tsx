@@ -1,57 +1,78 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
+import {
+    Button,
+    TextField,
+    Typography,
+    Link,
+    DialogActions,
+} from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { LoginModalProps } from '../../types/login/LoginTypes'
 
-const LogIn = ({ open, onClose, onLogin }: LoginModalProps) => {
+const LogIn = ({ onClose, onLogin }: LoginModalProps) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
 
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
-    const onButtonClick = () => {
-        // You'll update this function later...
-        onLogin()
+    const handleLoginClick = () => {
+        // 로그인 로직 처리 후 홈으로 이동
+        if (onLogin) {
+            onLogin()
+        }
+        navigate('/')
+        if (onClose) {
+            onClose()
+        }
+    }
+
+    const handleSignUpClick = () => {
+        navigate('/signup')
+        if (onClose) {
+            onClose()
+        }
     }
 
     return (
-        <div className={'mainContainer'}>
-            <div className={'titleContainer'}>
-                <div>Login</div>
-            </div>
-            <br />
-            <div className={'inputContainer'}>
-                <input
-                    value={email}
-                    placeholder="Enter your email here"
-                    onChange={(ev) => setEmail(ev.target.value)}
-                    className={'inputBox'}
-                />
-                <label className="errorLabel">{emailError}</label>
-            </div>
-            <br />
-            <div className={'inputContainer'}>
-                <input
-                    value={password}
-                    placeholder="Enter your password here"
-                    onChange={(ev) => setPassword(ev.target.value)}
-                    className={'inputBox'}
-                />
-                <label className="errorLabel">{passwordError}</label>
-            </div>
-            <br />
-            <div className={'inputContainer'}>
-                <input
-                    className={'inputButton'}
-                    type="button"
-                    onClick={onButtonClick}
-                    value={'Log in'}
-                />
-            </div>
-        </div>
+        <>
+            <TextField
+                autoFocus
+                margin="dense"
+                label="Email Address"
+                type="email"
+                fullWidth
+                variant="standard"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={!!emailError}
+                helperText={emailError}
+            />
+            <TextField
+                margin="dense"
+                label="Password"
+                type="password"
+                fullWidth
+                variant="standard"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={!!passwordError}
+                helperText={passwordError}
+            />
+            <Typography variant="body2">
+                Do not have an account?
+                <Link href="#" onClick={handleSignUpClick}>
+                    Sign up
+                </Link>
+            </Typography>
+            <DialogActions>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={handleLoginClick}>Log in</Button>
+            </DialogActions>
+        </>
     )
 }
 
-export default Login
+export default LogIn

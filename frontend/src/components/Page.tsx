@@ -2,7 +2,6 @@ import React from 'react'
 import { Header } from './pages/1_Headers/Header'
 import Footer from './pages/9_Footers/Footer'
 import Todo from './pages/2_Body/MongoDB/Todo'
-import Login from './login/Login'
 
 type User = {
     name: string
