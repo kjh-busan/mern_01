@@ -3,7 +3,6 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Page } from './components/Page'
 import LogIn from './components/login/Login'
-import SignUp from './components/login/SignUp'
 
 const App: React.FC = () => {
     return (
@@ -20,17 +19,6 @@ const App: React.FC = () => {
                         />
                     }
                 />
-                <Route
-                    path="/signup"
-                    element={
-                        <SignUp
-                            open={false}
-                            onClose={function (): void {
-                                throw new Error('Function not implemented.')
-                            }}
-                        />
-                    }
-                />{' '}
             </Routes>
         </Router>
     )

@@ -14,12 +14,7 @@ interface HeaderProps {
     onCreateAccount?: () => void
 }
 
-export const Header = ({
-    user,
-    onLogin,
-    onLogout,
-    onCreateAccount,
-}: HeaderProps) => {
+export const Header = ({ user, onLogin, onLogout }: HeaderProps) => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
     const handleLoginClick = () => {
@@ -76,12 +71,6 @@ export const Header = ({
                                 onClick={handleLoginClick}
                                 label="Log in"
                             />
-                            {/* <Button
-                                primary
-                                size="small"
-                                onClick={handleSignUpClick}
-                                label="Sign up"
-                            /> */}
                         </>
                     )}
                 </div>

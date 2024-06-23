@@ -18,10 +18,6 @@ export const Page: React.FC = () => {
     const onLogout = () => {
         setUser(undefined)
     }
-    const onCreateAccount = () => {
-        // openCreateAccountPage
-        alert('会員登録画面')
-    }
     return (
         <>
             <section>
@@ -29,7 +25,6 @@ export const Page: React.FC = () => {
                     user={user}
                     onLogin={() => onLogin()}
                     onLogout={() => onLogout()}
-                    onCreateAccount={() => onCreateAccount()}
                 />
             </section>
             <section className="storybook-page">{user && <Todo />}</section>

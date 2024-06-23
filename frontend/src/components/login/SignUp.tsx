@@ -9,7 +9,6 @@ import {
     TextField,
     Typography,
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 
 const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
     const [email, setEmail] = useState('')
@@ -20,7 +19,8 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
     const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
     const handleSignUp = () => {
-        // 회원가입 로직을 여기에 추가하세요
+        // 회원가입 로직 추가 후 모달 닫기
+        onClose()
     }
 
     return (

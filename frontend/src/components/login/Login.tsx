@@ -9,12 +9,14 @@ import {
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { LoginModalProps } from '../../types/login/LoginTypes'
+import SignUp from './SignUp'
 
 const LogIn = ({ onClose, onLogin }: LoginModalProps) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
+    const [isSignUpModalOpen, setSignUpModalOpen] = useState(false)
 
     const navigate = useNavigate()
 
@@ -29,11 +31,13 @@ const LogIn = ({ onClose, onLogin }: LoginModalProps) => {
         }
     }
 
-    const handleSignUpClick = () => {
-        navigate('/signup')
-        if (onClose) {
-            onClose()
-        }
+    const handleSignUpClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        setSignUpModalOpen(true)
+    }
+
+    const handleSignUpClose = () => {
+        setSignUpModalOpen(false)
     }
 
     return (
@@ -71,6 +75,8 @@ const LogIn = ({ onClose, onLogin }: LoginModalProps) => {
                 <Button onClick={onClose}>Cancel</Button>
                 <Button onClick={handleLoginClick}>Log in</Button>
             </DialogActions>
+
+            <SignUp open={isSignUpModalOpen} onClose={handleSignUpClose} />
         </>
     )
 }
