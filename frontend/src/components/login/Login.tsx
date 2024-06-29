@@ -21,7 +21,6 @@ const LogIn = ({ onClose, onLogin }: LoginModalProps) => {
     const navigate = useNavigate()
 
     const handleLoginClick = () => {
-        // 로그인 로직 처리 후 홈으로 이동
         if (onLogin) {
             onLogin()
         }
@@ -45,8 +44,8 @@ const LogIn = ({ onClose, onLogin }: LoginModalProps) => {
             <TextField
                 autoFocus
                 margin="dense"
-                label="Email Address"
-                type="email"
+                label="ID"
+                type="text"
                 fullWidth
                 variant="standard"
                 value={email}

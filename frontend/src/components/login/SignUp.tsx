@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 import {
     Dialog,
@@ -18,9 +17,46 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
     const [passwordError, setPasswordError] = useState('')
     const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
+        return emailRegex.test(email.toLowerCase())
+    }
+
+    const validatePassword = (password: string) => {
+        const passwordRegex =
+            /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
+        return passwordRegex.test(password)
+    }
+
     const handleSignUp = () => {
-        // 회원가입 로직 추가 후 모달 닫기
-        onClose()
+        let valid = true
+
+        if (!validateEmail(email)) {
+            setEmailError('invalid ID, please check your ID')
+            valid = false
+        } else {
+            setEmailError('')
+        }
+
+        if (!validatePassword(password)) {
+            setPasswordError(
+                'Password must contain at least one letter, one number, and one special character.'
+            )
+            valid = false
+        } else {
+            setPasswordError('')
+        }
+
+        if (password !== confirmPassword) {
+            setConfirmPasswordError('Passwords do not match.')
+            valid = false
+        } else {
+            setConfirmPasswordError('')
+        }
+
+        if (valid) {
+            onClose()
+        }
     }
 
     return (
