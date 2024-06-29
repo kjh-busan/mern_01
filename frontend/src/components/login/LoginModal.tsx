@@ -14,7 +14,7 @@ const LoginModal = ({ open, onClose, onLogin }: LoginModalProps) => {
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Login</DialogTitle>
             <DialogContent>
-                <LogIn onLogin={onLogin} onClose={onClose} open={false} />
+                <LogIn />
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Close</Button>

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 import {
     Button,
@@ -11,33 +10,24 @@ import { useNavigate } from 'react-router-dom'
 import { LoginModalProps } from '../../types/login/LoginTypes'
 import SignUp from './SignUp'
 
-const LogIn = ({ onClose, onLogin }: LoginModalProps) => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [emailError, setEmailError] = useState('')
-    const [passwordError, setPasswordError] = useState('')
-    const [isSignUpModalOpen, setSignUpModalOpen] = useState(false)
+import { useLoginHooks } from '../../hooks/todos/LoginHooks'
+
+const LogIn = () => {
+    const {
+        email,
+        setEmail,
+        password,
+        setPassword,
+        emailError,
+        passwordError,
+        handleLoginClick,
+        handleSignUpClick,
+        isSignUpModalOpen,
+        setSignUpModalOpen,
+        handleSignUpClose,
+    } = useLoginHooks()
 
     const navigate = useNavigate()
-
-    const handleLoginClick = () => {
-        if (onLogin) {
-            onLogin()
-        }
-        navigate('/')
-        if (onClose) {
-            onClose()
-        }
-    }
-
-    const handleSignUpClick = (event: React.MouseEvent) => {
-        event.preventDefault()
-        setSignUpModalOpen(true)
-    }
-
-    const handleSignUpClose = () => {
-        setSignUpModalOpen(false)
-    }
 
     return (
         <>
@@ -71,7 +61,6 @@ const LogIn = ({ onClose, onLogin }: LoginModalProps) => {
                 </Link>
             </Typography>
             <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
                 <Button onClick={handleLoginClick}>Log in</Button>
             </DialogActions>
 

@@ -9,16 +9,7 @@ const App: React.FC = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<Page />} />
-                <Route
-                    path="/login"
-                    element={
-                        <LogIn
-                            open={true}
-                            onClose={() => {}}
-                            onLogin={() => {}}
-                        />
-                    }
-                />
+                <Route path="/login" element={<LogIn />} />
             </Routes>
         </Router>
     )
