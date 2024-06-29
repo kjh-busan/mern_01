@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
     Dialog,
     DialogTitle,
@@ -6,58 +6,22 @@ import {
     DialogActions,
     Button,
     TextField,
-    Typography,
 } from '@mui/material'
+import { useSignUpHooks } from '../../hooks/todos/SignUpHooks'
 
 const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [emailError, setEmailError] = useState('')
-    const [passwordError, setPasswordError] = useState('')
-    const [confirmPasswordError, setConfirmPasswordError] = useState('')
-
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
-        return emailRegex.test(email.toLowerCase())
-    }
-
-    const validatePassword = (password: string) => {
-        const passwordRegex =
-            /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
-        return passwordRegex.test(password)
-    }
-
-    const handleSignUp = () => {
-        let valid = true
-
-        if (!validateEmail(email)) {
-            setEmailError('invalid ID, please check your ID')
-            valid = false
-        } else {
-            setEmailError('')
-        }
-
-        if (!validatePassword(password)) {
-            setPasswordError(
-                'Password must contain at least one letter, one number, and one special character.'
-            )
-            valid = false
-        } else {
-            setPasswordError('')
-        }
-
-        if (password !== confirmPassword) {
-            setConfirmPasswordError('Passwords do not match.')
-            valid = false
-        } else {
-            setConfirmPasswordError('')
-        }
-
-        if (valid) {
-            onClose()
-        }
-    }
+    const {
+        id,
+        setId,
+        password,
+        setPassword,
+        confirmPassword,
+        setConfirmPassword,
+        idError,
+        passwordError,
+        confirmPasswordError,
+        handleSignUp,
+    } = useSignUpHooks()
 
     return (
         <Dialog open={open} onClose={onClose}>
@@ -66,16 +30,17 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
                 <TextField
                     autoFocus
                     margin="dense"
-                    label="Email Address"
-                    type="email"
+                    label="ID"
+                    type="id"
                     fullWidth
                     variant="standard"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    error={!!emailError}
-                    helperText={emailError}
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
+                    error={!!idError}
+                    helperText={idError}
                 />
                 <TextField
+                    key="password-input"
                     margin="dense"
                     label="Password"
                     type="password"
@@ -87,6 +52,7 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
                     helperText={passwordError}
                 />
                 <TextField
+                    key="confirm-password-input"
                     margin="dense"
                     label="Confirm Password"
                     type="password"
