@@ -21,7 +21,7 @@ export const useSignUpHooks = () => {
         return passwordRegex.test(password)
     }
 
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         let valid = true
 
         if (!validateId(id)) {
@@ -49,16 +49,21 @@ export const useSignUpHooks = () => {
 
         if (valid) {
             // Perform signup action (e.g., API call)
-            // onClose(); // Assuming this is a function to close the signup form
+            try {
+                // Simulate API call with timeout
+                await new Promise((resolve) => setTimeout(resolve, 1000))
+                return true
+            } catch (error) {
+                console.error('Failed to sign up:', error)
+                return false
+            }
+        } else {
+            return false
         }
     }
 
-    const onClose = () => {
-        // Logic to close the signup form
-    }
-
     return {
-        id: id,
+        id,
         setId,
         password,
         setPassword,
