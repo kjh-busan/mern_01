@@ -24,11 +24,13 @@ export const useSignUpHooks = () => {
     const handleSignUp = async () => {
         let valid = true
 
+        setIdError(null)
+        setPasswordError(null)
+        setConfirmPasswordError(null)
+
         if (!validateId(id)) {
             setIdError('Invalid ID format. Please check your ID.')
             valid = false
-        } else {
-            setIdError(null)
         }
 
         if (!validatePassword(password)) {
@@ -36,15 +38,11 @@ export const useSignUpHooks = () => {
                 'Password must contain at least one letter, one number, and one special character.'
             )
             valid = false
-        } else {
-            setPasswordError(null)
         }
 
         if (password !== confirmPassword) {
             setConfirmPasswordError('Passwords do not match.')
             valid = false
-        } else {
-            setConfirmPasswordError(null)
         }
 
         if (valid) {
@@ -52,6 +50,9 @@ export const useSignUpHooks = () => {
             try {
                 // Simulate API call with timeout
                 await new Promise((resolve) => setTimeout(resolve, 1000))
+                setId('')
+                setPassword('')
+                setConfirmPassword('')
                 return true
             } catch (error) {
                 console.error('Failed to sign up:', error)

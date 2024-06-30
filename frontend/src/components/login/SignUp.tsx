@@ -37,12 +37,13 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
         if (result) {
             setSnackbarSeverity('success')
             setSnackbarMessage('Sign up successful!')
+            setSnackbarOpen(true)
             onClose()
         } else {
             setSnackbarSeverity('error')
             setSnackbarMessage('Sign up failed. Please check your details.')
+            setSnackbarOpen(true)
         }
-        setSnackbarOpen(true)
     }
 
     const handleSnackbarClose = () => {
@@ -71,7 +72,7 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
                         autoFocus
                         margin="dense"
                         label="ID"
-                        type="id"
+                        type="text"
                         fullWidth
                         variant="standard"
                         value={id}

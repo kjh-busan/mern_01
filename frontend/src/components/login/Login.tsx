@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
     Button,
     TextField,
@@ -6,11 +6,8 @@ import {
     Link,
     DialogActions,
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { LoginModalProps } from '../../types/login/LoginTypes'
-import SignUp from './SignUp'
-
 import { useLoginHooks } from '../../hooks/todos/LoginHooks'
+import SignUp from './SignUp'
 
 const LogIn = () => {
     const {
@@ -20,14 +17,11 @@ const LogIn = () => {
         setPassword,
         emailError,
         passwordError,
-        handleLoginClick,
+        handleLogin,
         handleSignUpClick,
-        isSignUpModalOpen,
-        setSignUpModalOpen,
         handleSignUpClose,
+        isSignUpModalOpen,
     } = useLoginHooks()
-
-    const navigate = useNavigate()
 
     return (
         <>
@@ -61,7 +55,7 @@ const LogIn = () => {
                 </Link>
             </Typography>
             <DialogActions>
-                <Button onClick={handleLoginClick}>Log in</Button>
+                <Button onClick={handleLogin}>Log in</Button>
             </DialogActions>
 
             <SignUp open={isSignUpModalOpen} onClose={handleSignUpClose} />

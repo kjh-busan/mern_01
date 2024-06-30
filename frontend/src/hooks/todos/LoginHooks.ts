@@ -1,29 +1,21 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const useLoginHooks = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState<string | null>(null)
     const [passwordError, setPasswordError] = useState<string | null>(null)
-    const [isSignUpModalOpen, setSignUpModalOpen] = useState(false) // 추가
-    const [handleSignUpClick, setHandleSignUpClick] = useState<() => void>(
-        () => {}
-    ) // 추가
-    const [handleSignUpClose, setHandleSignUpClose] = useState<() => void>(
-        () => {}
-    ) // 추가
-    const [handleLoginClick, setHandleLoginClick] = useState<() => void>(
-        () => {}
-    ) // 추가
+    const [isSignUpModalOpen, setSignUpModalOpen] = useState(false)
+
+    const navigate = useNavigate()
 
     const validateEmail = (email: string) => {
-        // Basic email validation regex
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         return emailRegex.test(email.toLowerCase())
     }
 
     const validatePassword = (password: string) => {
-        // Password validation regex (example)
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/
         return passwordRegex.test(password)
     }
@@ -52,6 +44,7 @@ export const useLoginHooks = () => {
             try {
                 // Simulate API call with timeout
                 await new Promise((resolve) => setTimeout(resolve, 1000))
+                navigate('/') // Login successful, navigate to home
                 return true
             } catch (error) {
                 console.error('Failed to log in:', error)
@@ -62,6 +55,15 @@ export const useLoginHooks = () => {
         }
     }
 
+    const handleSignUpClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        setSignUpModalOpen(true)
+    }
+
+    const handleSignUpClose = () => {
+        setSignUpModalOpen(false)
+    }
+
     return {
         email,
         setEmail,
@@ -70,13 +72,8 @@ export const useLoginHooks = () => {
         emailError,
         passwordError,
         handleLogin,
-        isSignUpModalOpen,
-        setSignUpModalOpen,
         handleSignUpClick,
-        setHandleSignUpClick,
         handleSignUpClose,
-        setHandleSignUpClose,
-        handleLoginClick,
-        setHandleLoginClick,
+        isSignUpModalOpen,
     }
 }
