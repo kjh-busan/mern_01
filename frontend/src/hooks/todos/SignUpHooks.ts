@@ -9,6 +9,11 @@ export const useSignUpHooks = () => {
     const [confirmPasswordError, setConfirmPasswordError] = useState<
         string | null
     >(null)
+    const [snackbarOpen, setSnackbarOpen] = useState(false)
+    const [snackbarSeverity, setSnackbarSeverity] = useState<
+        'success' | 'error'
+    >('success')
+    const [snackbarMessage, setSnackbarMessage] = useState('')
 
     const validateId = (id: string) => {
         const idRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]{5,}$/
@@ -50,17 +55,31 @@ export const useSignUpHooks = () => {
             try {
                 // Simulate API call with timeout
                 await new Promise((resolve) => setTimeout(resolve, 1000))
+                // Clear inputs on successful signup
                 setId('')
                 setPassword('')
                 setConfirmPassword('')
+                setSnackbarSeverity('success')
+                setSnackbarMessage('Sign up successful!')
+                setSnackbarOpen(true)
                 return true
             } catch (error) {
                 console.error('Failed to sign up:', error)
+                setSnackbarSeverity('error')
+                setSnackbarMessage('Sign up failed. Please try again.')
+                setSnackbarOpen(true)
                 return false
             }
         } else {
+            setSnackbarSeverity('error')
+            setSnackbarMessage('Sign up failed. Please check your details.')
+            setSnackbarOpen(true)
             return false
         }
+    }
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false)
     }
 
     return {
@@ -74,5 +93,9 @@ export const useSignUpHooks = () => {
         passwordError,
         confirmPasswordError,
         handleSignUp,
+        snackbarOpen,
+        snackbarSeverity,
+        snackbarMessage,
+        handleSnackbarClose,
     }
 }

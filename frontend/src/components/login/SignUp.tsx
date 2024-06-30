@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
     Dialog,
     DialogTitle,
@@ -12,12 +12,6 @@ import {
 import { useSignUpHooks } from '../../hooks/todos/SignUpHooks'
 
 const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-    const [snackbarOpen, setSnackbarOpen] = useState(false)
-    const [snackbarSeverity, setSnackbarSeverity] = useState<
-        'success' | 'error'
-    >('success')
-    const [snackbarMessage, setSnackbarMessage] = useState('')
-
     const {
         id,
         setId,
@@ -29,25 +23,18 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
         passwordError,
         confirmPasswordError,
         handleSignUp,
+        snackbarOpen,
+        snackbarSeverity,
+        snackbarMessage,
+        handleSnackbarClose,
     } = useSignUpHooks()
 
     const handleSignUpClick = async () => {
         const result = await handleSignUp()
 
         if (result) {
-            setSnackbarSeverity('success')
-            setSnackbarMessage('Sign up successful!')
-            setSnackbarOpen(true)
             onClose()
-        } else {
-            setSnackbarSeverity('error')
-            setSnackbarMessage('Sign up failed. Please check your details.')
-            setSnackbarOpen(true)
         }
-    }
-
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false)
     }
 
     return (
