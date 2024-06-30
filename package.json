@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "concurrently": "^8.2.2",
-    "dayjs": "^1.11.11"
+    "dayjs": "^1.11.11",
+    "react-player": "^2.16.0"
   }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Header } from './pages/1_Headers/Header'
 import Footer from './pages/9_Footers/Footer'
 import Todo from './pages/2_Body/MongoDB/Todo'
+import CenteredImage from './CenteredImage'
 
 type User = {
     name: string
@@ -18,19 +19,15 @@ export const Page: React.FC = () => {
     const onLogout = () => {
         setUser(undefined)
     }
+
     return (
-        <>
-            <section>
-                <Header
-                    user={user}
-                    onLogin={() => onLogin()}
-                    onLogout={() => onLogout()}
-                />
-            </section>
-            <section className="storybook-page">{user && <Todo />}</section>
-            <section>
-                <Footer />
-            </section>
-        </>
+        <div className="page-container">
+            <Header user={user} onLogout={onLogout} />
+            <main className="main-content">
+                {!user && <CenteredImage />}
+                {user && <Todo />}
+            </main>
+            <Footer />
+        </div>
     )
 }

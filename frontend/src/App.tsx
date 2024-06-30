@@ -7,10 +7,12 @@ import LogIn from './components/login/Login'
 const App: React.FC = () => {
     return (
         <Router>
-            <Routes>
-                <Route path="/" element={<Page />} />
-                <Route path="/login" element={<LogIn />} />
-            </Routes>
+            <div className="centered-container">
+                <Routes>
+                    <Route path="/" element={<Page />} />
+                    <Route path="/login" element={<LogIn />} />
+                </Routes>
+            </div>
         </Router>
     )
 }
