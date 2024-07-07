@@ -1,7 +1,8 @@
-export {}
+import { User } from '../user/UserType'
 
 export interface HeaderProps {
-    user: { name: string } | undefined
-    onLogin: (userName: string) => void
-    onLogout: () => void
+    user?: User
+    onLogin?: (userName: string) => void
+    onLogout?: () => void
+    onCreateAccount?: () => void
 }

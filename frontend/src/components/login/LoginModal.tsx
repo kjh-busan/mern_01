@@ -12,7 +12,7 @@ import LogIn from './Login'
 const LoginModal = ({
     open,
     onClose = () => {},
-    onLogin = () => {},
+    onLogin = (username: string) => {},
 }: LoginModalProps) => {
     return (
         <Dialog open={open} onClose={onClose}>

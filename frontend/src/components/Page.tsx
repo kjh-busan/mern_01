@@ -32,15 +32,8 @@ export const Page: React.FC = () => {
 
     return (
         <div className="page-container">
-            <Header
-                user={user}
-                onLogin={() => onLogin('')}
-                onLogout={onLogout}
-            />
+            <Header user={user} onLogin={onLogin} onLogout={onLogout} />
             <main className="main-content">
-                {!user?.name && (
-                    <button onClick={handleOpenLoginModal}>Open Login</button>
-                )}
                 {!user?.name && <CenteredImage />}
                 {user?.name && <Todo />}
             </main>
