@@ -27,3 +27,4 @@ app.listen(PORT, () => {
 
 // API Server List
 app.use("/api/todos", require("./routes/api/todos"));
+app.use("/api/signup", require("./routes/api/signup"));

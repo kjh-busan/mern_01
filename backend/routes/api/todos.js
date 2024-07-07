@@ -25,36 +25,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/api/check-username", async (req, res) => {
-  const { username } = req.query;
-  const hasUsername = await User.findOne({ username });
-  if (hasUsername) {
-    res.json({ exists: true });
-  } else {
-    res.json({ exists: false });
-  }
-});
-
-router.post("/api/signup", async (req, res) => {
-  const { username, password, title, contents, time } = req.body;
-
-  try {
-    const newTodo = new Todo({
-      username,
-      password,
-      title,
-      contents,
-      time,
-    });
-
-    await newTodo.save();
-    res.status(201).json({ message: "User created successfully" });
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
 router.get("/", async (req, res) => {
   const { username, title, contents, likeCount, completed, time } = req.body;
 
@@ -99,7 +69,7 @@ router.put("/:id", async (req, res) => {
       todo.completed = completed;
     }
 
-    console.log("[BE ]updateTodo:", todo);
+    console.log("[BE] updateTodo:", todo);
     const updateTodo = await todo.save();
 
     res.status(200).json(updateTodo);

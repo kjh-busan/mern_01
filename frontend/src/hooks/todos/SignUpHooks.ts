@@ -55,7 +55,7 @@ export const useSignUpHooks = () => {
 
         if (valid) {
             try {
-                const response = await axios.post(
+                const response = await axios.put(
                     'http://localhost:5001/api/signup',
                     {
                         username,
