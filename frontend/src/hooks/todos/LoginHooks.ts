@@ -70,7 +70,7 @@ export const useLoginHooks = () => {
 
     return {
         id,
-        setEmail: setId,
+        setId,
         password,
         setPassword,
         idError,
