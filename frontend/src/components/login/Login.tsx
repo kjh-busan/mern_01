@@ -8,8 +8,9 @@ import {
 } from '@mui/material'
 import { useLoginHooks } from '../../hooks/todos/LoginHooks'
 import SignUp from './SignUp'
+import { LogInProps } from '../../types/login/LoginTypes'
 
-const LogIn = () => {
+const LogIn = ({ onClose }: LogInProps) => {
     const {
         username,
         setUsername,
@@ -21,7 +22,7 @@ const LogIn = () => {
         handleSignUpClick,
         handleSignUpClose,
         isSignUpModalOpen,
-    } = useLoginHooks()
+    } = useLoginHooks(onClose)
 
     return (
         <>

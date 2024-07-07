@@ -8,3 +8,7 @@ export interface LoginModalProps {
     setSignUpModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
     handleSignUpClose?: () => void
 }
+
+export interface LogInProps {
+    onClose: () => void
+}

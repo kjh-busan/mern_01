@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export const useLoginHooks = () => {
+export const useLoginHooks = (onClose: () => void) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [usernameError, setUsernameError] = useState<string | null>(null)
@@ -50,7 +50,7 @@ export const useLoginHooks = () => {
 
         if (!validatePassword(password)) {
             setPasswordError(
-                'Password must be at least 8 characters long and contain at least one letter and one number.'
+                'Password must be at least 4 characters long and contain at least one letter and one number.'
             )
             valid = false
         } else {
@@ -65,11 +65,15 @@ export const useLoginHooks = () => {
         }
 
         if (valid) {
-            // Perform login action (e.g., API call)
             try {
                 // Simulate API call with timeout
                 await new Promise((resolve) => setTimeout(resolve, 1000))
                 navigate('/') // Login successful, navigate to home
+                setUsername('')
+                setPassword('')
+                setUsernameError(null)
+                setPasswordError(null)
+                onClose()
                 return true
             } catch (error) {
                 console.error('Failed to log in:', error)
