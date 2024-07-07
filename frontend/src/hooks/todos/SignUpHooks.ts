@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
 export const useSignUpHooks = () => {
-    const [id, setId] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [idError, setIdError] = useState<string | null>(null)
+    const [usernameError, setUsernameError] = useState<string | null>(null)
     const [passwordError, setPasswordError] = useState<string | null>(null)
     const [confirmPasswordError, setConfirmPasswordError] = useState<
         string | null
@@ -15,26 +15,28 @@ export const useSignUpHooks = () => {
     >('success')
     const [snackbarMessage, setSnackbarMessage] = useState('')
 
-    const validateId = (id: string) => {
-        const idRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$/
-        return idRegex.test(id.toLowerCase())
+    const validateUsername = (username: string) => {
+        const usernameRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$/
+        return usernameRegex.test(username.toLowerCase())
     }
 
     const validatePassword = (password: string) => {
         const passwordRegex =
-            /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
+            /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{4,}$/
         return passwordRegex.test(password)
     }
 
     const handleSignUp = async () => {
         let valid = true
 
-        setIdError(null)
+        setUsernameError(null)
         setPasswordError(null)
         setConfirmPasswordError(null)
 
-        if (!validateId(id)) {
-            setIdError('Invalid ID format. Please check your ID.')
+        if (!validateUsername(username)) {
+            setUsernameError(
+                'Invalid username format. Please check your username.'
+            )
             valid = false
         }
 
@@ -56,7 +58,7 @@ export const useSignUpHooks = () => {
                 // Simulate API call with timeout
                 await new Promise((resolve) => setTimeout(resolve, 1000))
                 // Clear inputs on successful signup
-                setId('')
+                setUsername('')
                 setPassword('')
                 setConfirmPassword('')
                 setSnackbarSeverity('success')
@@ -83,13 +85,13 @@ export const useSignUpHooks = () => {
     }
 
     return {
-        id,
-        setId,
+        username,
+        setUsername,
         password,
         setPassword,
         confirmPassword,
         setConfirmPassword,
-        idError,
+        usernameError,
         passwordError,
         confirmPasswordError,
         handleSignUp,
