@@ -2,17 +2,17 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const useLoginHooks = () => {
-    const [email, setEmail] = useState('')
+    const [id, setId] = useState('')
     const [password, setPassword] = useState('')
-    const [emailError, setEmailError] = useState<string | null>(null)
+    const [idError, setIdError] = useState<string | null>(null)
     const [passwordError, setPasswordError] = useState<string | null>(null)
     const [isSignUpModalOpen, setSignUpModalOpen] = useState(false)
 
     const navigate = useNavigate()
 
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        return emailRegex.test(email.toLowerCase())
+    const validateId = (id: string) => {
+        const idRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        return idRegex.test(id.toLowerCase())
     }
 
     const validatePassword = (password: string) => {
@@ -23,11 +23,11 @@ export const useLoginHooks = () => {
     const handleLogin = async () => {
         let valid = true
 
-        if (!validateEmail(email)) {
-            setEmailError('Invalid email format. Please check your email.')
+        if (!validateId(id)) {
+            setIdError('Invalid id format. Please check your id.')
             valid = false
         } else {
-            setEmailError(null)
+            setIdError(null)
         }
 
         if (!validatePassword(password)) {
@@ -39,6 +39,10 @@ export const useLoginHooks = () => {
             setPasswordError(null)
         }
 
+        /**
+         * TODO: check
+         *
+         */
         if (valid) {
             // Perform login action (e.g., API call)
             try {
@@ -65,11 +69,11 @@ export const useLoginHooks = () => {
     }
 
     return {
-        email,
-        setEmail,
+        id,
+        setEmail: setId,
         password,
         setPassword,
-        emailError,
+        idError,
         passwordError,
         handleLogin,
         handleSignUpClick,
