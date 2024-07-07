@@ -26,9 +26,10 @@ export const useLoginHooks = () => {
             const response = await axios.get('/api/check-username', {
                 params: { username: username },
             })
+            console.log('checkUsernameExists passed')
             return response.data.exists
         } catch (error) {
-            console.error('Failed to check ID:', error)
+            console.error('Failed to check USERNAME:', error)
             return false
         }
     }
@@ -55,8 +56,9 @@ export const useLoginHooks = () => {
         }
 
         const usernameExists = await checkUsernameExists(username)
+        console.log(`USERNAME does not exist: ${username}`)
         if (!usernameExists) {
-            setUsernameError('ID does not exist.')
+            setUsernameError('USERNAME does not exist.')
             return false
         }
 

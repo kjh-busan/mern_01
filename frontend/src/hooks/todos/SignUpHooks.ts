@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import axios from 'axios'
+import { useState } from 'react'
 
 export const useSignUpHooks = () => {
     const [username, setUsername] = useState('')
@@ -25,6 +25,18 @@ export const useSignUpHooks = () => {
         const passwordRegex =
             /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{4,}$/
         return passwordRegex.test(password)
+    }
+
+    const checkUsernameExists = async (username: string) => {
+        try {
+            const response = await axios.get('/api/login/check-username', {
+                params: { username },
+            })
+            return response.data.exists
+        } catch (error) {
+            console.error('Failed to check username:', error)
+            return false
+        }
     }
 
     const handleSignUp = async () => {
@@ -55,22 +67,30 @@ export const useSignUpHooks = () => {
 
         if (valid) {
             try {
-                const response = await axios.put(
-                    'http://localhost:5001/api/signup',
-                    {
-                        username,
-                        password,
-                        title: 'signUp',
-                        contents: '',
-                        time: new Date().toISOString(),
-                    }
-                )
+                const usernameExists = await checkUsernameExists(username)
+                if (usernameExists) {
+                    setUsernameError(
+                        'Username already exists. Please choose another one.'
+                    )
+                    return false
+                }
+
+                const response = await axios.post('/api/signup', {
+                    username,
+                    password,
+                    title: 'default title',
+                    contents: 'default contents',
+                    likeCount: 0,
+                    completed: false,
+                    time: new Date().toISOString(),
+                })
+
                 if (response.status === 201) {
                     setUsername('')
                     setPassword('')
                     setConfirmPassword('')
                     setSnackbarSeverity('success')
-                    setSnackbarMessage('')
+                    setSnackbarMessage('Sign up successful!')
                     setSnackbarOpen(true)
                     return true
                 }

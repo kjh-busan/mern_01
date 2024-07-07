@@ -2,17 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Todo = require("../../models/Todo");
 
-router.get("/api/check-username", async (req, res) => {
-  const { username } = req.query;
-  const hasUsername = await Todo.findOne({ username });
-  if (hasUsername) {
-    res.json({ exists: true });
-  } else {
-    res.json({ exists: false });
-  }
-});
-
-router.post("/api/signup", async (req, res) => {
+router.post("/", async (req, res) => {
   const { username, password, title, contents, likeCount, completed, time } =
     req.body;
 
@@ -26,6 +16,8 @@ router.post("/api/signup", async (req, res) => {
       completed,
       time,
     });
+
+    console.log("New Todo object:", newTodo);
 
     await newTodo.save();
     res.status(201).json({ message: "User created successfully" });
