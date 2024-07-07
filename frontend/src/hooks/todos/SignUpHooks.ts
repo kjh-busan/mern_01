@@ -16,7 +16,7 @@ export const useSignUpHooks = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('')
 
     const validateId = (id: string) => {
-        const idRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]{5,}$/
+        const idRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$/
         return idRegex.test(id.toLowerCase())
     }
 
