@@ -29,9 +29,12 @@ export const useSignUpHooks = () => {
 
     const checkUsernameExists = async (username: string) => {
         try {
-            const response = await axios.get('/api/login/check-username', {
-                params: { username },
-            })
+            const response = await axios.get(
+                'http://localhost:5001/api/login/check-username',
+                {
+                    params: { username },
+                }
+            )
             return response.data.exists
         } catch (error) {
             console.error('Failed to check username:', error)
@@ -78,8 +81,8 @@ export const useSignUpHooks = () => {
                 const response = await axios.post('/api/signup', {
                     username,
                     password,
-                    title: 'default title',
-                    contents: 'default contents',
+                    title: 'sign up',
+                    contents: 'sign up',
                     likeCount: 0,
                     completed: false,
                     time: new Date().toISOString(),

@@ -12,7 +12,7 @@ export const useLoginHooks = () => {
     const navigate = useNavigate()
 
     const validateUsername = (username: string) => {
-        const usernameRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        const usernameRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$/
         return usernameRegex.test(username.toLowerCase())
     }
 
@@ -23,13 +23,15 @@ export const useLoginHooks = () => {
 
     const checkUsernameExists = async (username: string) => {
         try {
-            const response = await axios.get('/api/check-username', {
-                params: { username: username },
-            })
-            console.log('checkUsernameExists passed')
+            const response = await axios.get(
+                'http://localhost:5001/api/login/check-username',
+                {
+                    params: { username },
+                }
+            )
             return response.data.exists
         } catch (error) {
-            console.error('Failed to check USERNAME:', error)
+            console.error('Failed to check username:', error)
             return false
         }
     }
@@ -56,8 +58,8 @@ export const useLoginHooks = () => {
         }
 
         const usernameExists = await checkUsernameExists(username)
-        console.log(`USERNAME does not exist: ${username}`)
         if (!usernameExists) {
+            console.log(`USERNAME does not exist: ${username}`)
             setUsernameError('USERNAME does not exist.')
             return false
         }

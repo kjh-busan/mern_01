@@ -9,7 +9,11 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 connectDB();
 
-app.use(express.json());
+app.use(
+  express.json({
+    extended: false,
+  })
+);
 app.use(cors());
 
 app.listen(PORT, () => {
