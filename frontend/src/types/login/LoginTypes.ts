@@ -11,4 +11,5 @@ export interface LoginModalProps {
 
 export interface LogInProps {
     onClose: () => void
+    onLogin: () => void
 }

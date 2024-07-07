@@ -10,7 +10,7 @@ import { useLoginHooks } from '../../hooks/todos/LoginHooks'
 import SignUp from './SignUp'
 import { LogInProps } from '../../types/login/LoginTypes'
 
-const LogIn = ({ onClose }: LogInProps) => {
+const LogIn = ({ onClose, onLogin }: LogInProps) => {
     const {
         username,
         setUsername,
@@ -22,7 +22,7 @@ const LogIn = ({ onClose }: LogInProps) => {
         handleSignUpClick,
         handleSignUpClose,
         isSignUpModalOpen,
-    } = useLoginHooks(onClose)
+    } = useLoginHooks(onClose, onLogin)
 
     return (
         <>

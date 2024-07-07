@@ -9,12 +9,16 @@ import {
 import { LoginModalProps } from '../../types/login/LoginTypes'
 import LogIn from './Login'
 
-const LoginModal = ({ open, onClose = () => {} }: LoginModalProps) => {
+const LoginModal = ({
+    open,
+    onClose = () => {},
+    onLogin = () => {},
+}: LoginModalProps) => {
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Login</DialogTitle>
             <DialogContent>
-                <LogIn onClose={onClose} />
+                <LogIn onClose={onClose} onLogin={onLogin} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Close</Button>

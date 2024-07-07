@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export const useLoginHooks = (onClose: () => void) => {
+export const useLoginHooks = (
+    onClose: () => void,
+    onLogin: (username: string) => void
+) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [usernameError, setUsernameError] = useState<string | null>(null)
     const [passwordError, setPasswordError] = useState<string | null>(null)
     const [isSignUpModalOpen, setSignUpModalOpen] = useState(false)
-
-    const navigate = useNavigate()
 
     const validateUsername = (username: string) => {
         const usernameRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$/
@@ -66,14 +66,11 @@ export const useLoginHooks = (onClose: () => void) => {
 
         if (valid) {
             try {
-                // Simulate API call with timeout
                 await new Promise((resolve) => setTimeout(resolve, 1000))
-                navigate('/') // Login successful, navigate to home
+                onLogin(username)
+                onClose()
                 setUsername('')
                 setPassword('')
-                setUsernameError(null)
-                setPasswordError(null)
-                onClose()
                 return true
             } catch (error) {
                 console.error('Failed to log in:', error)
