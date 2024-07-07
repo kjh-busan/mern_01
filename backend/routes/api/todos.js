@@ -25,6 +25,16 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/api/check-username", async (req, res) => {
+  const { username } = req.query;
+  const hasUsername = await User.findOne({ username });
+  if (hasUsername) {
+    res.json({ exists: true });
+  } else {
+    res.json({ exists: false });
+  }
+});
+
 router.get("/", async (req, res) => {
   const { username, title, contents, likeCount, completed, time } = req.body;
 

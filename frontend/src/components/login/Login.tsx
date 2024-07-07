@@ -11,11 +11,11 @@ import SignUp from './SignUp'
 
 const LogIn = () => {
     const {
-        email,
-        setEmail,
+        username,
+        setUsername,
         password,
         setPassword,
-        emailError,
+        usernameError,
         passwordError,
         handleLogin,
         handleSignUpClick,
@@ -32,10 +32,10 @@ const LogIn = () => {
                 type="text"
                 fullWidth
                 variant="standard"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                error={!!emailError}
-                helperText={emailError}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                error={!!usernameError}
+                helperText={usernameError}
             />
             <TextField
                 margin="dense"

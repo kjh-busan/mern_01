@@ -13,13 +13,13 @@ import { useSignUpHooks } from '../../hooks/todos/SignUpHooks'
 
 const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
     const {
-        id,
-        setId,
+        username,
+        setUsername,
         password,
         setPassword,
         confirmPassword,
         setConfirmPassword,
-        idError,
+        usernameError,
         passwordError,
         confirmPasswordError,
         handleSignUp,
@@ -62,10 +62,10 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
                         type="text"
                         fullWidth
                         variant="standard"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
-                        error={!!idError}
-                        helperText={idError}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        error={!!usernameError}
+                        helperText={usernameError}
                     />
                     <TextField
                         key="password-input"

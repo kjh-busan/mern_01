@@ -1,33 +1,48 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 export const useLoginHooks = () => {
-    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [emailError, setEmailError] = useState<string | null>(null)
+    const [usernameError, setUsernameError] = useState<string | null>(null)
     const [passwordError, setPasswordError] = useState<string | null>(null)
     const [isSignUpModalOpen, setSignUpModalOpen] = useState(false)
 
     const navigate = useNavigate()
 
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        return emailRegex.test(email.toLowerCase())
+    const validateUsername = (username: string) => {
+        const usernameRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        return usernameRegex.test(username.toLowerCase())
     }
 
     const validatePassword = (password: string) => {
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*#?&]{4,}$/
         return passwordRegex.test(password)
+    }
+
+    const checkUsernameExists = async (username: string) => {
+        try {
+            const response = await axios.get('/api/check-username', {
+                params: { username: username },
+            })
+            return response.data.exists
+        } catch (error) {
+            console.error('Failed to check ID:', error)
+            return false
+        }
     }
 
     const handleLogin = async () => {
         let valid = true
 
-        if (!validateEmail(email)) {
-            setEmailError('Invalid email format. Please check your email.')
+        if (!validateUsername(username)) {
+            setUsernameError(
+                'Invalid username format. Please check your username.'
+            )
             valid = false
         } else {
-            setEmailError(null)
+            setUsernameError(null)
         }
 
         if (!validatePassword(password)) {
@@ -37,6 +52,12 @@ export const useLoginHooks = () => {
             valid = false
         } else {
             setPasswordError(null)
+        }
+
+        const usernameExists = await checkUsernameExists(username)
+        if (!usernameExists) {
+            setUsernameError('ID does not exist.')
+            return false
         }
 
         if (valid) {
@@ -65,11 +86,11 @@ export const useLoginHooks = () => {
     }
 
     return {
-        email,
-        setEmail,
+        username,
+        setUsername,
         password,
         setPassword,
-        emailError,
+        usernameError,
         passwordError,
         handleLogin,
         handleSignUpClick,
