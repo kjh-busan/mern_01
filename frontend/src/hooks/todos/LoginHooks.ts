@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export const useLoginHooks = () => {
+export const useLoginHooks = (
+    onClose: () => void,
+    onLogin: (username: string) => void
+) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [usernameError, setUsernameError] = useState<string | null>(null)
     const [passwordError, setPasswordError] = useState<string | null>(null)
     const [isSignUpModalOpen, setSignUpModalOpen] = useState(false)
 
-    const navigate = useNavigate()
-
     const validateUsername = (username: string) => {
-        const usernameRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        const usernameRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$/
         return usernameRegex.test(username.toLowerCase())
     }
 
@@ -23,12 +23,15 @@ export const useLoginHooks = () => {
 
     const checkUsernameExists = async (username: string) => {
         try {
-            const response = await axios.get('/api/check-username', {
-                params: { username: username },
-            })
+            const response = await axios.get(
+                'http://localhost:5001/api/login/check-username',
+                {
+                    params: { username },
+                }
+            )
             return response.data.exists
         } catch (error) {
-            console.error('Failed to check ID:', error)
+            console.error('Failed to check username:', error)
             return false
         }
     }
@@ -47,7 +50,7 @@ export const useLoginHooks = () => {
 
         if (!validatePassword(password)) {
             setPasswordError(
-                'Password must be at least 8 characters long and contain at least one letter and one number.'
+                'Password must be at least 4 characters long and contain at least one letter and one number.'
             )
             valid = false
         } else {
@@ -56,16 +59,18 @@ export const useLoginHooks = () => {
 
         const usernameExists = await checkUsernameExists(username)
         if (!usernameExists) {
-            setUsernameError('ID does not exist.')
+            console.log(`USERNAME does not exist: ${username}`)
+            setUsernameError('USERNAME does not exist.')
             return false
         }
 
         if (valid) {
-            // Perform login action (e.g., API call)
             try {
-                // Simulate API call with timeout
                 await new Promise((resolve) => setTimeout(resolve, 1000))
-                navigate('/') // Login successful, navigate to home
+                onLogin(username)
+                onClose()
+                setUsername('')
+                setPassword('')
                 return true
             } catch (error) {
                 console.error('Failed to log in:', error)

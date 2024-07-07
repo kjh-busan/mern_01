@@ -58,7 +58,7 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
                     <TextField
                         autoFocus
                         margin="dense"
-                        label="ID"
+                        label="Username"
                         type="text"
                         fullWidth
                         variant="standard"
@@ -68,7 +68,6 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
                         helperText={usernameError}
                     />
                     <TextField
-                        key="password-input"
                         margin="dense"
                         label="Password"
                         type="password"
@@ -80,7 +79,6 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
                         helperText={passwordError}
                     />
                     <TextField
-                        key="confirm-password-input"
                         margin="dense"
                         label="Confirm Password"
                         type="password"

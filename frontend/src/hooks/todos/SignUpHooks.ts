@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useState } from 'react'
 
 export const useSignUpHooks = () => {
@@ -24,6 +25,21 @@ export const useSignUpHooks = () => {
         const passwordRegex =
             /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{4,}$/
         return passwordRegex.test(password)
+    }
+
+    const checkUsernameExists = async (username: string) => {
+        try {
+            const response = await axios.get(
+                'http://localhost:5001/api/login/check-username',
+                {
+                    params: { username },
+                }
+            )
+            return response.data.exists
+        } catch (error) {
+            console.error('Failed to check username:', error)
+            return false
+        }
     }
 
     const handleSignUp = async () => {
@@ -53,18 +69,34 @@ export const useSignUpHooks = () => {
         }
 
         if (valid) {
-            // Perform signup action (e.g., API call)
             try {
-                // Simulate API call with timeout
-                await new Promise((resolve) => setTimeout(resolve, 1000))
-                // Clear inputs on successful signup
-                setUsername('')
-                setPassword('')
-                setConfirmPassword('')
-                setSnackbarSeverity('success')
-                setSnackbarMessage('Sign up successful!')
-                setSnackbarOpen(true)
-                return true
+                const usernameExists = await checkUsernameExists(username)
+                if (usernameExists) {
+                    setUsernameError(
+                        'Username already exists. Please choose another one.'
+                    )
+                    return false
+                }
+
+                const response = await axios.post('/api/signup', {
+                    username,
+                    password,
+                    title: 'sign up',
+                    contents: 'sign up',
+                    likeCount: 0,
+                    completed: false,
+                    time: new Date().toISOString(),
+                })
+
+                if (response.status === 201) {
+                    setUsername('')
+                    setPassword('')
+                    setConfirmPassword('')
+                    setSnackbarSeverity('success')
+                    setSnackbarMessage('Sign up successful!')
+                    setSnackbarOpen(true)
+                    return true
+                }
             } catch (error) {
                 console.error('Failed to sign up:', error)
                 setSnackbarSeverity('error')

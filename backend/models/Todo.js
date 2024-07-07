@@ -11,9 +11,13 @@ const TodoSchema = new mongoose.Schema({
     required: true,
     unique: false,
   },
-  title: {
+  password: {
     type: String,
     required: true,
+  },
+  title: {
+    type: String,
+    required: false,
   },
   likeCount: {
     type: Number,
@@ -22,10 +26,16 @@ const TodoSchema = new mongoose.Schema({
   },
   contents: {
     type: String,
-    required: true,
+    required: false,
   },
-  completed: { type: Boolean, default: false },
-  time: { type: String, required: true },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
+  time: {
+    type: String,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("Todo", TodoSchema);

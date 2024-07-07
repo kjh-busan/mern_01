@@ -25,16 +25,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/api/check-username", async (req, res) => {
-  const { username } = req.query;
-  const hasUsername = await User.findOne({ username });
-  if (hasUsername) {
-    res.json({ exists: true });
-  } else {
-    res.json({ exists: false });
-  }
-});
-
 router.get("/", async (req, res) => {
   const { username, title, contents, likeCount, completed, time } = req.body;
 
@@ -79,7 +69,7 @@ router.put("/:id", async (req, res) => {
       todo.completed = completed;
     }
 
-    console.log("[BE ]updateTodo:", todo);
+    console.log("[BE] updateTodo:", todo);
     const updateTodo = await todo.save();
 
     res.status(200).json(updateTodo);

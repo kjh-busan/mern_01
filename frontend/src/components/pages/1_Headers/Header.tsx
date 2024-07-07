@@ -9,7 +9,7 @@ type User = {
 
 interface HeaderProps {
     user?: User
-    onLogin?: () => void
+    onLogin?: (userName: string) => void
     onLogout?: () => void
     onCreateAccount?: () => void
 }
@@ -78,7 +78,12 @@ export const Header = ({ user, onLogin, onLogout }: HeaderProps) => {
             <LoginModal
                 open={isLoginModalOpen}
                 onClose={handleClose}
-                onLogin={onLogin}
+                onLogin={(userName: string) => {
+                    if (onLogin) {
+                        onLogin(userName)
+                    }
+                    handleClose()
+                }}
             />
         </header>
     )
