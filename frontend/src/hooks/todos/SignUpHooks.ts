@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from 'axios'
 
 export const useSignUpHooks = () => {
     const [username, setUsername] = useState('')
@@ -53,18 +54,26 @@ export const useSignUpHooks = () => {
         }
 
         if (valid) {
-            // Perform signup action (e.g., API call)
             try {
-                // Simulate API call with timeout
-                await new Promise((resolve) => setTimeout(resolve, 1000))
-                // Clear inputs on successful signup
-                setUsername('')
-                setPassword('')
-                setConfirmPassword('')
-                setSnackbarSeverity('success')
-                setSnackbarMessage('Sign up successful!')
-                setSnackbarOpen(true)
-                return true
+                const response = await axios.post(
+                    'http://localhost:5001/api/signup',
+                    {
+                        username,
+                        password,
+                        title: 'signUp',
+                        contents: '',
+                        time: new Date().toISOString(),
+                    }
+                )
+                if (response.status === 201) {
+                    setUsername('')
+                    setPassword('')
+                    setConfirmPassword('')
+                    setSnackbarSeverity('success')
+                    setSnackbarMessage('')
+                    setSnackbarOpen(true)
+                    return true
+                }
             } catch (error) {
                 console.error('Failed to sign up:', error)
                 setSnackbarSeverity('error')

@@ -35,6 +35,26 @@ router.get("/api/check-username", async (req, res) => {
   }
 });
 
+router.post("/api/signup", async (req, res) => {
+  const { username, password, title, contents, time } = req.body;
+
+  try {
+    const newTodo = new Todo({
+      username,
+      password,
+      title,
+      contents,
+      time,
+    });
+
+    await newTodo.save();
+    res.status(201).json({ message: "User created successfully" });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 router.get("/", async (req, res) => {
   const { username, title, contents, likeCount, completed, time } = req.body;
 

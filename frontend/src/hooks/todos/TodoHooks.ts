@@ -57,7 +57,6 @@ export const useTodoHooks = () => {
             todo._id === row._id ? { ...todo, [field]: value } : todo
         )
 
-        // onHandleMessage(`Updated ${field}: ${value}`, TodoAlertColor.success)
         setTodos(updatedTodo)
     }
 
@@ -77,7 +76,6 @@ export const useTodoHooks = () => {
     }
 
     const onUpdateHandle = async (row: TodoType) => {
-        // If row was checked delete checkbox
         if (row.delete) {
             const deleteStatus = await onHandleDelete(row)
             if (ResponseStatus.includes(deleteStatus!)) {
@@ -93,7 +91,6 @@ export const useTodoHooks = () => {
                 )
             }
 
-            // Initial selectAll checkbox
             setSelectAll(false)
             setSelectAllDelete(false)
             return
@@ -142,7 +139,6 @@ export const useTodoHooks = () => {
                 )
             }
 
-            // Initial selectAll checkbox
             setSelectAll(false)
             setSelectAllDelete(false)
         } catch (error) {
@@ -195,7 +191,6 @@ export const useTodoHooks = () => {
         } else {
             onHandleMessage('Error inserting todo.', TodoAlertColor.error)
         }
-        // Initial selectAll checkbox
         setSelectAll(false)
         setSelectAllDelete(false)
     }
