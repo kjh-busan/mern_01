@@ -36,7 +36,6 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                 onChange={onToggleSelectAll}
                             />
                         </TableCell>
-                        <TableCell>User Name</TableCell>
                         <TableCell align="left">Category</TableCell>
                         <TableCell align="left">Content</TableCell>
                         <TableCell align="left">Like</TableCell>
@@ -66,9 +65,6 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                     checked={row.selected || false}
                                     onChange={() => onSelectRow(row._id!)}
                                 />
-                            </TableCell>
-                            <TableCell component="th" scope="row">
-                                {row.username}
                             </TableCell>
                             <TableCell align="left">
                                 <TextField

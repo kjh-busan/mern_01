@@ -8,8 +8,6 @@ import TodoTable from './TodoTable'
 const Todo: React.FC = () => {
     const {
         todos,
-        username,
-        setUsername,
         title,
         setTitle,
         contents,

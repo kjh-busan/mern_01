@@ -3,8 +3,6 @@ import { Button, MenuItem, TextField } from '@mui/material'
 import { TodoTitles, TodoHeaderProps } from '../../../../types/todos/TodoTypes'
 
 const TodoHeader: React.FC<TodoHeaderProps> = ({
-    username,
-    setUsername,
     title,
     setTitle,
     contents,
@@ -16,13 +14,6 @@ const TodoHeader: React.FC<TodoHeaderProps> = ({
 }) => {
     return (
         <div>
-            <TextField
-                id="todo-username"
-                label="User Name"
-                variant="outlined"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
             <TextField
                 id="todo-title"
                 select
