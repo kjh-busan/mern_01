@@ -1,4 +1,9 @@
 import { Types } from 'mongoose'
+import { User } from '../user/UserType'
+
+export interface TodoProps {
+    user: User
+}
 
 export type TodoType = {
     _id?: Types.ObjectId
@@ -13,8 +18,6 @@ export type TodoType = {
 }
 
 export type TodoHeaderProps = {
-    username: string
-    setUsername: (value: string) => void
     title: string
     setTitle: (value: string) => void
     contents: string

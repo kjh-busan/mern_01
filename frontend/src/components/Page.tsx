@@ -4,10 +4,7 @@ import Footer from './pages/9_Footers/Footer'
 import Todo from './pages/2_Body/MongoDB/Todo'
 import CenteredImage from './CenteredImage'
 import LoginModal from './login/LoginModal'
-
-type User = {
-    name: string
-}
+import { User } from '../types/user/UserType'
 
 export const Page: React.FC = () => {
     const [user, setUser] = useState<User | undefined>()
@@ -22,9 +19,9 @@ export const Page: React.FC = () => {
         setUser(undefined)
     }
 
-    const handleOpenLoginModal = () => {
-        setLoginModalOpen(true)
-    }
+    // const handleOpenLoginModal = () => {
+    //     setLoginModalOpen(true)
+    // }
 
     const handleCloseLoginModal = () => {
         setLoginModalOpen(false)
@@ -35,7 +32,7 @@ export const Page: React.FC = () => {
             <Header user={user} onLogin={onLogin} onLogout={onLogout} />
             <main className="main-content">
                 {!user?.name && <CenteredImage />}
-                {user?.name && <Todo />}
+                {user?.name && <Todo user={user} />}
             </main>
             <Footer />
             <LoginModal

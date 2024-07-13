@@ -4,8 +4,10 @@ import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import TodoTable from './TodoTable'
+// import { User } from '../../../../types/user/UserType'
+import { TodoProps } from '../../../../types/todos/TodoTypes'
 
-const Todo: React.FC = () => {
+const Todo: React.FC<TodoProps> = ({ user }) => {
     const {
         todos,
         title,
@@ -30,7 +32,7 @@ const Todo: React.FC = () => {
 
     return (
         <div>
-            <h1>Todos</h1>
+            <h1>{user.name}’s Todos</h1>
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
                 <Alert
                     onClose={handleClose}
@@ -41,8 +43,6 @@ const Todo: React.FC = () => {
                 </Alert>
             </Snackbar>
             <TodoHeader
-                username={username}
-                setUsername={setUsername}
                 title={title}
                 setTitle={setTitle}
                 contents={contents}

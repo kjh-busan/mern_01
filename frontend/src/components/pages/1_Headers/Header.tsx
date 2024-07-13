@@ -2,17 +2,8 @@ import React, { useState } from 'react'
 import './header.css'
 import { Button } from '../../../stories/Button'
 import LoginModal from '../../login/LoginModal'
-
-type User = {
-    name: string
-}
-
-interface HeaderProps {
-    user?: User
-    onLogin?: (userName: string) => void
-    onLogout?: () => void
-    onCreateAccount?: () => void
-}
+import { User } from '../../../types/user/UserType'
+import { HeaderProps } from '../../../types/header/HeaderTypes'
 
 export const Header = ({ user, onLogin, onLogout }: HeaderProps) => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
