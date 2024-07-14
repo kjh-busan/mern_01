@@ -29,6 +29,10 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
         selectAllDelete,
     } = useTodoHooks()
 
+    const handleInsert = () => {
+        onInsertHandle(user) // 비동기 함수를 동기 함수로 감싸서 호출
+    }
+
     return (
         <div>
             <h1>{user.name}’s Todos</h1>
@@ -42,11 +46,12 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
                 </Alert>
             </Snackbar>
             <TodoHeader
+                user={user}
                 title={title}
                 setTitle={setTitle}
                 contents={contents}
                 setContents={setContents}
-                onInsertHandle={onInsertHandle}
+                onInsertHandle={handleInsert} // 동기 함수로 변경
                 onUpdateSelected={onUpdateSelected}
                 checkoutInsert={checkoutInsert}
                 checkoutUpdate={checkoutUpdate}

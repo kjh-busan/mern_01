@@ -3,6 +3,7 @@ import { Button, MenuItem, TextField } from '@mui/material'
 import { TodoTitles, TodoHeaderProps } from '../../../../types/todos/TodoTypes'
 
 const TodoHeader: React.FC<TodoHeaderProps> = ({
+    user,
     title,
     setTitle,
     contents,

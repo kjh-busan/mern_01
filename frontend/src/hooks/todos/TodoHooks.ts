@@ -7,6 +7,7 @@ import {
     TodoType,
 } from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
+import { User } from '../../types/user/UserType'
 
 export const useTodoHooks = () => {
     const [todos, setTodos] = useState<TodoType[]>([])
@@ -146,7 +147,7 @@ export const useTodoHooks = () => {
         }
     }
 
-    const onInsertHandle = async () => {
+    const onInsertHandle = async (user: User) => {
         if (checkoutInsert()) {
             onHandleMessage(
                 'Please fill in all fields.',
@@ -156,10 +157,7 @@ export const useTodoHooks = () => {
         }
 
         const existingTodo = todos.find(
-            (todo) =>
-                todo.username === username &&
-                todo.title === title &&
-                todo.contents === contents
+            (todo) => todo.title === title && todo.contents === contents
         )
 
         if (existingTodo) {
@@ -171,7 +169,7 @@ export const useTodoHooks = () => {
         }
 
         const newTodo: TodoType = {
-            username,
+            username: user.name,
             title,
             contents,
             likeCount: 0,
