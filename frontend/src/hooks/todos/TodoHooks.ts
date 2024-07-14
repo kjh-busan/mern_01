@@ -9,10 +9,10 @@ import {
 import { Types } from 'mongoose'
 import { User } from '../../types/user/UserType'
 
-export const useTodoHooks = () => {
+export const useTodoHooks = (user: User) => {
     const [todos, setTodos] = useState<TodoType[]>([])
     const [todosOri, setTodosOri] = useState<TodoType[]>([])
-    const [username, setUsername] = useState('')
+    const [username, setUsername] = useState(user.name)
     const [title, setTitle] = useState('Programming')
     const [contents, setContents] = useState('')
     const [message, setMessage] = useState<string | null>(null)
@@ -29,7 +29,7 @@ export const useTodoHooks = () => {
     const fetchTodos = async () => {
         try {
             const response = await axios.get<TodoType[]>(
-                'http://localhost:5001/api/todos'
+                `http://localhost:5001/api/todos?username=${username}`
             )
             if (response.data) {
                 setTodos(response.data)
@@ -37,7 +37,7 @@ export const useTodoHooks = () => {
             }
         } catch (error) {
             onHandleMessage(
-                `Error fetching todos:${error}`,
+                `Error fetching todos: ${error}`,
                 TodoAlertColor.error
             )
         }

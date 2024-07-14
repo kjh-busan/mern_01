@@ -27,7 +27,7 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
         checkoutUpdate,
         onToggleSelectAllDelete,
         selectAllDelete,
-    } = useTodoHooks()
+    } = useTodoHooks(user)
 
     const handleInsert = () => {
         onInsertHandle(user) // 비동기 함수를 동기 함수로 감싸서 호출

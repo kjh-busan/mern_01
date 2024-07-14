@@ -26,23 +26,17 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const { username, title, contents, likeCount, completed, time } = req.body;
-
+  const { username } = req.query;
   try {
-    let query = {};
-
-    if (username) {
-      query.username = new RegExp(username, "i");
+    if (!username) {
+      return res.status(400).send("Username is required");
     }
-    const todos = await Todo.find(query);
-    res.json(todos);
-    console.log(
-      "#2 [READ] Status:",
-      todos.length > 0 ? todos[0].status : "No todos found"
-    );
+
+    const todos = await Todo.find({ username });
+    res.status(200).json(todos);
   } catch (err) {
-    console.error("error: ", err.message);
-    res.status(500).send("Server Error");
+    console.error("Error fetching todos:", err);
+    res.status(500).send("Server error");
   }
 });
 
