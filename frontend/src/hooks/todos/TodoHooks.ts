@@ -195,7 +195,7 @@ export const useTodoHooks = () => {
         setSelectAllDelete(false)
     }
 
-    const checkoutInsert = (): boolean => !username || !title || !contents
+    const checkoutInsert = (): boolean => !title || !contents
     const checkoutUpdate = (): boolean =>
         todos.filter((todo) => todo.selected).length > 0 ? false : true
 

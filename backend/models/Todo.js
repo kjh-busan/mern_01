@@ -11,10 +11,6 @@ const TodoSchema = new mongoose.Schema({
     required: true,
     unique: false,
   },
-  password: {
-    type: String,
-    required: true,
-  },
   title: {
     type: String,
     required: false,

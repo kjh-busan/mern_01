@@ -4,7 +4,6 @@ import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import TodoTable from './TodoTable'
-// import { User } from '../../../../types/user/UserType'
 import { TodoProps } from '../../../../types/todos/TodoTypes'
 
 const Todo: React.FC<TodoProps> = ({ user }) => {

@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
       todos.length > 0 ? todos[0].status : "No todos found"
     );
   } catch (err) {
-    console.error("에러: ", err.message);
+    console.error("error: ", err.message);
     res.status(500).send("Server Error");
   }
 });

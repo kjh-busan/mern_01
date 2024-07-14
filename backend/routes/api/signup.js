@@ -9,10 +9,6 @@ router.post("/", async (req, res) => {
     const newUser = new User({
       username,
       password,
-      title,
-      contents,
-      likeCount,
-      completed,
       time,
     });
 
