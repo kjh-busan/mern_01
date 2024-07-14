@@ -189,6 +189,7 @@ export const useTodoHooks = () => {
         } else {
             onHandleMessage('Error inserting todo.', TodoAlertColor.error)
         }
+        setContents('')
         setSelectAll(false)
         setSelectAllDelete(false)
     }
