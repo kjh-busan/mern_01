@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Header } from './pages/1_Headers/Header'
 import Footer from './pages/9_Footers/Footer'
 import Todo from './pages/2_Body/MongoDB/Todo'
-import CenteredImage from './CenteredImage'
 import LoginModal from './login/LoginModal'
 import { User } from '../types/user/UserType'
+import CenteredImage from './image/CenteredImage'
 
 export const Page: React.FC = () => {
     const [user, setUser] = useState<User | undefined>()

@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Todo = require("../../models/Todo");
+const User = require("../../models/User");
 
 router.post("/", async (req, res) => {
-  const { username, password, title, contents, likeCount, completed, time } =
-    req.body;
+  const { username, password, time } = req.body;
 
   try {
-    const newTodo = new Todo({
+    const newUser = new User({
       username,
       password,
       title,
@@ -17,9 +16,9 @@ router.post("/", async (req, res) => {
       time,
     });
 
-    console.log("New Todo object:", newTodo);
+    console.log("New User object:", newUser);
 
-    await newTodo.save();
+    await newUser.save();
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     console.error("Error creating user:", error);

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactPlayer from 'react-player'
-import image from '../imgs/SUYIIAPZFTQR3PKLAWUZDQGQI4.avif'
+import image from '../../imgs/SUYIIAPZFTQR3PKLAWUZDQGQI4.avif'
 
 const CenteredImage: React.FC = () => {
     return (
