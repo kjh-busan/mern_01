@@ -1,31 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Header } from './pages/1_Headers/Header'
 import Footer from './pages/9_Footers/Footer'
 import Todo from './pages/2_Body/MongoDB/Todo'
 import LoginModal from './login/LoginModal'
-import { User } from '../types/user/UserType'
 import CenteredImage from './image/CenteredImage'
+import { usePageHooks } from '../hooks/pages/PageHooks'
 
 export const Page: React.FC = () => {
-    const [user, setUser] = useState<User | undefined>()
-    const [isLoginModalOpen, setLoginModalOpen] = useState(false)
-
-    const onLogin = (userName: string) => {
-        setUser({ name: userName })
-        setLoginModalOpen(false)
-    }
-
-    const onLogout = () => {
-        setUser(undefined)
-    }
-
-    // const handleOpenLoginModal = () => {
-    //     setLoginModalOpen(true)
-    // }
-
-    const handleCloseLoginModal = () => {
-        setLoginModalOpen(false)
-    }
+    const {
+        user,
+        isLoginModalOpen,
+        onLogin,
+        onLogout,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        handleOpenLoginModal,
+        handleCloseLoginModal,
+    } = usePageHooks()
 
     return (
         <div className="page-container">

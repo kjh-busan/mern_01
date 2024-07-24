@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState } from 'react'
 
-export const useSignUpHooks = () => {
+export const useSignUpHooks = (onClose: () => void) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -95,6 +95,7 @@ export const useSignUpHooks = () => {
                     setSnackbarSeverity('success')
                     setSnackbarMessage('Sign up successful!')
                     setSnackbarOpen(true)
+                    onClose()
                     return true
                 }
             } catch (error) {

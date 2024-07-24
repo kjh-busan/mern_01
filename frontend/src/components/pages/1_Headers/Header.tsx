@@ -1,20 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './header.css'
 import { Button } from '../../../stories/Button'
 import LoginModal from '../../login/LoginModal'
-import { User } from '../../../types/user/UserType'
 import { HeaderProps } from '../../../types/header/HeaderTypes'
+import { useHeaderHooks } from '../../../hooks/todos/HeaderHooks'
 
-export const Header = ({ user, onLogin, onLogout }: HeaderProps) => {
-    const [isLoginModalOpen, setLoginModalOpen] = useState(false)
-
-    const handleLoginClick = () => {
-        setLoginModalOpen(true)
-    }
-
-    const handleClose = () => {
-        setLoginModalOpen(false)
-    }
+export const Header = ({
+    user: initialUser,
+    onLogin,
+    onLogout,
+}: HeaderProps) => {
+    const {
+        user,
+        isLoginModalOpen,
+        handleLoginClick,
+        handleClose,
+        onLogin: handleLogin,
+        onLogout: handleLogout,
+    } = useHeaderHooks(initialUser)
 
     return (
         <header>
@@ -51,7 +54,7 @@ export const Header = ({ user, onLogin, onLogout }: HeaderProps) => {
                             </span>
                             <Button
                                 size="small"
-                                onClick={onLogout}
+                                onClick={handleLogout}
                                 label="Log out"
                             />
                         </>
@@ -70,10 +73,10 @@ export const Header = ({ user, onLogin, onLogout }: HeaderProps) => {
                 open={isLoginModalOpen}
                 onClose={handleClose}
                 onLogin={(userName: string) => {
+                    handleLogin(userName)
                     if (onLogin) {
                         onLogin(userName)
                     }
-                    handleClose()
                 }}
             />
         </header>

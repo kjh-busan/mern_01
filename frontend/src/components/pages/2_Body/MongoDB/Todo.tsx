@@ -27,7 +27,7 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
         checkoutUpdate,
         onToggleSelectAllDelete,
         selectAllDelete,
-    } = useTodoHooks(user) // user를 전달
+    } = useTodoHooks(user)
 
     return (
         <div>
@@ -60,7 +60,7 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
                 selectAll={selectAll}
                 onToggleSelectAllDelete={onToggleSelectAllDelete}
                 selectAllDelete={selectAllDelete}
-                isAdmin={user.name === 'admin'} // isAdmin 속성 추가
+                isAdmin={user.name === 'admin'}
             />
         </div>
     )

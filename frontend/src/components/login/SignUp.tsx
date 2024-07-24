@@ -27,15 +27,7 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
         snackbarSeverity,
         snackbarMessage,
         handleSnackbarClose,
-    } = useSignUpHooks()
-
-    const handleSignUpClick = async () => {
-        const result = await handleSignUp()
-
-        if (result) {
-            onClose()
-        }
-    }
+    } = useSignUpHooks(onClose)
 
     return (
         <>
@@ -92,7 +84,7 @@ const SignUp = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose}>Cancel</Button>
-                    <Button onClick={handleSignUpClick}>Sign up</Button>
+                    <Button onClick={handleSignUp}>Sign up</Button>
                 </DialogActions>
             </Dialog>
         </>
