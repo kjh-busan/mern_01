@@ -5,24 +5,18 @@ import Todo from './pages/2_Body/MongoDB/Todo'
 import LoginModal from './login/LoginModal'
 import CenteredImage from './image/CenteredImage'
 import { usePageHooks } from '../hooks/pages/PageHooks'
+import { useAtom } from 'jotai'
+import { usernameAtom } from '../hooks/atoms'
 
 export const Page: React.FC = () => {
-    const {
-        user,
-        isLoginModalOpen,
-        onLogin,
-        onLogout,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        handleOpenLoginModal,
-        handleCloseLoginModal,
-    } = usePageHooks()
+    const [username] = useAtom(usernameAtom)
+    const { isLoginModalOpen, onLogin, handleCloseLoginModal } = usePageHooks()
 
     return (
         <div className="page-container">
-            <Header user={user} onLogin={onLogin} onLogout={onLogout} />
+            <Header />
             <main className="main-content">
-                {!user?.name && <CenteredImage />}
-                {user?.name && <Todo user={user} />}
+                {!username ? <CenteredImage /> : <Todo />}
             </main>
             <Footer />
             <LoginModal

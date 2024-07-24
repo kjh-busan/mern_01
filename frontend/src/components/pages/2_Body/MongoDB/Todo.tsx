@@ -1,12 +1,14 @@
 import React from 'react'
-import TodoHeader from './TodoHeader'
+import { useAtom } from 'jotai'
 import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import TodoTable from './TodoTable'
-import { TodoProps } from '../../../../types/todos/TodoTypes'
+import TodoHeader from './TodoHeader'
+import { usernameAtom } from '../../../../hooks/atoms'
 
-const Todo: React.FC<TodoProps> = ({ user }) => {
+const Todo: React.FC = () => {
+    const [username] = useAtom(usernameAtom)
     const {
         todos,
         title,
@@ -27,11 +29,15 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
         checkoutUpdate,
         onToggleSelectAllDelete,
         selectAllDelete,
-    } = useTodoHooks(user)
+    } = useTodoHooks()
+
+    if (!username) {
+        return <div>Please log in to view your todos.</div>
+    }
 
     return (
         <div>
-            <h1>{user.name}’s Todos</h1>
+            <h1>{username}’s Todos</h1>
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
                 <Alert
                     onClose={handleClose}
@@ -42,7 +48,6 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
                 </Alert>
             </Snackbar>
             <TodoHeader
-                user={user}
                 title={title}
                 setTitle={setTitle}
                 contents={contents}
@@ -60,7 +65,7 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
                 selectAll={selectAll}
                 onToggleSelectAllDelete={onToggleSelectAllDelete}
                 selectAllDelete={selectAllDelete}
-                isAdmin={user.name === 'admin'}
+                isAdmin={false}
             />
         </div>
     )

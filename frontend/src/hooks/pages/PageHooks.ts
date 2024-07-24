@@ -1,17 +1,18 @@
+import { useAtom } from 'jotai'
+import { usernameAtom } from '../atoms'
 import { useState } from 'react'
-import { User } from '../../types/user/UserType'
 
 export const usePageHooks = () => {
-    const [user, setUser] = useState<User | undefined>()
+    const [username, setUsername] = useAtom(usernameAtom)
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
     const onLogin = (userName: string) => {
-        setUser({ name: userName })
+        setUsername(userName)
         setLoginModalOpen(false)
     }
 
     const onLogout = () => {
-        setUser(undefined)
+        setUsername(null)
     }
 
     const handleOpenLoginModal = () => {
@@ -23,7 +24,7 @@ export const usePageHooks = () => {
     }
 
     return {
-        user,
+        username,
         isLoginModalOpen,
         onLogin,
         onLogout,

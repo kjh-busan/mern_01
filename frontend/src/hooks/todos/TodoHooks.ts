@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useAtom } from 'jotai'
 import {
     AlertColors,
     ResponseStatus,
@@ -7,11 +8,12 @@ import {
     TodoType,
 } from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
+import { usernameAtom } from '../atoms'
 
-export const useTodoHooks = (user: { name: string }) => {
+export const useTodoHooks = () => {
+    const [username] = useAtom(usernameAtom)
     const [todos, setTodos] = useState<TodoType[]>([])
     const [todosOri, setTodosOri] = useState<TodoType[]>([])
-    const [username, setUsername] = useState(user.name)
     const [title, setTitle] = useState('Programming')
     const [contents, setContents] = useState('')
     const [message, setMessage] = useState<string | null>(null)
@@ -26,6 +28,7 @@ export const useTodoHooks = (user: { name: string }) => {
     }, [username])
 
     const fetchTodos = async () => {
+        if (!username) return
         try {
             const response = await axios.get<TodoType[]>(
                 `http://localhost:5001/api/todos?username=${username}`
@@ -287,7 +290,6 @@ export const useTodoHooks = (user: { name: string }) => {
     return {
         todos,
         username,
-        setUsername,
         title,
         setTitle,
         contents,

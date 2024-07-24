@@ -18,7 +18,6 @@ export type TodoType = {
 }
 
 export type TodoHeaderProps = {
-    user: User
     title: string
     setTitle: (value: string) => void
     contents: string

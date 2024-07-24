@@ -1,8 +1,9 @@
+import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { User } from '../../types/user/UserType'
+import { usernameAtom } from '../atoms'
 
-export const useHeaderHooks = (initialUser: User | undefined | null) => {
-    const [user, setUser] = useState<User | null>(initialUser || null)
+export const useHeaderHooks = () => {
+    const [username, setUsername] = useAtom(usernameAtom)
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
     const handleLoginClick = () => {
@@ -14,16 +15,16 @@ export const useHeaderHooks = (initialUser: User | undefined | null) => {
     }
 
     const onLogin = (userName: string) => {
-        setUser({ name: userName })
+        setUsername(userName)
         handleClose()
     }
 
     const onLogout = () => {
-        setUser(null)
+        setUsername(null)
     }
 
     return {
-        user,
+        username,
         isLoginModalOpen,
         handleLoginClick,
         handleClose,

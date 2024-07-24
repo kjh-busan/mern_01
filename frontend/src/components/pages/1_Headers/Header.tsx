@@ -2,22 +2,17 @@ import React from 'react'
 import './header.css'
 import { Button } from '../../../stories/Button'
 import LoginModal from '../../login/LoginModal'
-import { HeaderProps } from '../../../types/header/HeaderTypes'
 import { useHeaderHooks } from '../../../hooks/todos/HeaderHooks'
 
-export const Header = ({
-    user: initialUser,
-    onLogin,
-    onLogout,
-}: HeaderProps) => {
+export const Header: React.FC = () => {
     const {
-        user,
+        username,
         isLoginModalOpen,
         handleLoginClick,
         handleClose,
-        onLogin: handleLogin,
-        onLogout: handleLogout,
-    } = useHeaderHooks(initialUser)
+        onLogin,
+        onLogout,
+    } = useHeaderHooks()
 
     return (
         <header>
@@ -47,14 +42,14 @@ export const Header = ({
                     <h1>MERN Project</h1>
                 </div>
                 <div>
-                    {user ? (
+                    {username ? (
                         <>
                             <span className="welcome">
-                                Welcome, <b>{user.name}</b>!
+                                Welcome, <b>{username}</b>!
                             </span>
                             <Button
                                 size="small"
-                                onClick={handleLogout}
+                                onClick={onLogout}
                                 label="Log out"
                             />
                         </>
@@ -73,10 +68,7 @@ export const Header = ({
                 open={isLoginModalOpen}
                 onClose={handleClose}
                 onLogin={(userName: string) => {
-                    handleLogin(userName)
-                    if (onLogin) {
-                        onLogin(userName)
-                    }
+                    onLogin(userName)
                 }}
             />
         </header>
