@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { usernameAtom } from '../atoms'
+import { usernameAtom } from '../../atoms/atoms'
 import { useState } from 'react'
 
 export const usePageHooks = () => {

@@ -6,7 +6,7 @@ import LoginModal from './login/LoginModal'
 import CenteredImage from './image/CenteredImage'
 import { usePageHooks } from '../hooks/pages/PageHooks'
 import { useAtom } from 'jotai'
-import { usernameAtom } from '../hooks/atoms'
+import { usernameAtom } from '../atoms/atoms'
 
 export const Page: React.FC = () => {
     const [username] = useAtom(usernameAtom)

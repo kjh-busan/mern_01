@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { usernameAtom } from '../atoms'
+import { usernameAtom } from '../../atoms/atoms'
 
 export const useHeaderHooks = () => {
     const [username, setUsername] = useAtom(usernameAtom)

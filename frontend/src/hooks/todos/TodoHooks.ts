@@ -8,7 +8,7 @@ import {
     TodoType,
 } from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
-import { usernameAtom } from '../atoms'
+import { usernameAtom } from '../../atoms/atoms'
 
 export const useTodoHooks = () => {
     const [username] = useAtom(usernameAtom)

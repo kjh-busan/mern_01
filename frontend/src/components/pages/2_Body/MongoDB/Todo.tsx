@@ -5,7 +5,7 @@ import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import TodoTable from './TodoTable'
 import TodoHeader from './TodoHeader'
-import { usernameAtom } from '../../../../hooks/atoms'
+import { usernameAtom } from '../../../../atoms/atoms'
 
 const Todo: React.FC = () => {
     const [username] = useAtom(usernameAtom)
