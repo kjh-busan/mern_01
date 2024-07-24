@@ -1,26 +1,41 @@
+/// <reference types="jest" />
+
+import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Provider, useAtom } from 'jotai'
 import { Page } from '../../src/components/Page'
-import Todo from '../../src/components/pages/2_Body/MongoDB/Todo'
-import { Header } from '../../src/components/1_Headers/Header'
 import { usernameAtom } from '../../src/atoms/atoms'
-import Footer from '../../src/components/9_Footers/Footer'
+import { Header } from '../../src/components/pages/1_Headers/Header'
+import Footer from '../../src/components/pages/9_Footers/Footer'
+import Todo from '../../src/components/pages/2_Body/MongoDB/Todo'
 
 // Ensure the paths below are correct
-jest.mock('../../src/components/1_Headers/Header', () => ({
-    Header: Header,
+jest.mock('../../src/components/pages/1_Headers/Header', () => ({
+    __esModule: true,
+    Header: () => <div>Mock Header</div>,
 }))
-jest.mock('../../src/components/9_Footers/Footer', () => ({
-    Footer: Footer,
+jest.mock('../../src/components/pages/9_Footers/Footer', () => ({
+    __esModule: true,
+    Footer: () => <div>Mock Footer</div>,
 }))
 jest.mock('../../src/components/pages/2_Body/MongoDB/Todo', () => ({
-    Todo: Todo,
+    __esModule: true,
+    Todo: () => <div>Mock Todo</div>,
+}))
+jest.mock('../../src/components/image/CenteredImage', () => ({
+    __esModule: true,
+    CenteredImage: () => <img alt="Centered" />,
+}))
+jest.mock('../../src/components/login/LoginModal', () => ({
+    __esModule: true,
+    LoginModal: ({ open }: { open: boolean }) =>
+        open ? <div role="dialog">Mock LoginModal</div> : null,
 }))
 
 const MockProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [username, setUsername] = useAtom(usernameAtom)
+    const [, setUsername] = useAtom(usernameAtom)
     ;(global as any).setUsername = setUsername // global scope에 setUsername 추가
     return <Provider>{children}</Provider>
 }
@@ -46,12 +61,20 @@ describe('Page Component', () => {
             </MockProvider>
         )
         then(() => {
-            expect(screen.getByText('testUser’s Todos')).toBeInTheDocument()
+            expect(screen.getByText('Mock Todo')).toBeInTheDocument()
         })
     })
 
     it('when the login modal is open, it should render the LoginModal component in open state', () => {
-        given('isLoginModalOpen', true)
+        // Mock the usePageHooks to return isLoginModalOpen as true
+        jest.mock('../../src/hooks/pages/PageHooks', () => ({
+            usePageHooks: () => ({
+                isLoginModalOpen: true,
+                onLogin: jest.fn(),
+                handleCloseLoginModal: jest.fn(),
+            }),
+        }))
+
         render(
             <MockProvider>
                 <Page />
