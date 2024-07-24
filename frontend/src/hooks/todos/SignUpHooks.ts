@@ -132,5 +132,6 @@ export const useSignUpHooks = (onClose: () => void) => {
         snackbarSeverity,
         snackbarMessage,
         handleSnackbarClose,
+        setSnackbarOpen,
     }
 }
