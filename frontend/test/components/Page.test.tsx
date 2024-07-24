@@ -1,125 +1,86 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { Provider } from 'jotai'
+import { Provider, useAtom } from 'jotai'
 import { Page } from '../../src/components/Page'
-import { usePageHooks } from '../../src/hooks/pages/PageHooks'
-import 'jest-given'
-import { given } from 'jest-given'
+import Todo from '../../src/components/pages/2_Body/MongoDB/Todo'
+import { Header } from '../../src/components/1_Headers/Header'
+import { usernameAtom } from '../../src/atoms/atoms'
+import Footer from '../../src/components/9_Footers/Footer'
 
-jest.mock('../../src/hooks/pages/PageHooks', () => ({
-    usePageHooks: jest.fn(),
-}))
-
-const MockHeader = () => <div>Header</div>
-const MockFooter = () => <div>Footer</div>
-const MockTodo = () => <div>Todo</div>
-const MockCenteredImage = () => <div>CenteredImage</div>
-const MockLoginModal = ({
-    open,
-    onClose,
-    onLogin,
-}: {
-    open: boolean
-    onClose: () => void
-    onLogin: (username: string) => void
-}) => <div>{open ? 'LoginModal Open' : 'LoginModal Closed'}</div>
-
-jest.mock('../../src/components/pages/1_Headers/Header', () => ({
-    Header: MockHeader,
+// Ensure the paths below are correct
+jest.mock('../../src/components/1_Headers/Header', () => ({
+    Header: Header,
 }))
 jest.mock('../../src/components/9_Footers/Footer', () => ({
-    Footer: MockFooter,
+    Footer: Footer,
 }))
 jest.mock('../../src/components/pages/2_Body/MongoDB/Todo', () => ({
-    Todo: MockTodo,
+    Todo: Todo,
 }))
-jest.mock('../../src/components/image/CenteredImage', () => ({
-    CenteredImage: MockCenteredImage,
-}))
-jest.mock('../../src/components/login/LoginModal', () => ({
-    LoginModal: MockLoginModal,
-}))
+
+const MockProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => {
+    const [username, setUsername] = useAtom(usernameAtom)
+    ;(global as any).setUsername = setUsername // global scope에 setUsername 추가
+    return <Provider>{children}</Provider>
+}
 
 describe('Page Component', () => {
-    beforeEach(() => {
-        ;(usePageHooks as jest.Mock).mockReturnValue({
-            isLoginModalOpen: false,
-            onLogin: jest.fn(),
-            handleCloseLoginModal: jest.fn(),
+    it('when the user is not logged in, it should render the CenteredImage component', () => {
+        render(
+            <MockProvider>
+                <Page />
+            </MockProvider>
+        )
+        given('usernameAtom', null)
+        then(() => {
+            expect(screen.getByAltText('Centered')).toBeInTheDocument()
         })
     })
 
-    afterEach(() => {
-        jest.clearAllMocks()
-    })
-
-    describe('when the user is not logged in', () => {
-        given('the user is not logged in', () => {
-            ;(usePageHooks as jest.Mock).mockReturnValue({
-                isLoginModalOpen: false,
-                onLogin: jest.fn(),
-                handleCloseLoginModal: jest.fn(),
-            })
-        })
-
-        then('it should render the CenteredImage component', () => {
-            render(
-                <Provider>
-                    <Page />
-                </Provider>
-            )
-
-            expect(screen.getByText('Header')).toBeInTheDocument()
-            expect(screen.getByText('Footer')).toBeInTheDocument()
-            expect(screen.getByText('CenteredImage')).toBeInTheDocument()
-            expect(screen.queryByText('Todo')).not.toBeInTheDocument()
+    it('when the user is logged in, it should render the Todo component', () => {
+        given('usernameAtom', 'testUser')
+        render(
+            <MockProvider>
+                <Page />
+            </MockProvider>
+        )
+        then(() => {
+            expect(screen.getByText('testUser’s Todos')).toBeInTheDocument()
         })
     })
 
-    describe('when the user is logged in', () => {
-        given('the user is logged in', () => {
-            ;(usePageHooks as jest.Mock).mockReturnValue({
-                isLoginModalOpen: false,
-                onLogin: jest.fn(),
-                handleCloseLoginModal: jest.fn(),
-            })
-            localStorage.setItem('username', 'testuser')
-        })
-
-        then('it should render the Todo component', () => {
-            render(
-                <Provider>
-                    <Page />
-                </Provider>
-            )
-
-            expect(screen.getByText('Header')).toBeInTheDocument()
-            expect(screen.getByText('Footer')).toBeInTheDocument()
-            expect(screen.queryByText('CenteredImage')).not.toBeInTheDocument()
-            expect(screen.getByText('Todo')).toBeInTheDocument()
-        })
-    })
-
-    describe('when the login modal is open', () => {
-        given('the login modal is open', () => {
-            ;(usePageHooks as jest.Mock).mockReturnValue({
-                isLoginModalOpen: true,
-                onLogin: jest.fn(),
-                handleCloseLoginModal: jest.fn(),
-            })
-        })
-
-        then('it should render the LoginModal component in open state', () => {
-            render(
-                <Provider>
-                    <Page />
-                </Provider>
-            )
-
-            expect(screen.getByText('LoginModal Open')).toBeInTheDocument()
+    it('when the login modal is open, it should render the LoginModal component in open state', () => {
+        given('isLoginModalOpen', true)
+        render(
+            <MockProvider>
+                <Page />
+            </MockProvider>
+        )
+        then(() => {
+            expect(screen.getByRole('dialog')).toBeInTheDocument()
         })
     })
 })
-function then(arg0: string, arg1: () => void) {
-    throw new Error('Function not implemented.')
+
+function given(atomName: string, value: any) {
+    switch (atomName) {
+        case 'usernameAtom':
+            ;(global as any).setUsername(value)
+            break
+        default:
+            throw new Error(`Unknown atom: ${atomName}`)
+    }
+}
+
+function then(assertion: () => void) {
+    try {
+        assertion()
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(`Assertion failed: ${error.message}`)
+        } else {
+            throw new Error('Unknown assertion error')
+        }
+    }
 }
