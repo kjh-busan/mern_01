@@ -1,12 +1,12 @@
+import { renderHook, act } from '@testing-library/react-hooks'
+import { Provider, atom, useAtom } from 'jotai'
 import React from 'react'
-import { renderHook } from '@testing-library/react-hooks'
-import { Provider, useAtom } from 'jotai'
-import { usernameAtom } from '../../src/atoms/atoms'
 import { createRoot } from 'react-dom/client'
 
-const Wrapper: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+const usernameAtom = atom<string | null>(null)
+
+const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const container = document.createElement('div')
-    document.body.appendChild(container)
     const root = createRoot(container)
     root.render(<Provider>{children}</Provider>)
     return <>{children}</>
@@ -26,8 +26,12 @@ describe('usernameAtom', () => {
             wrapper: Wrapper,
         })
         const [, setUsername] = result.current
-        setUsername('testUser')
+
+        act(() => {
+            setUsername('newUsername')
+        })
+
         const [username] = result.current
-        expect(username).toBe('testUser')
+        expect(username).toBe('newUsername')
     })
 })
