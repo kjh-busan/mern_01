@@ -1,6 +1,9 @@
 module.exports = {
     preset: 'ts-jest',
-    testEnvironment: 'jest-environment-jsdom',
+    testEnvironment: 'jsdom',
+    testEnvironmentOptions: {
+        resources: 'usable',
+    },
     transform: {
         '^.+\\.[tj]sx?$': 'ts-jest',
     },

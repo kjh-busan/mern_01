@@ -15,7 +15,14 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react-jsx",
-        "types": ["jest"]
+        "types": ["jest", "node"]
     },
-    "include": ["src", "API/routers"]
+    "include": [
+        "src",
+        "API/routers",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "test/**/*.ts",
+        "test/**/*.tsx"
+    ]
 }
