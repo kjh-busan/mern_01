@@ -24,6 +24,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
     selectAll,
     onToggleSelectAllDelete,
     selectAllDelete,
+    isAdmin,
 }) => {
     return (
         <TableContainer component={Paper}>
@@ -36,6 +37,9 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                 onChange={onToggleSelectAll}
                             />
                         </TableCell>
+                        {isAdmin && (
+                            <TableCell align="left">Username</TableCell>
+                        )}
                         <TableCell align="left">Category</TableCell>
                         <TableCell align="left">Content</TableCell>
                         <TableCell align="left">Like</TableCell>
@@ -66,6 +70,11 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                     onChange={() => onSelectRow(row._id!)}
                                 />
                             </TableCell>
+                            {isAdmin && (
+                                <TableCell align="left">
+                                    {row.username}
+                                </TableCell>
+                            )}
                             <TableCell align="left">
                                 <TextField
                                     select

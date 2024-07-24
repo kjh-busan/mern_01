@@ -7,9 +7,8 @@ import {
     TodoType,
 } from '../../types/todos/TodoTypes'
 import { Types } from 'mongoose'
-import { User } from '../../types/user/UserType'
 
-export const useTodoHooks = (user: User) => {
+export const useTodoHooks = (user: { name: string }) => {
     const [todos, setTodos] = useState<TodoType[]>([])
     const [todosOri, setTodosOri] = useState<TodoType[]>([])
     const [username, setUsername] = useState(user.name)
@@ -24,7 +23,7 @@ export const useTodoHooks = (user: User) => {
     useEffect(() => {
         fetchTodos()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [username])
 
     const fetchTodos = async () => {
         try {
@@ -147,7 +146,7 @@ export const useTodoHooks = (user: User) => {
         }
     }
 
-    const onInsertHandle = async (user: User) => {
+    const onInsertHandle = async () => {
         if (checkoutInsert()) {
             onHandleMessage(
                 'Please fill in all fields.',
@@ -156,8 +155,16 @@ export const useTodoHooks = (user: User) => {
             return
         }
 
+        if (!username) {
+            onHandleMessage('Username is required.', TodoAlertColor.error)
+            return
+        }
+
         const existingTodo = todos.find(
-            (todo) => todo.title === title && todo.contents === contents
+            (todo) =>
+                todo.username === username &&
+                todo.title === title &&
+                todo.contents === contents
         )
 
         if (existingTodo) {
@@ -169,7 +176,7 @@ export const useTodoHooks = (user: User) => {
         }
 
         const newTodo: TodoType = {
-            username: user.name,
+            username,
             title,
             contents,
             likeCount: 0,
@@ -189,7 +196,6 @@ export const useTodoHooks = (user: User) => {
         } else {
             onHandleMessage('Error inserting todo.', TodoAlertColor.error)
         }
-        setContents('')
         setSelectAll(false)
         setSelectAllDelete(false)
     }

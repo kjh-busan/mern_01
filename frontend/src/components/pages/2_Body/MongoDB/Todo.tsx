@@ -27,11 +27,7 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
         checkoutUpdate,
         onToggleSelectAllDelete,
         selectAllDelete,
-    } = useTodoHooks(user)
-
-    const handleInsert = () => {
-        onInsertHandle(user) // 비동기 함수를 동기 함수로 감싸서 호출
-    }
+    } = useTodoHooks(user) // user를 전달
 
     return (
         <div>
@@ -51,7 +47,7 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
                 setTitle={setTitle}
                 contents={contents}
                 setContents={setContents}
-                onInsertHandle={handleInsert} // 동기 함수로 변경
+                onInsertHandle={onInsertHandle}
                 onUpdateSelected={onUpdateSelected}
                 checkoutInsert={checkoutInsert}
                 checkoutUpdate={checkoutUpdate}
@@ -64,6 +60,7 @@ const Todo: React.FC<TodoProps> = ({ user }) => {
                 selectAll={selectAll}
                 onToggleSelectAllDelete={onToggleSelectAllDelete}
                 selectAllDelete={selectAllDelete}
+                isAdmin={user.name === 'admin'} // isAdmin 속성 추가
             />
         </div>
     )

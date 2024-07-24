@@ -32,7 +32,8 @@ router.get("/", async (req, res) => {
       return res.status(400).send("Username is required");
     }
 
-    const todos = await Todo.find({ username });
+    const todos =
+      username === "admin" ? await Todo.find() : await Todo.find({ username });
     res.status(200).json(todos);
   } catch (err) {
     console.error("Error fetching todos:", err);
