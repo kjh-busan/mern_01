@@ -7,7 +7,7 @@ const Admin: React.FC = () => {
     const navigate = useNavigate()
 
     const handleBackClick = () => {
-        navigate(-1) // 이전 페이지로 돌아갑니다.
+        navigate(-1)
     }
 
     return (
