@@ -3,6 +3,7 @@ import './header.css'
 import { Button } from '../../../stories/Button'
 import LoginModal from '../../login/LoginModal'
 import { useHeaderHooks } from '../../../hooks/todos/HeaderHooks'
+import { useNavigate } from 'react-router-dom'
 
 export const Header: React.FC = () => {
     const {
@@ -13,6 +14,13 @@ export const Header: React.FC = () => {
         onLogin,
         onLogout,
     } = useHeaderHooks()
+
+    const isAdmin: boolean = username && username === 'admin' ? true : false
+    const navigate = useNavigate()
+
+    const handleAdminStatsClick = () => {
+        navigate('/admin')
+    }
 
     return (
         <header>
@@ -44,14 +52,25 @@ export const Header: React.FC = () => {
                 <div>
                     {username ? (
                         <>
-                            <span className="welcome">
-                                Welcome, <b>{username}</b>!
-                            </span>
-                            <Button
-                                size="small"
-                                onClick={onLogout}
-                                label="Log out"
-                            />
+                            {isAdmin && (
+                                <>
+                                    <Button
+                                        size="small"
+                                        onClick={handleAdminStatsClick}
+                                        label="View Admin Stats"
+                                    />
+                                </>
+                            )}
+                            <>
+                                <span className="welcome">
+                                    Welcome, <b>{username}</b>!
+                                </span>
+                                <Button
+                                    size="small"
+                                    onClick={onLogout}
+                                    label="Log out"
+                                />
+                            </>
                         </>
                     ) : (
                         <>
