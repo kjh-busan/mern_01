@@ -65,7 +65,7 @@ const Todo: React.FC = () => {
                 selectAll={selectAll}
                 onToggleSelectAllDelete={onToggleSelectAllDelete}
                 selectAllDelete={selectAllDelete}
-                isAdmin={false}
+                isAdmin={username === 'admin' ? true : false}
             />
         </div>
     )
