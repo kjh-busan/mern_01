@@ -5,7 +5,7 @@ import LoginModal from '../../login/LoginModal'
 import { useHeaderHooks } from '../../../hooks/todos/HeaderHooks'
 import { useNavigate } from 'react-router-dom'
 
-export const Header: React.FC = () => {
+export const AdminHeader: React.FC = () => {
     const {
         username,
         isLoginModalOpen,
@@ -15,11 +15,14 @@ export const Header: React.FC = () => {
         onLogout,
     } = useHeaderHooks()
 
-    const isAdmin: boolean = username && username === 'admin' ? true : false
     const navigate = useNavigate()
 
     const handleAdminStatsClick = () => {
         navigate('/admin')
+    }
+
+    const handleBackClick = () => {
+        navigate(-1) // 이전 페이지로 돌아갑니다.
     }
 
     return (
@@ -47,39 +50,33 @@ export const Header: React.FC = () => {
                             />
                         </g>
                     </svg>
-                    <h1>MERN Project</h1>
+                    <h1>Admin Dashboard</h1>
                 </div>
                 <div>
                     {username ? (
                         <>
-                            {isAdmin && (
-                                <>
-                                    <Button
-                                        size="small"
-                                        onClick={handleAdminStatsClick}
-                                        label="View Admin Stats"
-                                    />
-                                </>
-                            )}
-                            <>
-                                <span className="welcome">
-                                    Welcome, <b>{username}</b>!
-                                </span>
-                                <Button
-                                    size="small"
-                                    onClick={onLogout}
-                                    label="Log out"
-                                />
-                            </>
-                        </>
-                    ) : (
-                        <>
                             <Button
                                 size="small"
-                                onClick={handleLoginClick}
-                                label="Log in"
+                                onClick={handleAdminStatsClick}
+                                label="View Admin Stats"
+                            />
+                            <Button
+                                size="small"
+                                onClick={onLogout}
+                                label="Log out"
+                            />
+                            <Button
+                                size="small"
+                                onClick={handleBackClick}
+                                label="Go Back"
                             />
                         </>
+                    ) : (
+                        <Button
+                            size="small"
+                            onClick={handleLoginClick}
+                            label="Log in"
+                        />
                     )}
                 </div>
             </div>
@@ -94,4 +91,4 @@ export const Header: React.FC = () => {
     )
 }
 
-export default Header
+export default AdminHeader

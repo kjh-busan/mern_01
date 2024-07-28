@@ -1,18 +1,26 @@
 import React from 'react'
-import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Page } from './components/Page'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Admin from './components/admin/Admin'
+import { Page } from './components/Page'
+import ErrorPage from './components/ErrorPage'
+import ProtectedRoute from './components/ProtectedRoute'
 
 const App: React.FC = () => {
     return (
         <Router>
-            <div className="centered-container">
-                <Routes>
-                    <Route path="/" element={<Page />} />
-                    <Route path="/admin" element={<Admin />} />
-                </Routes>
-            </div>
+            <Routes>
+                <Route path="/" element={<Page />} />
+                <Route
+                    path="/admin"
+                    element={
+                        <ProtectedRoute>
+                            <Admin />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="/error" element={<ErrorPage />} />
+                <Route path="*" element={<ErrorPage />} />
+            </Routes>
         </Router>
     )
 }
