@@ -21,13 +21,6 @@ const Admin: React.FC = () => {
                     Welcome to the admin dashboard. Here you can manage various
                     aspects of the application.
                 </Typography>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleBackClick}
-                >
-                    Go Back
-                </Button>
             </Paper>
         </div>
     )
