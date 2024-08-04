@@ -1,38 +1,84 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { Provider, atom, useAtom } from 'jotai'
+import { Provider } from 'jotai'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { useHeaderHooks } from '../../src/hooks/todos/HeaderHooks'
 
-const usernameAtom = atom<string | null>(null)
-
+// Test Wrapper Component
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const container = document.createElement('div')
     document.body.appendChild(container)
     const root = createRoot(container)
-    root.render(<Provider>{children}</Provider>) // Provider를 추가하여 Jotai 상태 제공
-    return container
+    root.render(<Provider>{children}</Provider>)
+    return null
 }
 
-describe('usernameAtom', () => {
-    it('should have initial state as null', () => {
-        const { result } = renderHook(() => useAtom(usernameAtom), {
+describe('useHeaderHooks', () => {
+    it('should initialize with correct default values', () => {
+        const { result } = renderHook(() => useHeaderHooks(), {
             wrapper: Wrapper,
         })
-        const [username] = result.current
-        expect(username).toBeNull()
+
+        expect(result.current.username).toBeNull()
+        expect(result.current.isLoginModalOpen).toBe(false)
     })
 
-    it('should update the username state', () => {
-        const { result } = renderHook(() => useAtom(usernameAtom), {
+    it('should handle login click correctly', () => {
+        const { result } = renderHook(() => useHeaderHooks(), {
             wrapper: Wrapper,
         })
-        const [, setUsername] = result.current
 
         act(() => {
-            setUsername('newUsername')
+            result.current.handleLoginClick()
         })
 
-        const [username] = result.current
-        expect(username).toBe('newUsername')
+        expect(result.current.isLoginModalOpen).toBe(true)
+    })
+
+    it('should handle close correctly', () => {
+        const { result } = renderHook(() => useHeaderHooks(), {
+            wrapper: Wrapper,
+        })
+
+        act(() => {
+            result.current.handleLoginClick()
+        })
+
+        act(() => {
+            result.current.handleClose()
+        })
+
+        expect(result.current.isLoginModalOpen).toBe(false)
+    })
+
+    it('should handle login correctly', () => {
+        const { result } = renderHook(() => useHeaderHooks(), {
+            wrapper: Wrapper,
+        })
+
+        act(() => {
+            result.current.onLogin('testUser')
+        })
+
+        expect(result.current.username).toBe('testUser')
+        expect(result.current.isLoginModalOpen).toBe(false)
+    })
+
+    it('should handle logout correctly', () => {
+        const { result } = renderHook(() => useHeaderHooks(), {
+            wrapper: Wrapper,
+        })
+
+        act(() => {
+            result.current.onLogin('testUser')
+        })
+
+        act(() => {
+            result.current.onLogout()
+        })
+
+        expect(result.current.username).toBeNull()
     })
 })
+
+export {} // 빈 export 추가
