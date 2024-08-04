@@ -7,9 +7,10 @@ const usernameAtom = atom<string | null>(null)
 
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const container = document.createElement('div')
+    document.body.appendChild(container)
     const root = createRoot(container)
-    root.render(<Provider>{children}</Provider>)
-    return <>{children}</>
+    root.render(<Provider>{children}</Provider>) // Provider를 추가하여 Jotai 상태 제공
+    return container
 }
 
 describe('usernameAtom', () => {
