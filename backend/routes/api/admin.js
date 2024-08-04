@@ -3,7 +3,8 @@ const router = express.Router();
 const Todo = require("../../models/Todo");
 
 // 전체 유저의 TODO를 가져오는 API
-router.get("/admin/stats", async (req, res) => {
+router.get("/stats", async (req, res) => {
+  // 수정된 경로
   try {
     const todos = await Todo.find({});
     const userStats = todos.reduce((acc, todo) => {
@@ -24,7 +25,6 @@ router.get("/admin/stats", async (req, res) => {
 
     const statsArray = Object.values(userStats);
     res.json(statsArray);
-    console.log("res.json(statsArray): ", res.json(statsArray));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

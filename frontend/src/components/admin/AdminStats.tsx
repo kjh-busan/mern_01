@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Typography,
+    CircularProgress,
+} from '@mui/material'
 
 interface UserStats {
     username: string
@@ -16,7 +27,7 @@ const AdminStats: React.FC = () => {
             try {
                 const response = await axios.get<UserStats[]>(
                     'http://localhost:5001/api/admin/stats'
-                ) // 서버 포트와 경로 확인
+                )
                 console.log('#1 response.data: ', response.data)
                 setStats(response.data)
                 setLoading(false)
@@ -26,36 +37,51 @@ const AdminStats: React.FC = () => {
             }
         }
         fetchStats()
-    }, []) // 의존성 배열 추가
+    }, [])
 
     if (loading) {
-        return <div>Loading...</div>
+        return (
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                }}
+            >
+                <CircularProgress />
+            </div>
+        )
     }
 
     return (
-        <div>
-            <h2>Admin TODO Stats</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>Username</th>
-                        <th>TODO 갯수</th>
-                        <th>TODO 완성 갯수</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {stats.map((stat, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{stat.username}</td>
-                            <td>{stat.totalTodos}</td>
-                            <td>{stat.completedTodos}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+        <Paper style={{ padding: '16px' }}>
+            <Typography variant="h4" gutterBottom>
+                Admin TODO Stats
+            </Typography>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>No.</TableCell>
+                            <TableCell>Username</TableCell>
+                            <TableCell>TODO count</TableCell>
+                            <TableCell>TODO completed count</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {stats.map((stat, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>{stat.username}</TableCell>
+                                <TableCell>{stat.totalTodos}</TableCell>
+                                <TableCell>{stat.completedTodos}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Paper>
     )
 }
 

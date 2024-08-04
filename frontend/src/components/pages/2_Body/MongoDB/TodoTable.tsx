@@ -43,6 +43,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                         <TableCell align="left">Category</TableCell>
                         <TableCell align="left">Content</TableCell>
                         <TableCell align="left">Like</TableCell>
+                        <TableCell align="left">Completed</TableCell>
                         <TableCell align="left">
                             Delete
                             {selectAll && (
@@ -147,6 +148,19 @@ const TodoTable: React.FC<TodoTableProps> = ({
                                         +
                                     </Button>
                                 </ButtonGroup>
+                            </TableCell>
+                            <TableCell align="left">
+                                <Checkbox
+                                    checked={row.completed || false}
+                                    disabled={!row.selected}
+                                    onChange={() =>
+                                        onHandleParam(
+                                            row,
+                                            'completed',
+                                            !row.completed
+                                        )
+                                    }
+                                />
                             </TableCell>
                             <TableCell>
                                 <Checkbox
