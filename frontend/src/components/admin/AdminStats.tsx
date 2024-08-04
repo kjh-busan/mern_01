@@ -14,16 +14,19 @@ const AdminStats: React.FC = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await axios.get('/api/todo/admin/stats')
+                const response = await axios.get<UserStats[]>(
+                    'http://localhost:5001/api/admin/stats'
+                ) // 서버 포트와 경로 확인
+                console.log('#1 response.data: ', response.data)
                 setStats(response.data)
                 setLoading(false)
             } catch (error) {
                 console.error('Error fetching stats:', error)
+                setLoading(false)
             }
         }
-
         fetchStats()
-    }, [])
+    }, []) // 의존성 배열 추가
 
     if (loading) {
         return <div>Loading...</div>

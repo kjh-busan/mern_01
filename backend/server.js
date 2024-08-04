@@ -24,3 +24,4 @@ app.listen(PORT, () => {
 app.use("/api/todos", require("./routes/api/todos"));
 app.use("/api/login", require("./routes/api/login"));
 app.use("/api/signup", require("./routes/api/signup"));
+app.use("/api/admin", require("./routes/api/admin"));
