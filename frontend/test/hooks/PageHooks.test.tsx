@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { Provider, atom, useAtom } from 'jotai'
+import { Provider } from 'jotai'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { usePageHooks } from '../../src/hooks/pages/PageHooks'
@@ -7,9 +7,10 @@ import { usePageHooks } from '../../src/hooks/pages/PageHooks'
 // Test Wrapper Component
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const container = document.createElement('div')
+    document.body.appendChild(container)
     const root = createRoot(container)
     root.render(<Provider>{children}</Provider>)
-    return <>{children}</>
+    return null
 }
 
 describe('usePageHooks', () => {
@@ -69,3 +70,5 @@ describe('usePageHooks', () => {
         expect(result.current.isLoginModalOpen).toBe(false)
     })
 })
+
+export {} // 빈 export 추가

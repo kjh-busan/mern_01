@@ -7,9 +7,10 @@ import { useHeaderHooks } from '../../src/hooks/todos/HeaderHooks'
 // Test Wrapper Component
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const container = document.createElement('div')
+    document.body.appendChild(container)
     const root = createRoot(container)
     root.render(<Provider>{children}</Provider>)
-    return <>{children}</>
+    return null
 }
 
 describe('useHeaderHooks', () => {
@@ -79,3 +80,5 @@ describe('useHeaderHooks', () => {
         expect(result.current.username).toBeNull()
     })
 })
+
+export {} // 빈 export 추가

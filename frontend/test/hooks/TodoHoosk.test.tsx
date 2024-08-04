@@ -2,19 +2,25 @@ import React, { ReactNode } from 'react'
 import { renderHook, act } from '@testing-library/react-hooks'
 import axios from 'axios'
 import { Provider } from 'jotai'
+import { createRoot } from 'react-dom/client'
 import { useTodoHooks } from '../../src/hooks/todos/TodoHooks'
 import { TodoType } from '../../src/types/todos/TodoTypes'
-import { usernameAtom } from '../../src/atoms/atoms'
 import { Types } from 'mongoose'
 
+// Mock axios
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
 
-describe('useTodoHooks', () => {
-    const Wrapper: React.FC<{ children: ReactNode }> = ({ children }) => (
-        <Provider>{children}</Provider>
-    )
+// Test Wrapper Component
+const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = createRoot(container)
+    root.render(<Provider>{children}</Provider>)
+    return null
+}
 
+describe('useTodoHooks', () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
@@ -139,7 +145,7 @@ describe('useTodoHooks', () => {
             `http://localhost:5001/api/todos/${mockTodo._id}`,
             {
                 ...mockTodo,
-                time: new Date(),
+                time: expect.any(Date), // Using a matcher to ignore specific date
             }
         )
     })
@@ -170,7 +176,10 @@ describe('useTodoHooks', () => {
 
         expect(mockedAxios.post).toHaveBeenCalledWith(
             'http://localhost:5001/api/todos',
-            newTodo
+            {
+                ...newTodo,
+                time: expect.any(Date), // Using a matcher to ignore specific date
+            }
         )
     })
 
@@ -215,3 +224,5 @@ describe('useTodoHooks', () => {
         expect(result.current.open).toBe(false)
     })
 })
+
+export {} // 빈 export 추가

@@ -1,10 +1,22 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 import axios from 'axios'
+import { Provider } from 'jotai'
+import React from 'react'
+import { createRoot } from 'react-dom/client'
 import { useSignUpHooks } from '../../src/hooks/todos/SignUpHooks'
 
 // Mock axios
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
+
+// Test Wrapper Component
+const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = createRoot(container)
+    root.render(<Provider>{children}</Provider>)
+    return null
+}
 
 describe('useSignUpHooks', () => {
     const onCloseMock = jest.fn()
@@ -14,7 +26,9 @@ describe('useSignUpHooks', () => {
     })
 
     it('should initialize with correct default values', () => {
-        const { result } = renderHook(() => useSignUpHooks(onCloseMock))
+        const { result } = renderHook(() => useSignUpHooks(onCloseMock), {
+            wrapper: Wrapper,
+        })
 
         expect(result.current.username).toBe('')
         expect(result.current.password).toBe('')
@@ -28,7 +42,9 @@ describe('useSignUpHooks', () => {
     })
 
     it('should update username, password, and confirmPassword', () => {
-        const { result } = renderHook(() => useSignUpHooks(onCloseMock))
+        const { result } = renderHook(() => useSignUpHooks(onCloseMock), {
+            wrapper: Wrapper,
+        })
 
         act(() => {
             result.current.setUsername('testUser')
@@ -45,7 +61,9 @@ describe('useSignUpHooks', () => {
         mockedAxios.get.mockResolvedValue({ data: { exists: false } })
         mockedAxios.post.mockResolvedValue({ status: 201 })
 
-        const { result } = renderHook(() => useSignUpHooks(onCloseMock))
+        const { result } = renderHook(() => useSignUpHooks(onCloseMock), {
+            wrapper: Wrapper,
+        })
 
         act(() => {
             result.current.setUsername('testUser')
@@ -68,7 +86,9 @@ describe('useSignUpHooks', () => {
     })
 
     it('should show error for invalid username', async () => {
-        const { result } = renderHook(() => useSignUpHooks(onCloseMock))
+        const { result } = renderHook(() => useSignUpHooks(onCloseMock), {
+            wrapper: Wrapper,
+        })
 
         act(() => {
             result.current.setUsername('tu')
@@ -95,7 +115,9 @@ describe('useSignUpHooks', () => {
     })
 
     it('should show error for invalid password', async () => {
-        const { result } = renderHook(() => useSignUpHooks(onCloseMock))
+        const { result } = renderHook(() => useSignUpHooks(onCloseMock), {
+            wrapper: Wrapper,
+        })
 
         act(() => {
             result.current.setUsername('testUser')
@@ -122,7 +144,9 @@ describe('useSignUpHooks', () => {
     })
 
     it('should show error for non-matching passwords', async () => {
-        const { result } = renderHook(() => useSignUpHooks(onCloseMock))
+        const { result } = renderHook(() => useSignUpHooks(onCloseMock), {
+            wrapper: Wrapper,
+        })
 
         act(() => {
             result.current.setUsername('testUser')
@@ -149,7 +173,9 @@ describe('useSignUpHooks', () => {
     })
 
     it('should handle snackbar close', () => {
-        const { result } = renderHook(() => useSignUpHooks(onCloseMock))
+        const { result } = renderHook(() => useSignUpHooks(onCloseMock), {
+            wrapper: Wrapper,
+        })
 
         act(() => {
             result.current.setSnackbarOpen(true)
@@ -162,3 +188,5 @@ describe('useSignUpHooks', () => {
         expect(result.current.snackbarOpen).toBe(false)
     })
 })
+
+export {} // 빈 export 추가

@@ -148,3 +148,5 @@ describe('useLoginHooks', () => {
         expect(result.current.isSignUpModalOpen).toBe(false)
     })
 })
+
+export {} // 빈 export 추가
