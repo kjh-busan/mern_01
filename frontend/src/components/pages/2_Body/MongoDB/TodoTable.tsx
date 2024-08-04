@@ -13,6 +13,9 @@ import {
     TableContainer,
     Button,
     ButtonGroup,
+    Select,
+    FormControl,
+    InputLabel,
 } from '@mui/material'
 import { TodoTitles, TodoTableProps } from '../../../../types/todos/TodoTypes'
 
@@ -25,6 +28,8 @@ const TodoTable: React.FC<TodoTableProps> = ({
     onToggleSelectAllDelete,
     selectAllDelete,
     isAdmin,
+    users,
+    onSelectUser,
 }) => {
     return (
         <TableContainer component={Paper}>
@@ -38,7 +43,28 @@ const TodoTable: React.FC<TodoTableProps> = ({
                             />
                         </TableCell>
                         {isAdmin && (
-                            <TableCell align="left">Username</TableCell>
+                            <TableCell align="left">
+                                <FormControl sx={{ width: '150px' }}>
+                                    <InputLabel>Select User</InputLabel>
+                                    <Select
+                                        value=""
+                                        onChange={(e) =>
+                                            onSelectUser(
+                                                e.target.value as string
+                                            )
+                                        }
+                                    >
+                                        <MenuItem value="">
+                                            <em>Select User</em>
+                                        </MenuItem>
+                                        {users.map((user) => (
+                                            <MenuItem key={user} value={user}>
+                                                {user}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </TableCell>
                         )}
                         <TableCell align="left">Category</TableCell>
                         <TableCell align="left">Content</TableCell>

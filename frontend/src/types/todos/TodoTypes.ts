@@ -37,6 +37,8 @@ export type TodoTableProps = {
     onToggleSelectAllDelete: () => void
     selectAllDelete: boolean
     isAdmin: boolean
+    users: string[]
+    onSelectUser: (username: string) => void
 }
 
 export const TodoTitles = [
