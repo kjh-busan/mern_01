@@ -21,9 +21,12 @@ export const useTodoHooks = () => {
     const [selectAllDelete, setSelectAllDelete] = useState(false)
     const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState<AlertColors>(TodoAlertColor.error)
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [users, setUsers] = useState<string[]>([])
 
     useEffect(() => {
         fetchTodos()
+        checkAdmin()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [username])
 
@@ -40,6 +43,25 @@ export const useTodoHooks = () => {
         } catch (error) {
             onHandleMessage(
                 `Error fetching todos: ${error}`,
+                TodoAlertColor.error
+            )
+        }
+    }
+
+    const checkAdmin = async () => {
+        if (!username) return
+        try {
+            const response = await axios.get<{
+                isAdmin: boolean
+                users: string[]
+            }>(`http://localhost:5001/api/users/${username}`)
+            if (response.data) {
+                setIsAdmin(response.data.isAdmin)
+                setUsers(response.data.users)
+            }
+        } catch (error) {
+            onHandleMessage(
+                `Error checking admin status: ${error}`,
                 TodoAlertColor.error
             )
         }
@@ -287,6 +309,28 @@ export const useTodoHooks = () => {
         setMessage(null)
     }
 
+    const onSelectUser = (selectedUser: string) => {
+        fetchTodosByUser(selectedUser)
+    }
+
+    const fetchTodosByUser = async (selectedUser: string) => {
+        if (!selectedUser) return
+        try {
+            const response = await axios.get<TodoType[]>(
+                `http://localhost:5001/api/todos?username=${selectedUser}`
+            )
+            if (response.data) {
+                setTodos(response.data)
+                setTodosOri(response.data)
+            }
+        } catch (error) {
+            onHandleMessage(
+                `Error fetching todos for user ${selectedUser}: ${error}`,
+                TodoAlertColor.error
+            )
+        }
+    }
+
     return {
         todos,
         username,
@@ -313,5 +357,8 @@ export const useTodoHooks = () => {
         checkoutInsert,
         checkoutUpdate,
         todosOri,
+        isAdmin,
+        users,
+        onSelectUser,
     }
 }

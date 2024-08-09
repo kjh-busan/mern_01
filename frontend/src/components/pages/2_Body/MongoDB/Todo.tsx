@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import TodoTable from './TodoTable'
 import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
-import { useAtom } from 'jotai'
-import { usernameAtom } from '../../../../atoms/atoms'
+import {
+    Card,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+} from '@mui/material'
+import { TodoType } from '../../../../types/todos/TodoTypes'
 
 const Todo: React.FC = () => {
     const {
@@ -17,14 +24,38 @@ const Todo: React.FC = () => {
         users,
         onSelectUser,
     } = useTodoHooks()
+    const [selectedUser, setSelectedUser] = useState<string>('')
+    const [filteredTodos, setFilteredTodos] = useState<TodoType[]>(todos)
 
-    const [username] = useAtom(usernameAtom)
+    useEffect(() => {
+        if (selectedUser) {
+            setFilteredTodos(
+                todos.filter((todo) => todo.username === selectedUser)
+            )
+        } else {
+            setFilteredTodos(todos)
+        }
+    }, [selectedUser, todos])
+
+    const handleUserChange = (event: SelectChangeEvent<string>) => {
+        const value = event.target.value as string
+        setSelectedUser(value)
+        onSelectUser(value)
+    }
 
     return (
         <div>
             <h1>Todo List</h1>
+            <InputLabel>Username</InputLabel>
+            <Select value={selectedUser} onChange={handleUserChange}>
+                {users.map((user) => (
+                    <MenuItem key={user} value={user}>
+                        {user}
+                    </MenuItem>
+                ))}
+            </Select>
             <TodoTable
-                todos={todos}
+                todos={filteredTodos}
                 onHandleParam={onHandleParam}
                 onSelectRow={onSelectRow}
                 onToggleSelectAll={onToggleSelectAll}
