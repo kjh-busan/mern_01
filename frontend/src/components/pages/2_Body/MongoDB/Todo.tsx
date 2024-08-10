@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import TodoTable from './TodoTable'
 import { useTodoHooks } from '../../../../hooks/todos/TodoHooks'
-import {
-    Card,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    SelectChangeEvent,
-} from '@mui/material'
+import { InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material'
 import { TodoType } from '../../../../types/todos/TodoTypes'
 
 const Todo: React.FC = () => {
@@ -42,18 +35,21 @@ const Todo: React.FC = () => {
         setSelectedUser(value)
         onSelectUser(value)
     }
-
     return (
         <div>
             <h1>Todo List</h1>
-            <InputLabel>Username</InputLabel>
-            <Select value={selectedUser} onChange={handleUserChange}>
-                {users.map((user) => (
-                    <MenuItem key={user} value={user}>
-                        {user}
-                    </MenuItem>
-                ))}
-            </Select>
+            {isAdmin && (
+                <>
+                    <InputLabel>Username List</InputLabel>
+                    <Select value={selectedUser} onChange={handleUserChange}>
+                        {users.map((user) => (
+                            <MenuItem key={user} value={user}>
+                                {user}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </>
+            )}
             <TodoTable
                 todos={filteredTodos}
                 onHandleParam={onHandleParam}

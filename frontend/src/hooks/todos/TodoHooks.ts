@@ -54,7 +54,7 @@ export const useTodoHooks = () => {
             const response = await axios.get<{
                 isAdmin: boolean
                 users: string[]
-            }>(`http://localhost:5001/api/users/${username}`)
+            }>(`http://localhost:5001/api/admin/${username}`)
             if (response.data) {
                 setIsAdmin(response.data.isAdmin)
                 setUsers(response.data.users)

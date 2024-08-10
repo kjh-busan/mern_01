@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Todo = require("../../models/Todo");
+const User = require("../../models/User");
 
-// 전체 유저의 TODO를 가져오는 API
 router.get("/stats", async (req, res) => {
-  // 수정된 경로
   try {
     const todos = await Todo.find({});
     const userStats = todos.reduce((acc, todo) => {
@@ -25,6 +24,26 @@ router.get("/stats", async (req, res) => {
 
     const statsArray = Object.values(userStats);
     res.json(statsArray);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/:username", async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const isAdmin = user.username === "admin";
+
+    const users = await User.find({}).select("username -_id");
+
+    res.json({ isAdmin, users: users.map((u) => u.username) });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
