@@ -62,13 +62,13 @@ export const AdminHeader: React.FC = () => {
                             />
                             <Button
                                 size="small"
-                                onClick={onLogout}
-                                label="Log out"
+                                onClick={handleBackClick}
+                                label="Go Back"
                             />
                             <Button
                                 size="small"
-                                onClick={handleBackClick}
-                                label="Go Back"
+                                onClick={onLogout}
+                                label="Log out"
                             />
                         </>
                     ) : (
