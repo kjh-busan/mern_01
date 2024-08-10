@@ -25,8 +25,6 @@ const TodoTable: React.FC<TodoTableProps> = ({
     onToggleSelectAllDelete,
     selectAllDelete,
     isAdmin,
-    users,
-    onSelectUser,
 }) => {
     const sortedTodos = todos.sort((a, b) =>
         a.username.localeCompare(b.username)

@@ -309,28 +309,6 @@ export const useTodoHooks = () => {
         setMessage(null)
     }
 
-    const onSelectUser = (selectedUser: string) => {
-        fetchTodosByUser(selectedUser)
-    }
-
-    const fetchTodosByUser = async (selectedUser: string) => {
-        if (!selectedUser) return
-        try {
-            const response = await axios.get<TodoType[]>(
-                `http://localhost:5001/api/todos?username=${selectedUser}`
-            )
-            if (response.data) {
-                setTodos(response.data)
-                setTodosOri(response.data)
-            }
-        } catch (error) {
-            onHandleMessage(
-                `Error fetching todos for user ${selectedUser}: ${error}`,
-                TodoAlertColor.error
-            )
-        }
-    }
-
     return {
         todos,
         username,
@@ -359,6 +337,5 @@ export const useTodoHooks = () => {
         todosOri,
         isAdmin,
         users,
-        onSelectUser,
     }
 }

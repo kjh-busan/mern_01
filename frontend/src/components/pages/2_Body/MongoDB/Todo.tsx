@@ -21,14 +21,12 @@ const Todo: React.FC = () => {
         selectAllDelete,
         isAdmin,
         users,
-        onSelectUser,
     } = useTodoHooks()
-    const [selectedUser, setSelectedUser] = useState<string>('') // Default to an empty string
-    const [filteredTodos, setFilteredTodos] = useState<TodoType[]>(todos)
+    const [selectedUser, setSelectedUser] = useState<string>('')
+    const [filteredTodos, setFilteredTodos] = useState<TodoType[]>([])
 
     useEffect(() => {
-        // selectedUser가 빈칸인 경우 전체 todos를 표시
-        if (!selectedUser || selectedUser === '') {
+        if (!selectedUser) {
             setFilteredTodos(todos)
         } else {
             setFilteredTodos(
@@ -40,16 +38,6 @@ const Todo: React.FC = () => {
     const handleUserChange = (event: SelectChangeEvent<string>) => {
         const value = event.target.value as string
         setSelectedUser(value)
-
-        if (value === '') {
-            // 빈칸을 선택했을 때 전체 todos 표시
-            setFilteredTodos(todos)
-        } else {
-            // 특정 사용자를 선택했을 때 해당 사용자의 todos만 표시
-            setFilteredTodos(todos.filter((todo) => todo.username === value))
-        }
-
-        onSelectUser(value)
     }
 
     return (
@@ -62,14 +50,12 @@ const Todo: React.FC = () => {
                         value={selectedUser}
                         onChange={handleUserChange}
                         displayEmpty
-                        sx={{ height: '40px', minWidth: '200px' }} // Adjust the height and width
+                        sx={{ height: '40px', minWidth: '200px' }}
                     >
-                        <MenuItem value="" sx={{ height: '40px' }}>
-                            {/* 여백을 추가하여 빈칸으로 표시 */}
-                        </MenuItem>
+                        <MenuItem value="" sx={{ height: '40px' }}></MenuItem>
                         {users
-                            .filter((user) => user !== 'admin') // Filter out 'admin'
-                            .sort((a, b) => a.localeCompare(b)) // Sort users in ascending order
+                            .filter((user) => user !== 'admin')
+                            .sort((a, b) => a.localeCompare(b))
                             .map((user) => (
                                 <MenuItem key={user} value={user}>
                                     {user}
@@ -88,7 +74,6 @@ const Todo: React.FC = () => {
                 selectAllDelete={selectAllDelete}
                 isAdmin={isAdmin}
                 users={users}
-                onSelectUser={onSelectUser}
             />
         </div>
     )
