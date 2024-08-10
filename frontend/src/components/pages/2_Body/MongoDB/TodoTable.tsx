@@ -28,6 +28,10 @@ const TodoTable: React.FC<TodoTableProps> = ({
     users,
     onSelectUser,
 }) => {
+    const sortedTodos = todos.sort((a, b) =>
+        a.username.localeCompare(b.username)
+    )
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -58,7 +62,7 @@ const TodoTable: React.FC<TodoTableProps> = ({
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {todos.map((row) => (
+                    {sortedTodos.map((row) => (
                         <TableRow
                             key={row._id?.toString()}
                             sx={{
