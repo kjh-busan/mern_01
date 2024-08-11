@@ -9,6 +9,7 @@ import {
     Box,
 } from '@mui/material'
 import { TodoType } from '../../../../types/todos/TodoTypes'
+import TodoHeader from './TodoHeader'
 
 const Todo: React.FC = () => {
     const {
@@ -21,6 +22,14 @@ const Todo: React.FC = () => {
         selectAllDelete,
         isAdmin,
         users,
+        title,
+        setTitle,
+        contents,
+        setContents,
+        onInsertHandle,
+        onUpdateSelected,
+        checkoutInsert,
+        checkoutUpdate,
     } = useTodoHooks()
     const [selectedUser, setSelectedUser] = useState<string>('')
     const [filteredTodos, setFilteredTodos] = useState<TodoType[]>([])
@@ -44,15 +53,15 @@ const Todo: React.FC = () => {
         <div>
             <h1>Todo List</h1>
             {isAdmin && (
-                <Box sx={{ mb: 2, width: '200px' }}>
+                <Box sx={{ mb: 2, width: 200 }}>
                     <InputLabel>Username List</InputLabel>
                     <Select
                         value={selectedUser}
                         onChange={handleUserChange}
                         displayEmpty
-                        sx={{ height: '40px', minWidth: '200px' }}
+                        sx={{ height: 40, minWidth: 200 }}
                     >
-                        <MenuItem value="" sx={{ height: '40px' }}></MenuItem>
+                        <MenuItem value="" sx={{ height: 40 }}></MenuItem>
                         {users
                             .filter((user) => user !== 'admin')
                             .sort((a, b) => a.localeCompare(b))
@@ -63,6 +72,18 @@ const Todo: React.FC = () => {
                             ))}
                     </Select>
                 </Box>
+            )}
+            {!isAdmin && (
+                <TodoHeader
+                    title={title}
+                    setTitle={setTitle}
+                    contents={contents}
+                    setContents={setContents}
+                    onInsertHandle={onInsertHandle}
+                    onUpdateSelected={onUpdateSelected}
+                    checkoutInsert={checkoutInsert}
+                    checkoutUpdate={checkoutUpdate}
+                />
             )}
             <TodoTable
                 todos={filteredTodos}
