@@ -28,6 +28,10 @@ module.exports = {
     },
     plugins: ['react', 'prettier'],
     rules: {
+        // 'react/no-unknown-property': [
+        //     'error',
+        //     { ignore: ['args', 'intensity', 'position', 'angle', 'penumbra'] },
+        // ],
         'prettier/prettier': [
             'error',
             {
